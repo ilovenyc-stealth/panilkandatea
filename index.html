@@ -270,8 +270,8 @@
     <!-- QR Codes -->
     <div id="tab-qr" class="tab-content">
         <div class="card">
-            <h3 style="margin-bottom:12px;"><i class="fas fa-qrcode"></i> Generate QR Code with Machine Data</h3>
-            <p style="font-size:11px;color:#e65100;margin-bottom:10px;font-weight:600;">✅ Each QR contains ALL machine details in compact format</p>
+            <h3 style="margin-bottom:12px;"><i class="fas fa-qrcode"></i> Generate QR Code with Full Machine Data</h3>
+            <p style="font-size:11px;color:#e65100;margin-bottom:10px;font-weight:600;">✅ Each QR contains ALL machine details. Scan to see everything directly on your phone!</p>
             <div style="background:var(--primary-bg);border:2px dashed var(--primary-light);border-radius:16px;padding:16px;margin-bottom:16px;">
                 <div class="search-box">
                     <input type="text" id="qrMachineId" placeholder="Enter Machine ID" />
@@ -348,7 +348,7 @@
 // DATABASE
 // ============================================================
 var DB = {
-    KEY: 'teaFactory_v11',
+    KEY: 'teaFactory_v12',
     getAll: function(){ try{ return JSON.parse(localStorage.getItem(this.KEY)) || []; }catch(e){ return []; } },
     getById: function(id){ return this.getAll().find(function(m){ return m.machineId === id; }) || null; },
     save: function(m){
@@ -384,42 +384,40 @@ function toast(msg, type){
 }
 
 // ============================================================
-// QR CODE - Compact format to fit QR code limits
+// QR CODE - TRUNCATED TEXT TO FIT QR LIMITS
 // ============================================================
 function getQRText(machineId) {
     var m = DB.getById(machineId);
     if (!m) return 'ERR:' + machineId;
     
-    // Use 2-letter codes to save space - fits easily in QR
-    var lines = [];
-    lines.push('ID:' + m.machineId);
-    lines.push('NM:' + (m.machineName || ''));
-    if (m.machineType) lines.push('TP:' + m.machineType);
-    if (m.location) lines.push('LC:' + m.location);
-    if (m.manufacturer) lines.push('MF:' + m.manufacturer);
-    if (m.modelNumber) lines.push('MD:' + m.modelNumber);
-    if (m.installDate) lines.push('IN:' + m.installDate);
-    lines.push('ST:' + (m.status || 'Working'));
-    if (m.lastService) lines.push('LS:' + m.lastService);
-    if (m.nextService) lines.push('NS:' + m.nextService);
-    if (m.spareParts) lines.push('SP:' + m.spareParts);
-    if (m.maintenanceHistory) lines.push('MH:' + m.maintenanceHistory);
-    if (m.notes) lines.push('NT:' + m.notes);
+    var p = [];
+    p.push('I:' + m.machineId);
+    p.push('N:' + m.machineName.substring(0, 30));
+    p.push('S:' + (m.status || 'Working'));
+    if (m.machineType) p.push('T:' + m.machineType.substring(0, 20));
+    if (m.location) p.push('L:' + m.location.substring(0, 20));
+    if (m.manufacturer) p.push('M:' + m.manufacturer.substring(0, 20));
+    if (m.modelNumber) p.push('D:' + m.modelNumber.substring(0, 20));
+    if (m.installDate) p.push('ID:' + m.installDate);
+    if (m.lastService) p.push('LS:' + m.lastService);
+    if (m.nextService) p.push('NS:' + m.nextService);
+    if (m.spareParts) p.push('SP:' + m.spareParts.substring(0, 30));
+    if (m.maintenanceHistory) p.push('MH:' + m.maintenanceHistory.substring(0, 40));
+    if (m.notes) p.push('NT:' + m.notes.substring(0, 40));
     
-    return lines.join('\n');
+    return p.join('\n');
 }
 
-// Map short codes to full labels for display
 function expandQRText(text) {
     var map = {
-        'ID:': 'Machine ID: ',
-        'NM:': 'Name: ',
-        'TP:': 'Type: ',
-        'LC:': 'Location: ',
-        'MF:': 'Manufacturer: ',
-        'MD:': 'Model: ',
-        'IN:': 'Install Date: ',
-        'ST:': 'Status: ',
+        'I:': 'Machine ID: ',
+        'N:': 'Name: ',
+        'S:': 'Status: ',
+        'T:': 'Type: ',
+        'L:': 'Location: ',
+        'M:': 'Manufacturer: ',
+        'D:': 'Model: ',
+        'ID:': 'Install Date: ',
         'LS:': 'Last Service: ',
         'NS:': 'Next Service: ',
         'SP:': 'Spare Parts: ',
@@ -433,7 +431,6 @@ function expandQRText(text) {
                 return '<strong>' + map[key] + '</strong>' + esc(line.substring(key.length));
             }
         }
-        if (line.indexOf('ERR:') === 0) return '<strong>Error:</strong> ' + esc(line.substring(4));
         return esc(line);
     }).join('<br>');
 }
@@ -481,7 +478,7 @@ function generateQR() {
         
         var hint = document.createElement('p');
         hint.style.cssText = 'font-size:11px;color:#e65100;margin-top:8px;font-weight:600;';
-        hint.textContent = '📱 Scan QR → See ALL details on your phone!';
+        hint.textContent = '📱 Scan QR → See ALL details on your phone! (' + qrText.length + ' chars)';
         qrDisplay.appendChild(hint);
         
         var btnDiv = document.createElement('div');
@@ -489,13 +486,13 @@ function generateQR() {
         btnDiv.innerHTML = '<button onclick="saveQRImage()" class="btn btn-primary btn-sm"><i class="fas fa-download"></i> Download QR</button>';
         qrDisplay.appendChild(btnDiv);
         
-        qrInfoPanel.innerHTML = '<h4 style="color:var(--primary-dark);margin-bottom:8px;">📦 Data in this QR Code:</h4>' +
+        qrInfoPanel.innerHTML = '<h4 style="color:var(--primary-dark);margin-bottom:8px;">📦 Data in this QR Code (' + qrText.length + ' chars):</h4>' +
             '<div style="background:white;padding:12px;border-radius:8px;font-size:12px;">' + 
             expandQRText(qrText) + 
             '</div>' +
             '<p style="margin-top:8px;font-size:11px;color:#e65100;font-weight:600;">✅ When scanned, ALL this information appears on the phone!</p>';
         
-        toast('✅ QR generated! Data size: ' + qrText.length + ' chars');
+        toast('✅ QR generated! (' + qrText.length + ' chars)');
         
     } catch(e) {
         console.error('QR Error:', e);
@@ -578,15 +575,13 @@ function stopQRScanner() {
 function handleScannedQRData(data) {
     var scanResult = document.getElementById('scanResult');
     
-    // Display with expanded labels
     scanResult.innerHTML = '<div class="result-card" style="margin-top:12px;">' +
         '<h3>📱 Scanned Machine Data</h3>' +
         '<div style="background:white;border-radius:10px;padding:12px;font-size:13px;margin-top:8px;">' + 
         expandQRText(data) + 
         '</div></div>';
     
-    // Try to find machine ID
-    var match = data.match(/ID:(\S+)/);
+    var match = data.match(/I:(\S+)/);
     if (match) {
         var m = DB.getById(match[1]);
         if (m) {
@@ -760,7 +755,7 @@ function refreshDashboard(){
 // ============================================================
 document.addEventListener('DOMContentLoaded', function(){
     console.log('✅ Tea Factory Tracker Ready!');
-    console.log('📱 QR codes use compact format to fit all machine data');
+    console.log('📱 QR codes use truncated text to fit QR limits');
     
     setupTabs();
     
