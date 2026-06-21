@@ -716,73 +716,78 @@ function refreshDashboard(){
 // ============================================================
 // INIT - with QR URL detection
 // ============================================================
-document.addEventListener('DOMContentLoaded', function(){
-    console.log('✅ Tea Factory Tracker Ready!');
-    
-    // CHECK IF PAGE WAS OPENED FROM QR SCAN
+(function(){
+    // Check URL BEFORE DOM is ready
     var params = new URLSearchParams(window.location.search);
     var machineId = params.get('machine');
     
     if (machineId) {
-        var m = DB.getById(machineId);
-        if (m) {
-            // Hide the main app
-            document.querySelector('.app-container').style.display = 'none';
-            document.querySelector('.toast-container').style.display = 'none';
-            
-            // Style body for clean display
-            document.body.style.background = '#e8f5e9';
-            document.body.style.display = 'flex';
-            document.body.style.alignItems = 'center';
-            document.body.style.justifyContent = 'center';
-            document.body.style.minHeight = '100vh';
-            document.body.style.padding = '20px';
-            
-            var sc = (m.status || 'Working').toLowerCase().replace(/\s+/g, '-');
-            var colors = {
-                'working': { bg: '#c8e6c9', color: '#1b5e20' },
-                'under-maintenance': { bg: '#ffe0b2', color: '#e65100' },
-                'out-of-service': { bg: '#ffcdd2', color: '#c62828' }
-            };
-            var c = colors[sc] || colors['working'];
-            
-            // Show clean white card with ALL machine details
-            document.body.innerHTML += 
-                '<div style="background:white;border-radius:20px;padding:30px;max-width:500px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,0.15);">' +
-                '<h1 style="color:#1b5e20;font-size:24px;margin-bottom:8px;">🍃 ' + esc(m.machineName) + '</h1>' +
-                '<span style="display:inline-block;padding:6px 16px;border-radius:50px;font-weight:600;font-size:13px;margin-bottom:16px;background:' + c.bg + ';color:' + c.color + ';">' + esc(m.status || 'Working') + '</span>' +
-                '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:14px;">' +
-                '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Machine ID</strong>' + esc(m.machineId) + '</div>' +
-                '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Type</strong>' + esc(m.machineType || 'N/A') + '</div>' +
-                '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Location</strong>' + esc(m.location || 'N/A') + '</div>' +
-                '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Manufacturer</strong>' + esc(m.manufacturer || 'N/A') + '</div>' +
-                '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Model</strong>' + esc(m.modelNumber || 'N/A') + '</div>' +
-                '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Install Date</strong>' + fmtDate(m.installDate) + '</div>' +
-                '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Last Service</strong>' + fmtDate(m.lastService) + '</div>' +
-                '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Next Service</strong>' + fmtDate(m.nextService) + '</div>' +
-                '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Spare Parts</strong>' + esc(m.spareParts || 'N/A') + '</div>' +
-                '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Maintenance History</strong>' + esc(m.maintenanceHistory || 'None') + '</div>' +
-                '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Notes</strong>' + esc(m.notes || 'None') + '</div>' +
-                '</div>' +
-                '<p style="font-size:11px;color:#2e7d32;margin-top:12px;font-weight:600;">✅ Scanned from QR Code</p>' +
-                '</div>';
-            return; // Stop - don't initialize the main app
-        }
+        // QR scan detected - prepare to show clean page
+        document.addEventListener('DOMContentLoaded', function(){
+            var m = DB.getById(machineId);
+            if (m) {
+                // Hide main app
+                var app = document.querySelector('.app-container');
+                var toast = document.querySelector('.toast-container');
+                var footer = document.querySelector('.footer');
+                if (app) app.style.display = 'none';
+                if (toast) toast.style.display = 'none';
+                if (footer) footer.style.display = 'none';
+                
+                // Clear and style body
+                document.body.innerHTML = '';
+                document.body.style.background = '#e8f5e9';
+                document.body.style.display = 'flex';
+                document.body.style.alignItems = 'center';
+                document.body.style.justifyContent = 'center';
+                document.body.style.minHeight = '100vh';
+                document.body.style.padding = '20px';
+                document.body.style.fontFamily = 'Inter, sans-serif';
+                
+                var sc = (m.status || 'Working').toLowerCase().replace(/\s+/g, '-');
+                var colors = {
+                    'working': { bg: '#c8e6c9', color: '#1b5e20' },
+                    'under-maintenance': { bg: '#ffe0b2', color: '#e65100' },
+                    'out-of-service': { bg: '#ffcdd2', color: '#c62828' }
+                };
+                var c = colors[sc] || colors['working'];
+                
+                var card = 
+                    '<div style="background:white;border-radius:20px;padding:30px;max-width:500px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,0.15);">' +
+                    '<h1 style="color:#1b5e20;font-size:24px;margin-bottom:8px;">🍃 ' + esc(m.machineName) + '</h1>' +
+                    '<span style="display:inline-block;padding:6px 16px;border-radius:50px;font-weight:600;font-size:13px;margin-bottom:16px;background:' + c.bg + ';color:' + c.color + ';">' + esc(m.status || 'Working') + '</span>' +
+                    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:14px;">' +
+                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Machine ID</strong>' + esc(m.machineId) + '</div>' +
+                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Type</strong>' + esc(m.machineType || 'N/A') + '</div>' +
+                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Location</strong>' + esc(m.location || 'N/A') + '</div>' +
+                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Manufacturer</strong>' + esc(m.manufacturer || 'N/A') + '</div>' +
+                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Model</strong>' + esc(m.modelNumber || 'N/A') + '</div>' +
+                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Install Date</strong>' + fmtDate(m.installDate) + '</div>' +
+                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Last Service</strong>' + fmtDate(m.lastService) + '</div>' +
+                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Next Service</strong>' + fmtDate(m.nextService) + '</div>' +
+                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Spare Parts</strong>' + esc(m.spareParts || 'N/A') + '</div>' +
+                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Maintenance History</strong>' + esc(m.maintenanceHistory || 'None') + '</div>' +
+                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Notes</strong>' + esc(m.notes || 'None') + '</div>' +
+                    '</div>' +
+                    '<p style="font-size:11px;color:#2e7d32;margin-top:12px;font-weight:600;">✅ Scanned from QR Code</p>' +
+                    '</div>';
+                
+                document.body.innerHTML = card;
+            }
+        });
+        return; // Stop here - don't initialize main app
     }
     
     // Normal app initialization
-    setupTabs();
-    
-    document.getElementById('lookupId').addEventListener('keydown', function(e){ if(e.key === 'Enter') doLookup(); });
-    document.getElementById('qrMachineId').addEventListener('keydown', function(e){ if(e.key === 'Enter') generateQR(); });
-    
-    document.addEventListener('keydown', function(e){
-        if(e.key === 'Escape'){ closeEditModal(); stopQRScanner(); }
+    document.addEventListener('DOMContentLoaded', function(){
+        setupTabs();
+        document.getElementById('lookupId').addEventListener('keydown', function(e){ if(e.key === 'Enter') doLookup(); });
+        document.getElementById('qrMachineId').addEventListener('keydown', function(e){ if(e.key === 'Enter') generateQR(); });
+        document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeEditModal(); stopQRScanner(); } });
+        refreshList();
+        refreshDashboard();
     });
-    
-    refreshList();
-    refreshDashboard();
-});
+})();
 </script>
 
 </body>
