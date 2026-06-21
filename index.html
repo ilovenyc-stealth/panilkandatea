@@ -384,12 +384,28 @@ function toast(msg, type){
 }
 
 // ============================================================
+// URL-safe Base64 encoding/decoding
+// ============================================================
+function base64urlEncode(str) {
+    // Encode to base64 and make it URL-safe
+    var base64 = btoa(unescape(encodeURIComponent(str)));
+    return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function base64urlDecode(str) {
+    // Reverse the URL-safe replacements
+    str = str.replace(/-/g, '+').replace(/_/g, '/');
+    // Add padding if necessary
+    while (str.length % 4) str += '=';
+    return decodeURIComponent(escape(atob(str)));
+}
+
+// ============================================================
 // QR CODE – Encodes full machine data in URL hash
 // ============================================================
 function getQRText(machineId) {
     var m = DB.getById(machineId);
     if (!m) return '';
-    // Build a compact machine object
     var data = {
         id: m.machineId,
         nm: m.machineName,
@@ -405,9 +421,8 @@ function getQRText(machineId) {
         mh: m.maintenanceHistory || '',
         nt: m.notes || ''
     };
-    // Encode as base64 to keep URL short
     var json = JSON.stringify(data);
-    var encoded = btoa(unescape(encodeURIComponent(json)));
+    var encoded = base64urlEncode(json);
     var baseUrl = window.location.href.split('?')[0].split('#')[0];
     return baseUrl + '#data=' + encoded;
 }
@@ -562,10 +577,9 @@ function handleScannedQRData(data) {
             encoded = data.split('data=')[1].split('&')[0];
         }
         try {
-            var json = decodeURIComponent(escape(atob(encoded)));
+            var json = base64urlDecode(encoded);
             var obj = JSON.parse(json);
             if (obj.id && obj.nm) {
-                // Convert short keys to full keys
                 var machine = {
                     machineId: obj.id,
                     machineName: obj.nm,
@@ -802,7 +816,7 @@ function refreshDashboard(){
     if (hash && hash.indexOf('#data=') === 0) {
         var encoded = hash.substring(6); // remove '#data='
         try {
-            var json = decodeURIComponent(escape(atob(encoded)));
+            var json = base64urlDecode(encoded);
             var obj = JSON.parse(json);
             if (obj.id && obj.nm) {
                 var machine = {
@@ -837,7 +851,6 @@ function refreshDashboard(){
             if (m) {
                 showCleanDisplay(m);
             } else {
-                // Machine not in localStorage – show a message
                 document.body.innerHTML = '<div style="text-align:center;padding:40px;font-family:Inter,sans-serif;"><h2>Machine not found</h2><p>The machine data is not available on this device.</p></div>';
             }
         });
