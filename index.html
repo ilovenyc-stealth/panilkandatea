@@ -208,7 +208,7 @@
         <div class="logo-wrapper"><i class="fas fa-leaf"></i></div>
         <div class="header-text">
             <h1>Tea Factory Machine Tracker</h1>
-            <p>📱 Scan QR → See machine details instantly!</p>
+            <p>📱 Scan QR → See ALL machine details on your phone!</p>
         </div>
     </div>
 
@@ -270,7 +270,8 @@
     <!-- QR Codes -->
     <div id="tab-qr" class="tab-content">
         <div class="card">
-            <h3 style="margin-bottom:12px;"><i class="fas fa-qrcode"></i> Generate QR Code</h3>
+            <h3 style="margin-bottom:12px;"><i class="fas fa-qrcode"></i> Generate QR Code with Full Machine Data</h3>
+            <p style="font-size:11px;color:#e65100;margin-bottom:10px;font-weight:600;">✅ Each QR contains ALL machine details. Scan to see everything directly on your phone!</p>
             <div style="background:var(--primary-bg);border:2px dashed var(--primary-light);border-radius:16px;padding:16px;margin-bottom:16px;">
                 <div class="search-box">
                     <input type="text" id="qrMachineId" placeholder="Enter Machine ID" />
@@ -279,7 +280,7 @@
             </div>
             <div class="qr-container">
                 <div class="qr-display" id="qrDisplay"><p style="color:#999;">QR will appear here</p></div>
-                <div class="qr-info-panel" id="qrInfoPanel"><p style="color:#999;">Details here</p></div>
+                <div class="qr-info-panel" id="qrInfoPanel"><p style="color:#999;">Data preview here</p></div>
             </div>
         </div>
     </div>
@@ -308,7 +309,7 @@
         </div>
     </div>
 
-    <div class="footer">🍃 Tea Factory Machine Tracker · Scan QR → See Machine Details</div>
+    <div class="footer">🍃 Tea Factory Machine Tracker · Scan QR → See ALL Machine Details</div>
 </div>
 
 <!-- Edit Modal -->
@@ -347,7 +348,7 @@
 // DATABASE
 // ============================================================
 var DB = {
-    KEY: 'teaFactory_v9',
+    KEY: 'teaFactory_v10',
     getAll: function(){ try{ return JSON.parse(localStorage.getItem(this.KEY)) || []; }catch(e){ return []; } },
     getById: function(id){ return this.getAll().find(function(m){ return m.machineId === id; }) || null; },
     save: function(m){
@@ -383,11 +384,31 @@ function toast(msg, type){
 }
 
 // ============================================================
-// QR CODE - Contains URL that opens the app with machine data
+// QR CODE - CONTAINS ALL MACHINE DATA AS READABLE TEXT
 // ============================================================
-function getQRUrl(machineId) {
-    var baseUrl = window.location.href.split('?')[0].split('#')[0];
-    return baseUrl + '?machine=' + encodeURIComponent(machineId);
+function getQRText(machineId) {
+    var m = DB.getById(machineId);
+    if (!m) return 'Machine not found: ' + machineId;
+    
+    return '══════════════════════════\n' +
+        '  TEA FACTORY MACHINE\n' +
+        '══════════════════════════\n' +
+        '\n' +
+        'ID: ' + m.machineId + '\n' +
+        'Name: ' + m.machineName + '\n' +
+        'Type: ' + (m.machineType || 'N/A') + '\n' +
+        'Location: ' + (m.location || 'N/A') + '\n' +
+        'Manufacturer: ' + (m.manufacturer || 'N/A') + '\n' +
+        'Model: ' + (m.modelNumber || 'N/A') + '\n' +
+        'Install Date: ' + (m.installDate || 'N/A') + '\n' +
+        'Status: ' + (m.status || 'Working') + '\n' +
+        'Last Service: ' + (m.lastService || 'N/A') + '\n' +
+        'Next Service: ' + (m.nextService || 'N/A') + '\n' +
+        'Spare Parts: ' + (m.spareParts || 'N/A') + '\n' +
+        'Maintenance: ' + (m.maintenanceHistory || 'N/A') + '\n' +
+        'Notes: ' + (m.notes || 'N/A') + '\n' +
+        '\n' +
+        '══════════════════════════';
 }
 
 function generateQR() {
@@ -404,7 +425,7 @@ function generateQR() {
         return;
     }
     
-    var qrText = getQRUrl(id);
+    var qrText = getQRText(id);
     
     qrDisplay.innerHTML = '';
     var qrDiv = document.createElement('div');
@@ -414,11 +435,11 @@ function generateQR() {
     try {
         new QRCode(qrDiv, {
             text: qrText,
-            width: 250,
-            height: 250,
+            width: 280,
+            height: 280,
             colorDark: '#1b5e20',
             colorLight: '#ffffff',
-            correctLevel: QRCode.CorrectLevel.M
+            correctLevel: QRCode.CorrectLevel.L
         });
         
         var label = document.createElement('p');
@@ -433,7 +454,7 @@ function generateQR() {
         
         var hint = document.createElement('p');
         hint.style.cssText = 'font-size:11px;color:#e65100;margin-top:8px;font-weight:600;';
-        hint.textContent = '📱 Scan QR → Opens app & shows machine details!';
+        hint.textContent = '📱 Scan QR → See ALL details on your phone!';
         qrDisplay.appendChild(hint);
         
         var btnDiv = document.createElement('div');
@@ -441,24 +462,18 @@ function generateQR() {
         btnDiv.innerHTML = '<button onclick="saveQRImage()" class="btn btn-primary btn-sm"><i class="fas fa-download"></i> Download QR</button>';
         qrDisplay.appendChild(btnDiv);
         
-        qrInfoPanel.innerHTML = '<h4 style="color:var(--primary-dark);">✅ How it works:</h4>' +
-            '<p style="font-size:12px;">1. Download & print this QR</p>' +
-            '<p style="font-size:12px;">2. Stick on the machine</p>' +
-            '<p style="font-size:12px;">3. Scan with phone camera</p>' +
-            '<p style="font-size:12px;">4. App opens with:</p>' +
-            '<div style="background:white;padding:10px;border-radius:8px;margin-top:8px;">' +
-            '<strong>🏷 ' + esc(machine.machineName) + '</strong><br>' +
-            '<span>ID: ' + esc(machine.machineId) + '</span><br>' +
-            '<span>Status: ' + esc(machine.status) + '</span><br>' +
-            '<span>Location: ' + esc(machine.location || 'N/A') + '</span><br>' +
-            '<span>Next Service: ' + fmtDate(machine.nextService) + '</span>' +
-            '</div>';
+        // Show data preview in info panel
+        qrInfoPanel.innerHTML = '<h4 style="color:var(--primary-dark);margin-bottom:8px;">📦 Data encoded in this QR Code:</h4>' +
+            '<div style="background:white;padding:12px;border-radius:8px;font-size:11px;font-family:monospace;white-space:pre-wrap;max-height:300px;overflow-y:auto;">' + 
+            esc(qrText) + 
+            '</div>' +
+            '<p style="margin-top:8px;font-size:11px;color:#e65100;font-weight:600;">✅ When scanned, ALL this information appears on the phone screen!</p>';
         
-        toast('✅ QR generated!');
+        toast('✅ QR generated with ALL machine data!');
         
     } catch(e) {
         console.error('QR Error:', e);
-        qrDisplay.innerHTML = '<p style="color:var(--danger);">Error generating QR</p>';
+        qrDisplay.innerHTML = '<p style="color:var(--danger);">Data too large for QR. Try shorter text fields.</p>';
     }
 }
 
@@ -471,70 +486,6 @@ function saveQRImage() {
     link.href = canvas.toDataURL('image/png');
     link.click();
     toast('💾 QR saved!');
-}
-
-// ============================================================
-// SHOW MACHINE POPUP (When QR is scanned)
-// ============================================================
-function showMachinePopup(machine) {
-    var sc = statusCls(machine.status);
-    var si = statusIcon(machine.status);
-    
-    var existing = document.getElementById('machinePopup');
-    if (existing) existing.remove();
-    
-    var popup = document.createElement('div');
-    popup.id = 'machinePopup';
-    popup.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:15px;';
-    
-    popup.innerHTML = 
-        '<div style="background:white;border-radius:20px;padding:25px;max-width:550px;width:100%;max-height:90vh;overflow-y:auto;animation:fadeIn 0.3s;">' +
-        '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:15px;">' +
-        '<h2 style="color:#1b5e20;">🎯 ' + esc(machine.machineName) + '</h2>' +
-        '<button onclick="document.getElementById(\'machinePopup\').remove()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#666;">&times;</button>' +
-        '</div>' +
-        '<span class="status-badge ' + sc + '" style="font-size:14px;padding:6px 16px;"><i class="fas ' + si + '"></i> ' + esc(machine.status || 'Working') + '</span>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin-top:16px;font-size:13px;">' +
-        '<div><strong>Machine ID:</strong> ' + esc(machine.machineId) + '</div>' +
-        '<div><strong>Type:</strong> ' + esc(machine.machineType || 'N/A') + '</div>' +
-        '<div><strong>Location:</strong> ' + esc(machine.location || 'N/A') + '</div>' +
-        '<div><strong>Manufacturer:</strong> ' + esc(machine.manufacturer || 'N/A') + '</div>' +
-        '<div><strong>Model:</strong> ' + esc(machine.modelNumber || 'N/A') + '</div>' +
-        '<div><strong>Install Date:</strong> ' + fmtDate(machine.installDate) + '</div>' +
-        '<div><strong>Last Service:</strong> ' + fmtDate(machine.lastService) + '</div>' +
-        '<div><strong>Next Service:</strong> ' + fmtDate(machine.nextService) + '</div>' +
-        '<div style="grid-column:1/-1;"><strong>Spare Parts:</strong> ' + esc(machine.spareParts || 'N/A') + '</div>' +
-        '<div style="grid-column:1/-1;"><strong>Maintenance:</strong> ' + esc(machine.maintenanceHistory || 'None') + '</div>' +
-        '<div style="grid-column:1/-1;"><strong>Notes:</strong> ' + esc(machine.notes || 'None') + '</div>' +
-        '</div>' +
-        '<p style="margin-top:12px;font-size:11px;color:#2e7d32;font-weight:600;">✅ Scanned from QR Code</p>' +
-        '<button onclick="document.getElementById(\'machinePopup\').remove()" class="btn btn-primary btn-sm" style="margin-top:10px;">Close</button>' +
-        '</div>';
-    
-    document.body.appendChild(popup);
-    
-    popup.addEventListener('click', function(e) {
-        if (e.target === popup) popup.remove();
-    });
-}
-
-// ============================================================
-// CHECK URL FOR MACHINE (Auto-display when QR scanned)
-// ============================================================
-function checkUrlForMachine() {
-    var params = new URLSearchParams(window.location.search);
-    var machineId = params.get('machine');
-    
-    if (machineId) {
-        console.log('🔍 QR SCANNED! Loading machine:', machineId);
-        setTimeout(function() {
-            var m = DB.getById(machineId);
-            if (m) {
-                showMachinePopup(m);
-                toast('📱 Machine loaded from QR: ' + m.machineName);
-            }
-        }, 600);
-    }
 }
 
 // ============================================================
@@ -601,23 +552,51 @@ function stopQRScanner() {
 
 function handleScannedQRData(data) {
     var scanResult = document.getElementById('scanResult');
-    console.log('Processing:', data);
+    console.log('Processing scanned data...');
     
-    // Check for URL with machine parameter
+    // Display the scanned text directly (formatted)
+    var formatted = data
+        .replace(/═+/g, '<hr style="border-color:#c8e6c9;margin:5px 0;">')
+        .replace(/\n/g, '<br>')
+        .replace(/ID:/g, '<strong>ID:</strong>')
+        .replace(/Name:/g, '<strong>Name:</strong>')
+        .replace(/Type:/g, '<strong>Type:</strong>')
+        .replace(/Location:/g, '<strong>Location:</strong>')
+        .replace(/Manufacturer:/g, '<strong>Manufacturer:</strong>')
+        .replace(/Model:/g, '<strong>Model:</strong>')
+        .replace(/Install Date:/g, '<strong>Install Date:</strong>')
+        .replace(/Status:/g, '<strong>Status:</strong>')
+        .replace(/Last Service:/g, '<strong>Last Service:</strong>')
+        .replace(/Next Service:/g, '<strong>Next Service:</strong>')
+        .replace(/Spare Parts:/g, '<strong>Spare Parts:</strong>')
+        .replace(/Maintenance:/g, '<strong>Maintenance:</strong>')
+        .replace(/Notes:/g, '<strong>Notes:</strong>');
+    
+    scanResult.innerHTML = '<div class="result-card" style="margin-top:12px;">' +
+        '<h3>📱 Scanned Machine Data</h3>' +
+        '<div style="background:white;border-radius:10px;padding:12px;font-size:13px;margin-top:8px;">' + 
+        formatted + 
+        '</div></div>';
+    
+    // Try to find machine ID in the text
+    var match = data.match(/ID:\s*(\S+)/);
+    if (match) {
+        var m = DB.getById(match[1]);
+        if (m) toast('✅ Found: ' + m.machineName);
+    }
+    
+    // Also check for URL with machine parameter
     if (data.indexOf('machine=') > -1) {
         var machineId = '';
         if (data.indexOf('?machine=') > -1) {
             machineId = data.split('?machine=')[1].split('&')[0].split('#')[0];
-        } else if (data.indexOf('&machine=') > -1) {
-            machineId = data.split('&machine=')[1].split('&')[0].split('#')[0];
         }
         machineId = decodeURIComponent(machineId);
-        
         if (machineId) {
-            var m = DB.getById(machineId);
-            if (m) {
-                displayMachineInScan(m, scanResult);
-                toast('✅ Found: ' + m.machineName);
+            var m2 = DB.getById(machineId);
+            if (m2) {
+                displayMachineInScan(m2, scanResult);
+                toast('✅ Found: ' + m2.machineName);
                 return;
             }
         }
@@ -626,16 +605,13 @@ function handleScannedQRData(data) {
     // Check TEA: format
     if (data.toUpperCase().startsWith('TEA:')) {
         var id = data.substring(4).trim();
-        var m = DB.getById(id);
-        if (m) {
-            displayMachineInScan(m, scanResult);
-            toast('✅ Found: ' + m.machineName);
+        var m3 = DB.getById(id);
+        if (m3) {
+            displayMachineInScan(m3, scanResult);
+            toast('✅ Found: ' + m3.machineName);
             return;
         }
     }
-    
-    // Unknown
-    scanResult.innerHTML = '<div class="result-card" style="margin-top:12px;"><h4>QR Data</h4><p style="word-break:break-all;">' + esc(data) + '</p></div>';
 }
 
 function displayMachineInScan(m, container) {
@@ -801,7 +777,8 @@ function refreshDashboard(){
 // ============================================================
 document.addEventListener('DOMContentLoaded', function(){
     console.log('✅ Tea Factory Tracker Ready!');
-    console.log('📱 QR codes contain URLs that open the app with machine details');
+    console.log('📱 QR codes contain ALL machine data as readable text');
+    console.log('📷 Scan QR → See all details on phone screen');
     
     setupTabs();
     
@@ -809,14 +786,11 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('qrMachineId').addEventListener('keydown', function(e){ if(e.key === 'Enter') generateQR(); });
     
     document.addEventListener('keydown', function(e){
-        if(e.key === 'Escape'){ closeEditModal(); stopQRScanner(); var p = document.getElementById('machinePopup'); if(p) p.remove(); }
+        if(e.key === 'Escape'){ closeEditModal(); stopQRScanner(); }
     });
     
     refreshList();
     refreshDashboard();
-    
-    // Check if page was opened from QR scan
-    checkUrlForMachine();
 });
 </script>
 
