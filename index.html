@@ -384,7 +384,7 @@ function toast(msg, type){
 }
 
 // ============================================================
-// QR CODE - URL that opens clean page (CHANGED)
+// QR CODE - URL that opens clean page
 // ============================================================
 function getQRText(machineId) {
     var baseUrl = window.location.href.split('?')[0].split('#')[0];
@@ -714,22 +714,21 @@ function refreshDashboard(){
 }
 
 // ============================================================
-// INIT
+// INIT - with QR URL detection
 // ============================================================
 document.addEventListener('DOMContentLoaded', function(){
     console.log('✅ Tea Factory Tracker Ready!');
     
-    // CHECK IF PAGE WAS OPENED FROM QR SCAN - SHOW CLEAN BLANK PAGE (ADDED)
+    // CHECK IF PAGE WAS OPENED FROM QR SCAN
     var params = new URLSearchParams(window.location.search);
     var machineId = params.get('machine');
     
     if (machineId) {
         var m = DB.getById(machineId);
         if (m) {
-            // Hide the main app and toast container
+            // Hide the main app
             document.querySelector('.app-container').style.display = 'none';
             document.querySelector('.toast-container').style.display = 'none';
-            document.querySelector('.footer').style.display = 'none';
             
             // Style body for clean display
             document.body.style.background = '#e8f5e9';
@@ -747,7 +746,7 @@ document.addEventListener('DOMContentLoaded', function(){
             };
             var c = colors[sc] || colors['working'];
             
-            // Show clean card with machine details
+            // Show clean white card with ALL machine details
             document.body.innerHTML += 
                 '<div style="background:white;border-radius:20px;padding:30px;max-width:500px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,0.15);">' +
                 '<h1 style="color:#1b5e20;font-size:24px;margin-bottom:8px;">🍃 ' + esc(m.machineName) + '</h1>' +
@@ -771,7 +770,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     }
     
-    // Normal app initialization (your original code)
+    // Normal app initialization
     setupTabs();
     
     document.getElementById('lookupId').addEventListener('keydown', function(e){ if(e.key === 'Enter') doLookup(); });
