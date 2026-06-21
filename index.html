@@ -271,7 +271,7 @@
     <div id="tab-qr" class="tab-content">
         <div class="card">
             <h3 style="margin-bottom:12px;"><i class="fas fa-qrcode"></i> Generate QR Code with Machine Data</h3>
-            <p style="font-size:11px;color:#e65100;margin-bottom:10px;font-weight:600;">✅ QR contains machine data as text. Scan to see details directly on phone!</p>
+            <p style="font-size:11px;color:#e65100;margin-bottom:10px;font-weight:600;">✅ QR contains full machine data. Scan to see details on any device!</p>
             <div style="background:var(--primary-bg);border:2px dashed var(--primary-light);border-radius:16px;padding:16px;margin-bottom:16px;">
                 <div class="search-box">
                     <input type="text" id="qrMachineId" placeholder="Enter Machine ID" />
@@ -384,11 +384,32 @@ function toast(msg, type){
 }
 
 // ============================================================
-// QR CODE - URL that opens clean page
+// QR CODE – Encodes full machine data in URL hash
 // ============================================================
 function getQRText(machineId) {
+    var m = DB.getById(machineId);
+    if (!m) return '';
+    // Build a compact machine object
+    var data = {
+        id: m.machineId,
+        nm: m.machineName,
+        tp: m.machineType || '',
+        lc: m.location || '',
+        mf: m.manufacturer || '',
+        md: m.modelNumber || '',
+        ind: m.installDate || '',
+        st: m.status || 'Working',
+        ls: m.lastService || '',
+        ns: m.nextService || '',
+        sp: m.spareParts || '',
+        mh: m.maintenanceHistory || '',
+        nt: m.notes || ''
+    };
+    // Encode as base64 to keep URL short
+    var json = JSON.stringify(data);
+    var encoded = btoa(unescape(encodeURIComponent(json)));
     var baseUrl = window.location.href.split('?')[0].split('#')[0];
-    return baseUrl + '?machine=' + encodeURIComponent(machineId);
+    return baseUrl + '#data=' + encoded;
 }
 
 function generateQR() {
@@ -434,7 +455,7 @@ function generateQR() {
         
         var hint = document.createElement('p');
         hint.style.cssText = 'font-size:11px;color:#e65100;margin-top:8px;font-weight:600;';
-        hint.textContent = '📱 Scan QR → Opens clean page with details!';
+        hint.textContent = '📱 Scan QR → Shows machine details on any device!';
         qrDisplay.appendChild(hint);
         
         var btnDiv = document.createElement('div');
@@ -442,18 +463,17 @@ function generateQR() {
         btnDiv.innerHTML = '<button onclick="saveQRImage()" class="btn btn-primary btn-sm"><i class="fas fa-download"></i> Download QR</button>';
         qrDisplay.appendChild(btnDiv);
         
-        qrInfoPanel.innerHTML = '<h4 style="color:var(--primary-dark);margin-bottom:8px;">📱 How it works:</h4>' +
-            '<p style="font-size:12px;">1. Download & print this QR</p>' +
-            '<p style="font-size:12px;">2. Stick on the machine</p>' +
-            '<p style="font-size:12px;">3. Scan with phone camera</p>' +
-            '<p style="font-size:12px;">4. Opens a <strong>clean page</strong> with:</p>' +
+        qrInfoPanel.innerHTML = '<h4 style="color:var(--primary-dark);margin-bottom:8px;">📦 Data encoded in QR:</h4>' +
             '<div style="background:white;padding:10px;border-radius:8px;margin-top:8px;">' +
             '<strong>🏷 ' + esc(machine.machineName) + '</strong><br>' +
             '<span>ID: ' + esc(machine.machineId) + '</span><br>' +
             '<span>Status: ' + esc(machine.status) + '</span><br>' +
-            '<span>Location: ' + esc(machine.location || 'N/A') + '</span></div>';
+            '<span>Location: ' + esc(machine.location || 'N/A') + '</span><br>' +
+            '<span>Next Service: ' + fmtDate(machine.nextService) + '</span>' +
+            '</div>' +
+            '<p style="margin-top:8px;font-size:11px;color:#2e7d32;">✅ QR contains full data – works offline & cross‑device.</p>';
         
-        toast('✅ QR generated!');
+        toast('✅ QR generated with full machine data!');
         
     } catch(e) {
         console.error('QR Error:', e);
@@ -533,45 +553,105 @@ function stopQRScanner() {
 }
 
 function handleScannedQRData(data) {
-    var scanResult = document.getElementById('scanResult');
+    // First try to parse as hash data
+    if (data.indexOf('#data=') > -1 || data.indexOf('data=') > -1) {
+        var encoded = '';
+        if (data.indexOf('#data=') > -1) {
+            encoded = data.split('#data=')[1].split('&')[0];
+        } else {
+            encoded = data.split('data=')[1].split('&')[0];
+        }
+        try {
+            var json = decodeURIComponent(escape(atob(encoded)));
+            var obj = JSON.parse(json);
+            if (obj.id && obj.nm) {
+                // Convert short keys to full keys
+                var machine = {
+                    machineId: obj.id,
+                    machineName: obj.nm,
+                    machineType: obj.tp,
+                    location: obj.lc,
+                    manufacturer: obj.mf,
+                    modelNumber: obj.md,
+                    installDate: obj.ind,
+                    status: obj.st || 'Working',
+                    lastService: obj.ls,
+                    nextService: obj.ns,
+                    spareParts: obj.sp,
+                    maintenanceHistory: obj.mh,
+                    notes: obj.nt
+                };
+                showCleanDisplay(machine);
+                return;
+            }
+        } catch(e) {}
+    }
     
-    // Check for URL with machine parameter
+    // Fallback: try ?machine= parameter
     if (data.indexOf('machine=') > -1) {
         var machineId = data.split('machine=')[1].split('&')[0].split('#')[0];
         machineId = decodeURIComponent(machineId);
-        if (machineId) {
-            var m = DB.getById(machineId);
-            if (m) {
-                displayMachineInScan(m, scanResult);
-                toast('✅ Found: ' + m.machineName);
-                return;
-            }
+        var m = DB.getById(machineId);
+        if (m) {
+            showCleanDisplay(m);
+            return;
         }
     }
     
-    // Display the scanned text
+    // If nothing matches, show raw text
+    var scanResult = document.getElementById('scanResult');
     scanResult.innerHTML = '<div class="result-card" style="margin-top:12px;">' +
         '<h3>📱 Scanned Data</h3>' +
         '<div style="background:white;border-radius:10px;padding:12px;font-size:13px;margin-top:8px;white-space:pre-wrap;font-family:monospace;">' + esc(data) + '</div></div>';
 }
 
-function displayMachineInScan(m, container) {
-    var sc = statusCls(m.status), si = statusIcon(m.status);
-    container.innerHTML = '<div class="result-card" style="margin-top:12px;">' +
-        '<h3>🎯 ' + esc(m.machineName) + ' <span class="status-badge ' + sc + '"><i class="fas ' + si + '"></i> ' + esc(m.status) + '</span></h3>' +
-        '<div class="result-grid" style="margin-top:12px;">' +
-        '<div class="result-item"><label>ID</label><value>' + esc(m.machineId) + '</value></div>' +
-        '<div class="result-item"><label>Type</label><value>' + esc(m.machineType || 'N/A') + '</value></div>' +
-        '<div class="result-item"><label>Location</label><value>' + esc(m.location || 'N/A') + '</value></div>' +
-        '<div class="result-item"><label>Manufacturer</label><value>' + esc(m.manufacturer || 'N/A') + '</value></div>' +
-        '<div class="result-item"><label>Model</label><value>' + esc(m.modelNumber || 'N/A') + '</value></div>' +
-        '<div class="result-item"><label>Install</label><value>' + fmtDate(m.installDate) + '</value></div>' +
-        '<div class="result-item"><label>Last Service</label><value>' + fmtDate(m.lastService) + '</value></div>' +
-        '<div class="result-item"><label>Next Service</label><value>' + fmtDate(m.nextService) + '</value></div>' +
-        '<div class="result-item" style="grid-column:1/-1;"><label>Spare Parts</label><value>' + esc(m.spareParts || 'N/A') + '</value></div>' +
-        '<div class="result-item" style="grid-column:1/-1;"><label>Maintenance</label><value>' + esc(m.maintenanceHistory || 'None') + '</value></div>' +
-        '<div class="result-item" style="grid-column:1/-1;"><label>Notes</label><value>' + esc(m.notes || 'None') + '</value></div>' +
-        '</div></div>';
+function showCleanDisplay(machine) {
+    // Hide main app
+    var app = document.querySelector('.app-container');
+    var toastEl = document.querySelector('.toast-container');
+    var footer = document.querySelector('.footer');
+    if (app) app.style.display = 'none';
+    if (toastEl) toastEl.style.display = 'none';
+    if (footer) footer.style.display = 'none';
+    
+    // Prepare body for clean card
+    document.body.style.background = '#e8f5e9';
+    document.body.style.display = 'flex';
+    document.body.style.alignItems = 'center';
+    document.body.style.justifyContent = 'center';
+    document.body.style.minHeight = '100vh';
+    document.body.style.padding = '20px';
+    document.body.style.fontFamily = 'Inter, sans-serif';
+    
+    var sc = (machine.status || 'Working').toLowerCase().replace(/\s+/g, '-');
+    var colors = {
+        'working': { bg: '#c8e6c9', color: '#1b5e20' },
+        'under-maintenance': { bg: '#ffe0b2', color: '#e65100' },
+        'out-of-service': { bg: '#ffcdd2', color: '#c62828' }
+    };
+    var c = colors[sc] || colors['working'];
+    
+    var cardHTML = 
+        '<div style="background:white;border-radius:20px;padding:30px;max-width:500px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,0.15);">' +
+        '<h1 style="color:#1b5e20;font-size:24px;margin-bottom:8px;">🍃 ' + esc(machine.machineName) + '</h1>' +
+        '<span style="display:inline-block;padding:6px 16px;border-radius:50px;font-weight:600;font-size:13px;margin-bottom:16px;background:' + c.bg + ';color:' + c.color + ';">' + esc(machine.status || 'Working') + '</span>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:14px;">' +
+        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Machine ID</strong>' + esc(machine.machineId) + '</div>' +
+        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Type</strong>' + esc(machine.machineType || 'N/A') + '</div>' +
+        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Location</strong>' + esc(machine.location || 'N/A') + '</div>' +
+        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Manufacturer</strong>' + esc(machine.manufacturer || 'N/A') + '</div>' +
+        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Model</strong>' + esc(machine.modelNumber || 'N/A') + '</div>' +
+        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Install Date</strong>' + fmtDate(machine.installDate) + '</div>' +
+        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Last Service</strong>' + fmtDate(machine.lastService) + '</div>' +
+        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Next Service</strong>' + fmtDate(machine.nextService) + '</div>' +
+        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Spare Parts</strong>' + esc(machine.spareParts || 'N/A') + '</div>' +
+        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Maintenance History</strong>' + esc(machine.maintenanceHistory || 'None') + '</div>' +
+        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Notes</strong>' + esc(machine.notes || 'None') + '</div>' +
+        '</div>' +
+        '<p style="font-size:11px;color:#2e7d32;margin-top:12px;font-weight:600;">✅ Scanned from QR Code</p>' +
+        '</div>';
+    
+    document.body.innerHTML = cardHTML;
 }
 
 // ============================================================
@@ -714,68 +794,54 @@ function refreshDashboard(){
 }
 
 // ============================================================
-// INIT - with QR URL detection
+// INIT – handles both normal app and QR display
 // ============================================================
 (function(){
-    // Check URL BEFORE DOM is ready
+    // Check for hash data first (full machine data from QR)
+    var hash = window.location.hash;
+    if (hash && hash.indexOf('#data=') === 0) {
+        var encoded = hash.substring(6); // remove '#data='
+        try {
+            var json = decodeURIComponent(escape(atob(encoded)));
+            var obj = JSON.parse(json);
+            if (obj.id && obj.nm) {
+                var machine = {
+                    machineId: obj.id,
+                    machineName: obj.nm,
+                    machineType: obj.tp || '',
+                    location: obj.lc || '',
+                    manufacturer: obj.mf || '',
+                    modelNumber: obj.md || '',
+                    installDate: obj.ind || '',
+                    status: obj.st || 'Working',
+                    lastService: obj.ls || '',
+                    nextService: obj.ns || '',
+                    spareParts: obj.sp || '',
+                    maintenanceHistory: obj.mh || '',
+                    notes: obj.nt || ''
+                };
+                document.addEventListener('DOMContentLoaded', function(){
+                    showCleanDisplay(machine);
+                });
+                return; // Stop – don't load main app
+            }
+        } catch(e) {}
+    }
+    
+    // Check for ?machine= parameter (legacy)
     var params = new URLSearchParams(window.location.search);
     var machineId = params.get('machine');
-    
     if (machineId) {
-        // QR scan detected - prepare to show clean page
         document.addEventListener('DOMContentLoaded', function(){
             var m = DB.getById(machineId);
             if (m) {
-                // Hide main app
-                var app = document.querySelector('.app-container');
-                var toast = document.querySelector('.toast-container');
-                var footer = document.querySelector('.footer');
-                if (app) app.style.display = 'none';
-                if (toast) toast.style.display = 'none';
-                if (footer) footer.style.display = 'none';
-                
-                // Clear and style body
-                document.body.innerHTML = '';
-                document.body.style.background = '#e8f5e9';
-                document.body.style.display = 'flex';
-                document.body.style.alignItems = 'center';
-                document.body.style.justifyContent = 'center';
-                document.body.style.minHeight = '100vh';
-                document.body.style.padding = '20px';
-                document.body.style.fontFamily = 'Inter, sans-serif';
-                
-                var sc = (m.status || 'Working').toLowerCase().replace(/\s+/g, '-');
-                var colors = {
-                    'working': { bg: '#c8e6c9', color: '#1b5e20' },
-                    'under-maintenance': { bg: '#ffe0b2', color: '#e65100' },
-                    'out-of-service': { bg: '#ffcdd2', color: '#c62828' }
-                };
-                var c = colors[sc] || colors['working'];
-                
-                var card = 
-                    '<div style="background:white;border-radius:20px;padding:30px;max-width:500px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,0.15);">' +
-                    '<h1 style="color:#1b5e20;font-size:24px;margin-bottom:8px;">🍃 ' + esc(m.machineName) + '</h1>' +
-                    '<span style="display:inline-block;padding:6px 16px;border-radius:50px;font-weight:600;font-size:13px;margin-bottom:16px;background:' + c.bg + ';color:' + c.color + ';">' + esc(m.status || 'Working') + '</span>' +
-                    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:14px;">' +
-                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Machine ID</strong>' + esc(m.machineId) + '</div>' +
-                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Type</strong>' + esc(m.machineType || 'N/A') + '</div>' +
-                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Location</strong>' + esc(m.location || 'N/A') + '</div>' +
-                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Manufacturer</strong>' + esc(m.manufacturer || 'N/A') + '</div>' +
-                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Model</strong>' + esc(m.modelNumber || 'N/A') + '</div>' +
-                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Install Date</strong>' + fmtDate(m.installDate) + '</div>' +
-                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Last Service</strong>' + fmtDate(m.lastService) + '</div>' +
-                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Next Service</strong>' + fmtDate(m.nextService) + '</div>' +
-                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Spare Parts</strong>' + esc(m.spareParts || 'N/A') + '</div>' +
-                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Maintenance History</strong>' + esc(m.maintenanceHistory || 'None') + '</div>' +
-                    '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Notes</strong>' + esc(m.notes || 'None') + '</div>' +
-                    '</div>' +
-                    '<p style="font-size:11px;color:#2e7d32;margin-top:12px;font-weight:600;">✅ Scanned from QR Code</p>' +
-                    '</div>';
-                
-                document.body.innerHTML = card;
+                showCleanDisplay(m);
+            } else {
+                // Machine not in localStorage – show a message
+                document.body.innerHTML = '<div style="text-align:center;padding:40px;font-family:Inter,sans-serif;"><h2>Machine not found</h2><p>The machine data is not available on this device.</p></div>';
             }
         });
-        return; // Stop here - don't initialize main app
+        return;
     }
     
     // Normal app initialization
