@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🍃 Panilkanda Tea Factory</title>
+    <!-- Favicon – leaf icon in the address bar -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍃</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
@@ -387,15 +389,12 @@ function toast(msg, type){
 // URL-safe Base64 encoding/decoding
 // ============================================================
 function base64urlEncode(str) {
-    // Encode to base64 and make it URL-safe
     var base64 = btoa(unescape(encodeURIComponent(str)));
     return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
 function base64urlDecode(str) {
-    // Reverse the URL-safe replacements
     str = str.replace(/-/g, '+').replace(/_/g, '/');
-    // Add padding if necessary
     while (str.length % 4) str += '=';
     return decodeURIComponent(escape(atob(str)));
 }
