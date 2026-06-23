@@ -8,853 +8,1933 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
-        :root {
-            --primary: #2e7d32; --primary-dark: #1b5e20; --primary-light: #c8e6c9;
-            --primary-bg: #e8f5e9; --accent-light: #dcedc8; --white: #ffffff;
-            --text-dark: #1b3b1b; --danger: #c62828; --danger-light: #ffcdd2;
-            --warning: #e65100; --warning-light: #ffe0b2; --info: #1976d2; --info-light: #e3f2fd;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05); --shadow-md: 0 4px 15px rgba(0,0,0,0.06);
-            --shadow-lg: 0 8px 25px rgba(46,125,50,0.15); --radius-sm: 12px; --radius-md: 16px;
-            --radius-lg: 20px; --radius-full: 50px;
+        /* ─── Reset & Base ─── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); min-height: 100vh; padding: 20px; color: var(--text-dark); }
-        .app-container { max-width: 1200px; margin: 0 auto; background: rgba(255,255,255,0.95); border-radius: var(--radius-lg); padding: 25px 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
-        .header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; padding-bottom: 15px; border-bottom: 2px solid var(--accent-light); }
-        .logo-wrapper { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); width: 60px; height: 60px; border-radius: 50%; box-shadow: 0 8px 25px rgba(46,125,50,0.35); }
-        .logo-wrapper i { font-size: 26px; color: white; }
-        .header-text h1 { font-size: 24px; font-weight: 800; color: var(--text-dark); }
-        .header-text p { color: #2e5e2e; font-size: 13px; }
-        .tabs { display: flex; gap: 5px; background: var(--accent-light); padding: 5px; border-radius: var(--radius-full); margin-bottom: 20px; flex-wrap: wrap; }
-        .tab-btn { flex: 1; min-width: 60px; border: none; background: transparent; padding: 10px 8px; font-weight: 600; font-size: 11px; border-radius: var(--radius-full); cursor: pointer; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .tab-btn.active { background: var(--white); box-shadow: var(--shadow-lg); color: var(--primary-dark); }
-        .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.6); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
-        .card { background: var(--white); border-radius: var(--radius-md); padding: 18px; margin-bottom: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--primary-light); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
-        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .form-grid-3 { grid-template-columns: repeat(3, 1fr); }
-        @media(max-width:768px){.form-grid,.form-grid-3{grid-template-columns:1fr}}
-        .form-group { display: flex; flex-direction: column; }
-        .form-group.full { grid-column: 1/-1; }
-        label { font-weight: 600; font-size: 11px; margin-bottom: 4px; color: var(--text-dark); }
-        label i { color: var(--primary); width: 14px; }
-        input, select, textarea { padding: 8px 12px; border: 2px solid var(--primary-light); border-radius: 10px; font-size: 13px; font-family: inherit; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
-        textarea { resize: vertical; min-height: 50px; }
-        .btn { padding: 8px 16px; border: none; border-radius: var(--radius-full); font-weight: 600; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s; }
-        .btn:hover { transform: translateY(-1px); }
-        .btn-sm { padding: 5px 12px; font-size: 10px; }
-        .btn-lg { padding: 12px 24px; font-size: 14px; }
-        .btn-block { width: 100%; justify-content: center; }
-        .btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-secondary { background: var(--accent-light); color: var(--text-dark); }
-        .btn-info { background: var(--info); color: white; }
-        .btn-warning { background: var(--warning); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-scan { background: #6a1b9a; color: white; }
-        .btn-outline { background: white; border: 2px solid var(--primary); color: var(--primary); }
-        .status-badge { display: inline-flex; align-items: center; gap: 3px; padding: 3px 10px; border-radius: var(--radius-full); font-weight: 600; font-size: 10px; }
-        .status-badge.working { background: var(--primary-light); color: var(--primary-dark); }
-        .status-badge.maintenance { background: var(--warning-light); color: var(--warning); }
-        .status-badge.out-of-service { background: var(--danger-light); color: var(--danger); }
-        .machine-list { display: grid; gap: 6px; }
-        .machine-item { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 10px 14px; background: var(--white); border-radius: 10px; border: 2px solid var(--primary-light); gap: 8px; }
-        .machine-info { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .machine-id { font-weight: 700; color: var(--primary-dark); background: var(--primary-bg); padding: 2px 8px; border-radius: var(--radius-full); font-size: 12px; }
-        .machine-name { font-weight: 600; font-size: 13px; }
-        .machine-section { font-size: 11px; color: #666; background: #f5f5f5; padding: 2px 8px; border-radius: var(--radius-full); }
-        .search-box { display: flex; gap: 8px; }
-        .search-box input { flex: 1; }
-        .info-box { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 10px; font-size: 12px; flex-wrap: wrap; gap: 6px; }
-        .info-box.info { background: var(--info-light); border: 2px solid var(--info); color: #0d47a1; }
-        .info-box.success { background: var(--primary-bg); border: 2px solid var(--primary); color: var(--primary-dark); }
-        .result-card { background: var(--primary-bg); border-radius: var(--radius-md); padding: 18px; border-left: 5px solid var(--primary); animation: fadeIn 0.3s; margin-top: 10px; }
-        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 6px 12px; }
-        .result-item { padding: 5px 0; border-bottom: 1px solid rgba(46,125,50,0.1); font-size: 12px; }
-        .result-item label { font-size: 9px; text-transform: uppercase; color: #3f6b3f; }
-        .result-item value { font-size: 12px; font-weight: 500; }
-        .qr-container { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        @media(max-width:600px){.qr-container{grid-template-columns:1fr}}
-        .qr-display { text-align: center; padding: 14px; background: white; border-radius: 12px; box-shadow: var(--shadow-sm); }
-        .qr-display canvas { border-radius: 8px; max-width: 200px; }
-        .qr-info-panel { background: var(--primary-bg); border-radius: 12px; padding: 14px; border: 2px solid var(--primary-light); }
-        #qrReaderContainer { margin-top: 10px; padding: 14px; background: #000; border-radius: 12px; text-align: center; }
-        #qrReaderContainer video { max-width: 100%; border-radius: 8px; }
-        .toast-container { position: fixed; top: 10px; right: 10px; z-index: 9999; display: flex; flex-direction: column; gap: 6px; }
-        .toast { background: var(--primary); color: white; padding: 10px 18px; border-radius: var(--radius-full); font-weight: 600; font-size: 12px; animation: slideIn 0.3s; max-width: 320px; }
-        .toast.error { background: var(--danger); }
-        @keyframes slideIn { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 10px; }
-        .modal.active { display: flex; }
-        .modal-content { background: var(--white); border-radius: var(--radius-lg); padding: 20px; max-width: 650px; width: 100%; max-height: 85vh; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; }
-        .sub-tabs { display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap; }
-        .sub-tab { padding: 8px 14px; border: 2px solid var(--primary-light); border-radius: var(--radius-full); cursor: pointer; font-size: 11px; font-weight: 600; background: white; }
-        .sub-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .seller-card { background: #fffef5; border: 1px dashed #ccc; border-radius: 10px; padding: 12px; margin-top: 8px; }
-        .auto-id { background: #f5f5f5; color: #666; font-style: italic; }
-        .footer { margin-top: 20px; padding-top: 12px; text-align: center; font-size: 11px; opacity: 0.6; border-top: 2px solid var(--accent-light); }
-        .highlight { color: var(--primary-dark); font-weight: 700; }
+        :root {
+            --primary: #2e7d32;
+            --primary-dark: #1b5e20;
+            --primary-light: #c8e6c9;
+            --primary-bg: #e8f5e9;
+            --accent-light: #dcedc8;
+            --white: #ffffff;
+            --text-dark: #1b3b1b;
+            --danger: #c62828;
+            --danger-light: #ffcdd2;
+            --warning: #e65100;
+            --warning-light: #ffe0b2;
+            --info: #1976d2;
+            --info-light: #e3f2fd;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 8px 25px rgba(46, 125, 50, 0.15);
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --radius-full: 50px;
+            --sidebar-width: 250px;
+            --bottom-nav-height: 64px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            -webkit-tap-highlight-color: transparent;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── Layout: Sidebar + Main ─── */
+        .layout {
+            display: flex;
+            flex: 1;
+        }
+
+        /* ─── Sidebar ─── */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100%;
+            background: var(--white);
+            border-right: 2px solid var(--primary-light);
+            z-index: 200;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 2px solid var(--accent-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar-header i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+        .sidebar-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        .sidebar-nav {
+            padding: 10px 0;
+            flex: 1;
+        }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+            border-left: 4px solid transparent;
+            cursor: pointer;
+        }
+        .sidebar-nav a:hover {
+            background: var(--primary-bg);
+        }
+        .sidebar-nav a.active {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+        .sidebar-nav a i {
+            width: 20px;
+            text-align: center;
+        }
+        .sidebar-sub {
+            display: none;
+            padding-left: 20px;
+        }
+        .sidebar-sub.open {
+            display: block;
+        }
+        .sidebar-sub a {
+            padding: 8px 20px;
+            font-size: 13px;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 150;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* ─── Hamburger ─── */
+        .hamburger {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 300;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ─── Main Container ─── */
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius-lg);
+            padding: 25px 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: margin-left 0.3s ease;
+            margin: 20px;
+            margin-left: calc(var(--sidebar-width) + 20px);
+        }
+
+        /* ─── Bottom Nav (mobile) ─── */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-top: 2px solid var(--primary-light);
+            height: var(--bottom-nav-height);
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .bottom-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-size: 10px;
+            padding: 5px;
+            flex: 1;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .bottom-nav a i {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+        .bottom-nav a.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ─── Header ─── */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-light);
+        }
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.35);
+            flex-shrink: 0;
+        }
+        .logo-wrapper i {
+            font-size: 26px;
+            color: white;
+        }
+        .header-text h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+            line-height: 1.2;
+        }
+        .header-text p {
+            color: #2e5e2e;
+            font-size: 13px;
+        }
+
+        /* ─── Tabs ─── */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            background: var(--accent-light);
+            padding: 5px;
+            border-radius: var(--radius-full);
+            margin-bottom: 20px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+        .tab-btn {
+            flex: 0 0 auto;
+            min-width: 60px;
+            border: none;
+            background: transparent;
+            padding: 10px 12px;
+            font-weight: 600;
+            font-size: 12px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            color: var(--primary-dark);
+        }
+        .tab-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ─── Tab Content ─── */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ─── Sub‑tabs ─── */
+        .sub-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .sub-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        .sub-tab {
+            flex: 0 0 auto;
+            padding: 8px 16px;
+            border: 2px solid var(--primary-light);
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            background: white;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .sub-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .sub-content {
+            display: none;
+        }
+        .sub-content.active {
+            display: block;
+        }
+
+        /* ─── Cards & Forms ─── */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--primary-light);
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+        label {
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 4px;
+            color: var(--text-dark);
+        }
+        label i {
+            color: var(--primary);
+            width: 14px;
+        }
+        input,
+        select,
+        textarea {
+            padding: 10px 14px;
+            border: 2px solid var(--primary-light);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            background: white;
+            width: 100%;
+        }
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+            white-space: nowrap;
+            min-height: 44px;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 11px;
+            min-height: 36px;
+        }
+        .btn-lg {
+            padding: 14px 24px;
+            font-size: 15px;
+        }
+        .btn-block {
+            width: 100%;
+        }
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-secondary {
+            background: var(--accent-light);
+            color: var(--text-dark);
+        }
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        .btn-scan {
+            background: #6a1b9a;
+            color: white;
+        }
+
+        /* ─── Status Badge ─── */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 11px;
+        }
+        .status-badge.working {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+        .status-badge.maintenance {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+        .status-badge.out-of-service {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        /* ─── Machine List ─── */
+        .machine-list {
+            display: grid;
+            gap: 8px;
+        }
+        .machine-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--white);
+            border-radius: 12px;
+            border: 2px solid var(--primary-light);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .machine-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .machine-id {
+            font-weight: 700;
+            color: var(--primary-dark);
+            background: var(--primary-bg);
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+        }
+        .machine-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .machine-section {
+            font-size: 11px;
+            color: #666;
+            background: #f5f5f5;
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+        }
+
+        /* ─── Info Box ─── */
+        .info-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: var(--info-light);
+            border: 2px solid var(--info);
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+
+        /* ─── QR ─── */
+        .qr-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .qr-display {
+            text-align: center;
+            padding: 16px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .qr-display canvas {
+            border-radius: 10px;
+            max-width: 200px;
+        }
+        .qr-info-panel {
+            background: var(--primary-bg);
+            border-radius: 14px;
+            padding: 16px;
+            border: 2px solid var(--primary-light);
+        }
+
+        /* ─── Scanner ─── */
+        #qrReaderContainer {
+            margin-top: 12px;
+            padding: 16px;
+            background: #000;
+            border-radius: 14px;
+            text-align: center;
+        }
+        #qrReaderContainer video {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        /* ─── Result Card ─── */
+        .result-card {
+            background: var(--primary-bg);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            border-left: 5px solid var(--primary);
+            animation: fadeIn 0.3s;
+            margin-top: 10px;
+        }
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px 14px;
+        }
+        .result-item {
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(46, 125, 50, 0.1);
+            font-size: 13px;
+        }
+        .result-item label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #3f6b3f;
+            display: block;
+        }
+
+        /* ─── Stats ─── */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+        .stat-card {
+            background: var(--white);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            border: 2px solid var(--primary-light);
+        }
+        .stat-card .num {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+        .stat-card .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #666;
+            margin-top: 4px;
+        }
+        .stat-card.green {
+            border-color: var(--primary);
+        }
+        .stat-card.orange {
+            border-color: var(--warning);
+        }
+        .stat-card.red {
+            border-color: var(--danger);
+        }
+
+        /* ─── Toast ─── */
+        .toast-container {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .toast {
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
+            animation: slideIn 0.3s;
+            max-width: 300px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .toast.error {
+            background: var(--danger);
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ─── Modal ─── */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.6;
+            border-top: 2px solid var(--accent-light);
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .main-content {
+                margin: 10px 0;
+                padding: 15px 10px;
+                border-radius: var(--radius-md);
+                margin-left: 0 !important;
+                margin-right: 0;
+            }
+            .sidebar {
+                width: 280px;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .bottom-nav {
+                display: flex;
+            }
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .header-text h1 {
+                font-size: 20px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            input,
+            select,
+            textarea {
+                font-size: 16px;
+                padding: 12px 14px;
+            }
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+                min-height: 48px;
+            }
+            .btn-sm {
+                padding: 8px 14px;
+                font-size: 12px;
+                min-height: 40px;
+            }
+            .machine-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .machine-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .qr-container {
+                grid-template-columns: 1fr;
+            }
+            .info-box {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .modal-content {
+                padding: 15px;
+                margin: 10px;
+            }
+            .sub-tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .sub-tabs::-webkit-scrollbar {
+                display: none;
+            }
+            .tabs {
+                gap: 2px;
+                padding: 4px;
+            }
+            .tab-btn {
+                padding: 12px 16px;
+                font-size: 13px;
+                min-height: 44px;
+            }
+            .sidebar-overlay.active {
+                display: block;
+            }
+            .main-content {
+                margin-bottom: 80px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .hamburger {
+                display: none;
+            }
+            .bottom-nav {
+                display: none;
+            }
+            .sidebar {
+                transform: translateX(0);
+                position: fixed;
+                height: 100vh;
+                box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            }
+            .sidebar-overlay {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: calc(var(--sidebar-width) + 20px);
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="toast-container" id="toastContainer"></div>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
 
-<div class="app-container">
-    <div class="header">
-        <div class="logo-wrapper"><i class="fas fa-leaf"></i></div>
-        <div class="header-text">
-            <h1>Panilkanda Tea Factory Machine Tracker</h1>
-            <p>📱 Scan QR to View Details | Asset Management System</p>
+    <!-- Hamburger -->
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><i class="fas fa-bars"></i></button>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-leaf"></i>
+            <h2>Panilkanda TF</h2>
         </div>
-    </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="active" data-tab="assets" id="sidebar-assets">
+                <i class="fas fa-boxes"></i> Asset Management
+            </a>
+            <div class="sidebar-sub open" id="sidebarAssetSub">
+                <a href="#" class="active" data-sub="viewAssets"><i class="fas fa-eye"></i> View Assets</a>
+                <a href="#" data-sub="addAsset"><i class="fas fa-plus-circle"></i> Add Asset</a>
+                <a href="#" data-sub="addSection"><i class="fas fa-folder-plus"></i> Add Section</a>
+            </div>
+            <a href="#" data-tab="list"><i class="fas fa-list"></i> All Machines</a>
+            <a href="#" data-tab="lookup"><i class="fas fa-search"></i> Lookup</a>
+            <a href="#" data-tab="qr"><i class="fas fa-qrcode"></i> QR Codes</a>
+            <a href="#" data-tab="scan"><i class="fas fa-camera"></i> Scan QR</a>
+            <a href="#" data-tab="status"><i class="fas fa-chart-bar"></i> Statistics</a>
+        </nav>
+    </aside>
 
-    <div class="tabs">
-        <button class="tab-btn active" data-tab="assets"><i class="fas fa-boxes"></i>Asset Mgmt</button>
-        <button class="tab-btn" data-tab="list"><i class="fas fa-list"></i>All Machines</button>
-        <button class="tab-btn" data-tab="lookup"><i class="fas fa-search"></i>Lookup</button>
-        <button class="tab-btn" data-tab="qr"><i class="fas fa-qrcode"></i>QR</button>
-        <button class="tab-btn" data-tab="scan"><i class="fas fa-camera"></i>Scan</button>
-        <button class="tab-btn" data-tab="status"><i class="fas fa-chart-bar"></i>Stats</button>
-    </div>
+    <!-- Main Content -->
+    <div class="main-content" id="mainContainer">
 
-    <!-- ==================== ASSET MANAGEMENT TAB ==================== -->
-    <div id="tab-assets" class="tab-content active">
-        <div class="sub-tabs" id="assetSubTabs">
-            <button class="sub-tab active" data-sub="viewAssets"><i class="fas fa-eye"></i> View Assets</button>
-            <button class="sub-tab" data-sub="addAsset"><i class="fas fa-plus-circle"></i> Add Asset</button>
-            <button class="sub-tab" data-sub="addSection"><i class="fas fa-folder-plus"></i> Add Section</button>
+        <div class="header">
+            <div class="logo-wrapper"><i class="fas fa-leaf"></i></div>
+            <div class="header-text">
+                <h1>Panilkanda Tea Factory Machine Tracker</h1>
+                <p>📱 Scan QR to View Details | Asset Management System</p>
+            </div>
         </div>
 
-        <div id="sub-viewAssets" class="sub-content">
-            <div class="info-box info">
-                <span><strong>Total Assets:</strong> <span id="assetCount">0</span></span>
-                <div class="btn-group">
-                    <select id="filterSection" onchange="filterAssets()" style="padding:6px 10px;border-radius:20px;border:2px solid var(--primary-light);">
-                        <option value="all">All Sections</option>
-                    </select>
-                    <button onclick="refreshAssetView()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button>
-                    <button onclick="exportToCSV()" class="btn btn-primary btn-sm"><i class="fas fa-file-excel"></i> Export Excel</button>
+        <!-- Top Tabs -->
+        <div class="tabs" id="mainTabs">
+            <button class="tab-btn active" data-tab="assets"><i class="fas fa-boxes"></i>Asset Mgmt</button>
+            <button class="tab-btn" data-tab="list"><i class="fas fa-list"></i>All Machines</button>
+            <button class="tab-btn" data-tab="lookup"><i class="fas fa-search"></i>Lookup</button>
+            <button class="tab-btn" data-tab="qr"><i class="fas fa-qrcode"></i>QR</button>
+            <button class="tab-btn" data-tab="scan"><i class="fas fa-camera"></i>Scan</button>
+            <button class="tab-btn" data-tab="status"><i class="fas fa-chart-bar"></i>Stats</button>
+        </div>
+
+        <!-- ==================== ASSET MANAGEMENT ==================== -->
+        <div id="tab-assets" class="tab-content active">
+            <div class="sub-tabs" id="assetSubTabs">
+                <button class="sub-tab active" data-sub="viewAssets"><i class="fas fa-eye"></i> View Assets</button>
+                <button class="sub-tab" data-sub="addAsset"><i class="fas fa-plus-circle"></i> Add Asset</button>
+                <button class="sub-tab" data-sub="addSection"><i class="fas fa-folder-plus"></i> Add Section</button>
+            </div>
+
+            <div id="sub-viewAssets" class="sub-content active">
+                <div class="info-box">
+                    <span><strong>Total Assets:</strong> <span id="assetCount">0</span></span>
+                    <div class="btn-group">
+                        <select id="filterSection" onchange="filterAssets()" style="padding:6px 10px;border-radius:20px;border:2px solid var(--primary-light);">
+                            <option value="all">All Sections</option>
+                        </select>
+                        <button onclick="refreshAssetView()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button>
+                        <button onclick="exportToCSV()" class="btn btn-primary btn-sm"><i class="fas fa-file-excel"></i> Export Excel</button>
+                    </div>
+                </div>
+                <div id="assetListView" class="machine-list"><p style="text-align:center;padding:30px;">Loading assets...</p></div>
+            </div>
+
+            <div id="sub-addAsset" class="sub-content">
+                <div class="card">
+                    <h3 style="margin-bottom:14px;"><i class="fas fa-plus-circle"></i> Add New Asset</h3>
+                    <form id="assetForm" autocomplete="off">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label><i class="fas fa-hashtag"></i> Machine ID</label>
+                                <input type="text" id="assetMachineId" readonly class="auto-id" />
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-tag"></i> Machine Name *</label>
+                                <input type="text" id="assetName" placeholder="e.g. CTC Roller" required />
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-building"></i> Section *</label>
+                                <select id="assetSection" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-industry"></i> Manufacturer</label>
+                                <input type="text" id="assetManufacturer" placeholder="e.g. Marshall" />
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-cube"></i> Model</label>
+                                <input type="text" id="assetModel" placeholder="e.g. CTC-2000" />
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-barcode"></i> Serial Number</label>
+                                <input type="text" id="assetSerial" placeholder="e.g. SN-2024-001" />
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar-alt"></i> Installation Date</label>
+                                <input type="date" id="assetDate" />
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-info-circle"></i> Status</label>
+                                <select id="assetStatus">
+                                    <option value="working">Working</option>
+                                    <option value="maintenance">Maintenance</option>
+                                    <option value="out-of-service">Out of Service</option>
+                                </select>
+                            </div>
+                            <div class="form-group full">
+                                <label><i class="fas fa-sticky-note"></i> Notes</label>
+                                <textarea id="assetNotes" rows="2" placeholder="Additional details..."></textarea>
+                            </div>
+                        </div>
+                        <div class="btn-group" style="margin-top:12px;">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Asset</button>
+                            <button type="reset" class="btn btn-secondary"><i class="fas fa-undo"></i> Reset</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div id="assetListView" class="machine-list"><p style="text-align:center;padding:30px;">Loading assets...</p></div>
-        </div>
 
-        <div id="sub-addAsset" class="sub-content" style="display:none;">
-            <div class="card">
-                <h3 style="margin-bottom:14px;"><i class="fas fa-plus-circle"></i> Add New Asset</h3>
-                <form id="assetForm" autocomplete="off">
-                    <div class="form-grid">
-                        <div class="form-group"><label><i class="fas fa-folder"></i> Section *</label><select id="assetSection" required><option value="">Select Section</option></select></div>
-                        <div class="form-group"><label><i class="fas fa-barcode"></i> Machine ID</label><input type="text" id="assetMachineId" class="auto-id" readonly placeholder="Auto-generated" /></div>
-                        <div class="form-group"><label><i class="fas fa-tag"></i> Machine Name *</label><input type="text" id="assetMachineName" placeholder="e.g., Withering Trough" required /></div>
-                        <div class="form-group"><label><i class="fas fa-hashtag"></i> Model Number</label><input type="text" id="assetModelNumber" placeholder="e.g., MES-5506" /></div>
-                        <div class="form-group"><label><i class="fas fa-building"></i> Manufacturer</label><input type="text" id="assetManufacturer" placeholder="e.g., Mesco Engineering" /></div>
-                        <div class="form-group"><label><i class="fas fa-calendar-alt"></i> Installation Date</label><input type="date" id="assetInstallDate" /></div>
-                        <div class="form-group"><label><i class="fas fa-user-tie"></i> Seller Name</label><input type="text" id="assetSellerName" placeholder="e.g., John Doe" /></div>
-                        <div class="form-group"><label><i class="fas fa-calendar-check"></i> Next Service Date</label><input type="date" id="assetNextService" /></div>
-                    </div>
-                    <div class="seller-card">
-                        <h4 style="margin-bottom:8px;color:var(--primary-dark);"><i class="fas fa-address-book"></i> Seller Contact Details</h4>
+            <div id="sub-addSection" class="sub-content">
+                <div class="card">
+                    <h3 style="margin-bottom:14px;"><i class="fas fa-folder-plus"></i> Add New Section</h3>
+                    <form id="sectionForm" autocomplete="off">
                         <div class="form-grid">
-                            <div class="form-group"><label><i class="fas fa-phone"></i> Seller Phone</label><input type="text" id="assetSellerPhone" placeholder="e.g., +94 77 123 4567" /></div>
-                            <div class="form-group"><label><i class="fas fa-envelope"></i> Seller Email</label><input type="text" id="assetSellerEmail" placeholder="e.g., seller@example.com" /></div>
-                            <div class="form-group"><label><i class="fas fa-user"></i> Contact Person</label><input type="text" id="assetContactPerson" placeholder="e.g., Jane Smith" /></div>
-                            <div class="form-group"><label><i class="fas fa-phone-alt"></i> Contact Person Phone</label><input type="text" id="assetContactPhone" placeholder="e.g., +94 71 987 6543" /></div>
-                            <div class="form-group full"><label><i class="fas fa-map-marker-alt"></i> Seller Address</label><input type="text" id="assetSellerAddress" placeholder="Full address" /></div>
+                            <div class="form-group">
+                                <label><i class="fas fa-tag"></i> Section Name *</label>
+                                <input type="text" id="sectionName" placeholder="e.g. Fermentation" required />
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-palette"></i> Color (optional)</label>
+                                <input type="color" id="sectionColor" value="#2e7d32" />
+                            </div>
+                            <div class="form-group full">
+                                <label><i class="fas fa-sticky-note"></i> Description</label>
+                                <textarea id="sectionDesc" rows="2" placeholder="Section details..."></textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-grid" style="margin-top:12px;">
-                        <div class="form-group"><label><i class="fas fa-clipboard-check"></i> Status</label><select id="assetStatus"><option value="Working">✅ Working</option><option value="Under Maintenance">🔧 Under Maintenance</option><option value="Out of Service">⛔ Out of Service</option></select></div>
-                        <div class="form-group"><label><i class="fas fa-calendar-check"></i> Last Service Date</label><input type="date" id="assetLastService" /></div>
-                        <div class="form-group"><label><i class="fas fa-tools"></i> Spare Parts</label><input type="text" id="assetSpareParts" placeholder="e.g., Sensors, Bearings" /></div>
-                        <div class="form-group full"><label><i class="fas fa-history"></i> Maintenance History</label><textarea id="assetMaintenanceHistory" rows="2" placeholder="Record maintenance activities..."></textarea></div>
-                        <div class="form-group full"><label><i class="fas fa-sticky-note"></i> Other Details</label><textarea id="assetNotes" rows="2" placeholder="Any additional information..."></textarea></div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top:14px;"><i class="fas fa-save"></i> Save Asset</button>
-                </form>
+                        <div class="btn-group" style="margin-top:12px;">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Section</button>
+                            <button type="reset" class="btn btn-secondary"><i class="fas fa-undo"></i> Reset</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
-        <div id="sub-addSection" class="sub-content" style="display:none;">
-            <div class="card">
-                <h3 style="margin-bottom:14px;"><i class="fas fa-folder-plus"></i> Add New Section</h3>
-                <form id="sectionForm" autocomplete="off">
-                    <div class="form-grid">
-                        <div class="form-group"><label><i class="fas fa-folder"></i> Section Name *</label><input type="text" id="newSectionName" placeholder="e.g., Withering Section" required /></div>
-                        <div class="form-group"><label><i class="fas fa-map-marker-alt"></i> Location</label><input type="text" id="newSectionLocation" placeholder="e.g., Building A, Floor 1" /></div>
-                        <div class="form-group full"><label><i class="fas fa-sticky-note"></i> Description</label><textarea id="newSectionDesc" rows="2" placeholder="Section description..."></textarea></div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block" style="margin-top:10px;"><i class="fas fa-plus"></i> Add Section</button>
-                </form>
-            </div>
-            <div class="card">
-                <h4 style="margin-bottom:10px;"><i class="fas fa-list"></i> Existing Sections</h4>
-                <div id="sectionsList" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==================== ALL MACHINES TAB ==================== -->
-    <div id="tab-list" class="tab-content">
-        <div class="info-box info">
-            <div class="info-box-content"><strong>Total Machines:</strong> <span id="listCount">0</span></div>
-            <div class="btn-group">
+        <!-- ==================== ALL MACHINES ==================== -->
+        <div id="tab-list" class="tab-content">
+            <div class="info-box">
+                <span><strong>All Machines</strong> <span id="listCount">0</span></span>
                 <button onclick="refreshList()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button>
-                <button onclick="exportToCSV()" class="btn btn-primary btn-sm"><i class="fas fa-file-excel"></i> Export Excel</button>
+            </div>
+            <div id="machineListView" class="machine-list"><p style="text-align:center;padding:30px;">Loading machines...</p></div>
+        </div>
+
+        <!-- ==================== LOOKUP ==================== -->
+        <div id="tab-lookup" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-search"></i> Find Machine</h3>
+                <div class="search-box" style="margin-top:10px; display:flex; gap:8px;">
+                    <input type="text" id="lookupInput" placeholder="Search by ID, Name, Serial, or Section..." oninput="lookupMachine()" style="flex:1;" />
+                    <button onclick="lookupMachine()" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+                </div>
+                <div id="lookupResult"></div>
             </div>
         </div>
-        <div id="machineList" class="machine-list"><p style="text-align:center;padding:30px;">Loading...</p></div>
+
+        <!-- ==================== QR ==================== -->
+        <div id="tab-qr" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-qrcode"></i> Generate QR Code</h3>
+                <div class="form-grid" style="margin-top:10px;">
+                    <div class="form-group">
+                        <label>Select Machine</label>
+                        <select id="qrMachineSelect" onchange="generateQR()"></select>
+                    </div>
+                    <div class="form-group" style="justify-content:flex-end; flex-direction:row; gap:8px;">
+                        <button onclick="generateQR()" class="btn btn-primary"><i class="fas fa-qrcode"></i> Generate</button>
+                        <button onclick="downloadQR()" class="btn btn-secondary"><i class="fas fa-download"></i> Download</button>
+                    </div>
+                </div>
+                <div id="qrOutput" style="display:none; margin-top:15px;" class="qr-container">
+                    <div class="qr-display">
+                        <div id="qrCanvasContainer"></div>
+                        <p id="qrLabel" style="font-weight:600;margin-top:6px;font-size:13px;"></p>
+                    </div>
+                    <div class="qr-info-panel">
+                        <h4>Machine Details</h4>
+                        <div id="qrInfoDetails"><p style="color:#666;font-size:13px;">Select a machine to see details.</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SCAN ==================== -->
+        <div id="tab-scan" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-camera"></i> Scan QR Code</h3>
+                <div class="btn-group" style="margin:12px 0;">
+                    <button onclick="startQRScanner()" class="btn btn-scan"><i class="fas fa-play"></i> Start Camera</button>
+                    <button onclick="stopQRScanner()" class="btn btn-danger"><i class="fas fa-stop"></i> Stop</button>
+                </div>
+                <div id="qrReaderContainer" style="display:none;"></div>
+                <div id="scanResult" style="margin-top:12px;"></div>
+            </div>
+        </div>
+
+        <!-- ==================== STATISTICS ==================== -->
+        <div id="tab-status" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-chart-bar"></i> Statistics Dashboard</h3>
+                <div id="statsContainer" style="margin-top:14px;">
+                    <div class="stat-grid" id="statGrid"></div>
+                    <div style="margin-top:20px;">
+                        <h4 style="margin-bottom:8px;">Machines by Section</h4>
+                        <div id="sectionStats"></div>
+                    </div>
+                    <div style="margin-top:16px;">
+                        <button onclick="refreshDashboard()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">🍃 Panilkanda Tea Factory Machine Tracker · Developed by MaplyVision Labs</div>
     </div>
 
-    <!-- ==================== LOOKUP TAB ==================== -->
-    <div id="tab-lookup" class="tab-content">
-        <div class="card">
-            <h3 style="margin-bottom:10px;"><i class="fas fa-search"></i> Find Machine</h3>
-            <div class="search-box"><input type="text" id="lookupId" placeholder="Enter Machine ID" /><button onclick="doLookup()" class="btn btn-primary"><i class="fas fa-search"></i>Search</button></div>
-            <div id="lookupResult" style="margin-top:14px;"></div>
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="bottom-nav" id="bottomNav">
+        <a href="#" data-tab="assets" class="active"><i class="fas fa-boxes"></i><span>Assets</span></a>
+        <a href="#" data-tab="list"><i class="fas fa-list"></i><span>Machines</span></a>
+        <a href="#" data-tab="qr"><i class="fas fa-qrcode"></i><span>QR</span></a>
+        <a href="#" data-tab="scan"><i class="fas fa-camera"></i><span>Scan</span></a>
+        <a href="#" data-tab="status"><i class="fas fa-chart-bar"></i><span>Stats</span></a>
+    </nav>
+
+    <!-- Edit Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Edit Machine</h3>
+                <button class="modal-close" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form id="editForm" autocomplete="off">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><i class="fas fa-hashtag"></i> Machine ID</label>
+                        <input type="text" id="editMachineId" readonly class="auto-id" />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Machine Name *</label>
+                        <input type="text" id="editName" required />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-building"></i> Section *</label>
+                        <select id="editSection" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-industry"></i> Manufacturer</label>
+                        <input type="text" id="editManufacturer" />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-cube"></i> Model</label>
+                        <input type="text" id="editModel" />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-barcode"></i> Serial Number</label>
+                        <input type="text" id="editSerial" />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> Installation Date</label>
+                        <input type="date" id="editDate" />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-info-circle"></i> Status</label>
+                        <select id="editStatus">
+                            <option value="working">Working</option>
+                            <option value="maintenance">Maintenance</option>
+                            <option value="out-of-service">Out of Service</option>
+                        </select>
+                    </div>
+                    <div class="form-group full">
+                        <label><i class="fas fa-sticky-note"></i> Notes</label>
+                        <textarea id="editNotes" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="btn-group" style="margin-top:12px;">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
+                    <button type="button" onclick="deleteMachineFromEdit()" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                    <button type="button" onclick="closeEditModal()" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- ==================== QR TAB ==================== -->
-    <div id="tab-qr" class="tab-content">
-        <div class="card">
-            <h3 style="margin-bottom:10px;"><i class="fas fa-qrcode"></i> Generate QR Code</h3>
-            <p style="font-size:11px;color:#e65100;margin-bottom:8px;font-weight:600;">✅ QR contains full machine data. Scan to see details on any device!</p>
-            <div style="background:var(--primary-bg);border:2px dashed var(--primary-light);border-radius:14px;padding:14px;margin-bottom:14px;">
-                <div class="search-box"><input type="text" id="qrMachineId" placeholder="Enter Machine ID" /><button onclick="generateQR()" class="btn btn-primary"><i class="fas fa-qrcode"></i>Generate</button></div>
-            </div>
-            <div class="qr-container">
-                <div class="qr-display" id="qrDisplay"><p style="color:#999;">QR will appear here</p></div>
-                <div class="qr-info-panel" id="qrInfoPanel"><p style="color:#999;">Data preview here</p></div>
-            </div>
-        </div>
-    </div>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js">
+    </script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js">
+    </script>
 
-    <!-- ==================== SCAN TAB ==================== -->
-    <div id="tab-scan" class="tab-content">
-        <div class="card">
-            <h3 style="margin-bottom:8px;"><i class="fas fa-camera"></i> Scan QR Code</h3>
-            <p style="font-size:12px;color:#666;margin-bottom:10px;">Use camera to scan QR. Machine details appear instantly!</p>
-            <div class="btn-group" style="margin-bottom:10px;"><button onclick="startQRScanner()" class="btn btn-scan btn-lg"><i class="fas fa-play"></i>Start Scanner</button><button onclick="stopQRScanner()" class="btn btn-danger"><i class="fas fa-stop"></i>Stop</button></div>
-            <div id="qrReaderContainer" style="display:none;"><div id="qrReader"></div></div>
-            <div id="scanResult"></div>
-        </div>
-    </div>
-
-    <!-- ==================== STATS TAB ==================== -->
-    <div id="tab-status" class="tab-content">
-        <div class="card"><h3 style="margin-bottom:10px;"><i class="fas fa-chart-bar"></i> Status Overview</h3><div id="statusDashboard"><p style="text-align:center;padding:30px;">Loading...</p></div></div>
-    </div>
-
-    <div class="footer">🍃 Panilkanda Tea Factory Machine Tracker · Developed by MaplyVision Labs</div>
-</div>
-
-<!-- Edit Modal -->
-<div id="editModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header"><h3>Edit Machine</h3><button class="modal-close" onclick="closeEditModal()">&times;</button></div>
-        <form id="editForm" autocomplete="off">
-            <input type="hidden" id="editMachineId" />
-            <div class="form-grid">
-                <div class="form-group"><label>Section</label><select id="editSection"></select></div>
-                <div class="form-group"><label>Machine Name *</label><input type="text" id="editMachineName" required /></div>
-                <div class="form-group"><label>Model Number</label><input type="text" id="editModelNumber" /></div>
-                <div class="form-group"><label>Manufacturer</label><input type="text" id="editManufacturer" /></div>
-                <div class="form-group"><label>Install Date</label><input type="date" id="editInstallDate" /></div>
-                <div class="form-group"><label>Seller Name</label><input type="text" id="editSellerName" /></div>
-                <div class="form-group"><label>Seller Phone</label><input type="text" id="editSellerPhone" /></div>
-                <div class="form-group"><label>Seller Email</label><input type="text" id="editSellerEmail" /></div>
-                <div class="form-group"><label>Contact Person</label><input type="text" id="editContactPerson" /></div>
-                <div class="form-group"><label>Contact Phone</label><input type="text" id="editContactPhone" /></div>
-                <div class="form-group full"><label>Seller Address</label><input type="text" id="editSellerAddress" /></div>
-                <div class="form-group"><label>Status</label><select id="editStatus"><option value="Working">✅ Working</option><option value="Under Maintenance">🔧 Maintenance</option><option value="Out of Service">⛔ Out of Service</option></select></div>
-                <div class="form-group"><label>Next Service</label><input type="date" id="editNextService" /></div>
-                <div class="form-group"><label>Last Service</label><input type="date" id="editLastService" /></div>
-                <div class="form-group"><label>Spare Parts</label><input type="text" id="editSpareParts" /></div>
-                <div class="form-group full"><label>Maintenance History</label><textarea id="editMaintenanceHistory" rows="2"></textarea></div>
-                <div class="form-group full"><label>Other Details</label><textarea id="editNotes" rows="2"></textarea></div>
-            </div>
-            <div class="btn-group" style="margin-top:14px;"><button type="submit" class="btn btn-primary" style="flex:1;">Update</button><button type="button" class="btn btn-danger" id="deleteBtn">Delete</button></div>
-        </form>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-
-<script>
-// ============================================================
-// DATABASE
-// ============================================================
-var DB = {
-    KEY_MACHINES: 'ptfMachines_v1',
-    KEY_SECTIONS: 'ptfSections_v1',
-    getMachines: function(){ try{ return JSON.parse(localStorage.getItem(this.KEY_MACHINES)) || []; }catch(e){ return []; } },
-    getSections: function(){ try{ return JSON.parse(localStorage.getItem(this.KEY_SECTIONS)) || []; }catch(e){ return []; } },
-    getMachineById: function(id){ return this.getMachines().find(function(m){ return m.machineId === id; }) || null; },
-    saveMachine: function(m){
-        var list = this.getMachines();
-        var idx = list.findIndex(function(x){ return x.machineId === m.machineId; });
-        if(idx !== -1){ list[idx] = Object.assign({}, list[idx], m, { updatedAt: new Date().toISOString() }); }
-        else { list.push(Object.assign({}, m, { createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() })); }
-        localStorage.setItem(this.KEY_MACHINES, JSON.stringify(list));
-    },
-    deleteMachine: function(id){ localStorage.setItem(this.KEY_MACHINES, JSON.stringify(this.getMachines().filter(function(m){ return m.machineId !== id; }))); },
-    saveSection: function(s){
-        var list = this.getSections();
-        if(!list.find(function(x){ return x.name === s.name; })){
-            list.push(s);
-            localStorage.setItem(this.KEY_SECTIONS, JSON.stringify(list));
+    <script>
+        // ============================================================
+        // DATABASE
+        // ============================================================
+        function getDB() {
+            try {
+                const data = localStorage.getItem('panilkanda_db');
+                if (data) return JSON.parse(data);
+            } catch (e) { /* ignore */ }
+            return { machines: [], sections: [] };
         }
-    },
-    deleteSection: function(name){ localStorage.setItem(this.KEY_SECTIONS, JSON.stringify(this.getSections().filter(function(s){ return s.name !== name; }))); },
-    getStats: function(){
-        var list = this.getMachines(); var s = { total: list.length, working: 0, maintenance: 0, outOfService: 0 };
-        list.forEach(function(m){ if(m.status === 'Working') s.working++; else if(m.status === 'Under Maintenance') s.maintenance++; else if(m.status === 'Out of Service') s.outOfService++; else s.working++; });
-        return s;
-    }
-};
 
-function generateMachineId() {
-    var machines = DB.getMachines();
-    var maxNum = 0;
-    machines.forEach(function(m){
-        var match = m.machineId.match(/PTF-(\d+)/);
-        if(match && parseInt(match[1]) > maxNum) maxNum = parseInt(match[1]);
-    });
-    return 'PTF-' + String(maxNum + 1).padStart(4, '0');
-}
-
-function esc(str){ if(!str) return ''; var d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
-function fmtDate(d){ if(!d) return 'N/A'; try { var dt = new Date(d); if(isNaN(dt.getTime())) return d; return dt.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); } catch(e){ return d; } }
-function statusCls(s){ if(s==='Under Maintenance') return 'maintenance'; if(s==='Out of Service') return 'out-of-service'; return 'working'; }
-function statusIcon(s){ if(s==='Under Maintenance') return 'fa-wrench'; if(s==='Out of Service') return 'fa-times-circle'; return 'fa-check-circle'; }
-function toast(msg, type){
-    type = type || 'success';
-    var t = document.createElement('div'); t.className = 'toast' + (type !== 'success' ? ' ' + type : '');
-    t.innerHTML = '<i class="fas ' + (type==='error'?'fa-exclamation-circle':type==='warning'?'fa-exclamation-triangle':'fa-check-circle') + '"></i><span>' + msg + '</span>';
-    document.getElementById('toastContainer').appendChild(t); setTimeout(function(){ t.remove(); }, 3000);
-}
-
-// ============================================================
-// EXPORT TO EXCEL (CSV)
-// ============================================================
-function exportToCSV() {
-    var machines = DB.getMachines();
-    // Apply filter if in View Assets
-    var filter = document.getElementById('filterSection');
-    if (filter && filter.value !== 'all') {
-        machines = machines.filter(function(m) { return m.section === filter.value; });
-    }
-    if (machines.length === 0) { toast('No data to export', 'warning'); return; }
-    
-    var headers = [
-        'Machine ID', 'Section', 'Machine Name', 'Model Number', 'Manufacturer',
-        'Install Date', 'Seller Name', 'Seller Phone', 'Seller Email',
-        'Contact Person', 'Contact Phone', 'Seller Address',
-        'Status', 'Next Service Date', 'Last Service Date', 'Spare Parts',
-        'Maintenance History', 'Other Details'
-    ];
-    
-    var csv = headers.join(',') + '\n';
-    machines.forEach(function(m) {
-        var row = [
-            m.machineId, m.section, m.machineName, m.modelNumber, m.manufacturer,
-            m.installDate, m.sellerName, m.sellerPhone, m.sellerEmail,
-            m.contactPerson, m.contactPhone, m.sellerAddress,
-            m.status, m.nextService, m.lastService, m.spareParts,
-            m.maintenanceHistory, m.notes
-        ].map(function(field) {
-            var str = field ? String(field) : '';
-            // Escape double quotes and wrap in quotes if contains comma, quote, or newline
-            if (str.includes(',') || str.includes('"') || str.includes('\n')) {
-                str = '"' + str.replace(/"/g, '""') + '"';
-            }
-            return str;
-        });
-        csv += row.join(',') + '\n';
-    });
-    
-    var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'Panilkanda_Machines_' + new Date().toISOString().slice(0,10) + '.csv';
-    a.click();
-    URL.revokeObjectURL(url);
-    toast('✅ Exported ' + machines.length + ' records!');
-}
-
-// ============================================================
-// SECTIONS MANAGEMENT
-// ============================================================
-function loadSectionsDropdown() {
-    var sections = DB.getSections();
-    if (sections.length === 0) {
-        var defaults = [
-            { name: 'Withering Section', location: '', description: '' },
-            { name: 'Rolling Section', location: '', description: '' },
-            { name: 'Drying Section', location: '', description: '' },
-            { name: 'Sifting Section', location: '', description: '' }
-        ];
-        defaults.forEach(function(s){ DB.saveSection(s); });
-        sections = DB.getSections();
-    }
-    var dropdowns = ['assetSection', 'editSection', 'filterSection'];
-    dropdowns.forEach(function(dId){
-        var sel = document.getElementById(dId);
-        if (!sel) return;
-        var currentVal = sel.value;
-        sel.innerHTML = dId === 'filterSection' ? '<option value="all">All Sections</option>' : '<option value="">Select Section</option>';
-        sections.forEach(function(s){
-            sel.innerHTML += '<option value="' + esc(s.name) + '">' + esc(s.name) + '</option>';
-        });
-        if (currentVal) sel.value = currentVal;
-    });
-    var listEl = document.getElementById('sectionsList');
-    if (listEl) {
-        listEl.innerHTML = sections.map(function(s){
-            return '<span style="background:var(--primary-light);padding:6px 12px;border-radius:20px;font-size:11px;display:inline-flex;align-items:center;gap:6px;">' + esc(s.name) + ' <button onclick="deleteSectionHandler(\'' + esc(s.name) + '\')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:14px;">&times;</button></span>';
-        }).join('');
-    }
-}
-
-function deleteSectionHandler(name) {
-    if (confirm('Delete section "' + name + '"?')) {
-        DB.deleteSection(name);
-        loadSectionsDropdown();
-        toast('Section deleted!');
-    }
-}
-
-document.getElementById('sectionForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    var name = document.getElementById('newSectionName').value.trim();
-    if (!name) { toast('Section name required!', 'error'); return; }
-    DB.saveSection({ name: name, location: document.getElementById('newSectionLocation').value.trim(), description: document.getElementById('newSectionDesc').value.trim() });
-    loadSectionsDropdown();
-    toast('✅ Section added!');
-    this.reset();
-});
-
-// ============================================================
-// ASSET SUB-TABS
-// ============================================================
-document.getElementById('assetSubTabs').addEventListener('click', function(e){
-    if (e.target.classList.contains('sub-tab')) {
-        document.querySelectorAll('#assetSubTabs .sub-tab').forEach(function(b){ b.classList.remove('active'); });
-        e.target.classList.add('active');
-        var sub = e.target.dataset.sub;
-        document.getElementById('sub-viewAssets').style.display = sub === 'viewAssets' ? 'block' : 'none';
-        document.getElementById('sub-addAsset').style.display = sub === 'addAsset' ? 'block' : 'none';
-        document.getElementById('sub-addSection').style.display = sub === 'addSection' ? 'block' : 'none';
-        if (sub === 'viewAssets') refreshAssetView();
-        if (sub === 'addAsset') {
-            document.getElementById('assetMachineId').value = generateMachineId();
+        function saveDB(db) {
+            localStorage.setItem('panilkanda_db', JSON.stringify(db));
         }
-    }
-});
 
-// ============================================================
-// ADD ASSET FORM
-// ============================================================
-document.getElementById('assetForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    var section = document.getElementById('assetSection').value;
-    var machineId = document.getElementById('assetMachineId').value;
-    var machineName = document.getElementById('assetMachineName').value.trim();
-    if (!section) { toast('Please select a section!', 'error'); return; }
-    if (!machineName) { toast('Machine name required!', 'error'); return; }
-    
-    var m = {
-        machineId: machineId,
-        section: section,
-        machineName: machineName,
-        modelNumber: document.getElementById('assetModelNumber').value.trim(),
-        manufacturer: document.getElementById('assetManufacturer').value.trim(),
-        installDate: document.getElementById('assetInstallDate').value,
-        sellerName: document.getElementById('assetSellerName').value.trim(),
-        sellerPhone: document.getElementById('assetSellerPhone').value.trim(),
-        sellerEmail: document.getElementById('assetSellerEmail').value.trim(),
-        contactPerson: document.getElementById('assetContactPerson').value.trim(),
-        contactPhone: document.getElementById('assetContactPhone').value.trim(),
-        sellerAddress: document.getElementById('assetSellerAddress').value.trim(),
-        nextService: document.getElementById('assetNextService').value,
-        status: document.getElementById('assetStatus').value,
-        lastService: document.getElementById('assetLastService').value,
-        spareParts: document.getElementById('assetSpareParts').value.trim(),
-        maintenanceHistory: document.getElementById('assetMaintenanceHistory').value.trim(),
-        notes: document.getElementById('assetNotes').value.trim()
-    };
-    DB.saveMachine(m);
-    toast('✅ Asset saved! ID: ' + machineId);
-    this.reset();
-    document.getElementById('assetMachineId').value = generateMachineId();
-    document.getElementById('assetStatus').value = 'Working';
-    refreshAssetView();
-    refreshList();
-    refreshDashboard();
-});
+        function getSections() {
+            return getDB().sections || [];
+        }
 
-// ============================================================
-// VIEW ASSETS
-// ============================================================
-function refreshAssetView() {
-    var el = document.getElementById('assetListView');
-    var machines = DB.getMachines();
-    var filterSection = document.getElementById('filterSection') ? document.getElementById('filterSection').value : 'all';
-    document.getElementById('assetCount').textContent = machines.length;
-    
-    if (filterSection !== 'all') {
-        machines = machines.filter(function(m){ return m.section === filterSection; });
-    }
-    
-    if (!machines.length) { el.innerHTML = '<p style="text-align:center;padding:30px;opacity:0.5;">No assets found.</p>'; return; }
-    machines.sort(function(a,b){ return a.machineId.localeCompare(b.machineId); });
-    el.innerHTML = machines.map(function(m){
-        var sc = statusCls(m.status);
-        return '<div class="machine-item"><div class="machine-info"><span class="machine-id">' + esc(m.machineId) + '</span><span class="machine-section">' + esc(m.section || 'N/A') + '</span><span class="machine-name">' + esc(m.machineName) + '</span><span class="status-badge ' + sc + '">' + esc(m.status || 'Working') + '</span></div><div class="btn-group"><button onclick="switchToTab(\'qr\');document.getElementById(\'qrMachineId\').value=\'' + esc(m.machineId) + '\';generateQR();" class="btn btn-info btn-sm"><i class="fas fa-qrcode"></i></button><button onclick="openEditModal(\'' + esc(m.machineId) + '\')" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button><button onclick="deleteAsset(\'' + esc(m.machineId) + '\')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
-    }).join('');
-}
+        function getMachines() {
+            return getDB().machines || [];
+        }
 
-function filterAssets() { refreshAssetView(); }
+        function generateMachineId() {
+            const db = getDB();
+            const existing = db.machines || [];
+            const nums = existing.map(m => {
+                const n = parseInt(m.id.replace(/\D/g, ''));
+                return isNaN(n) ? 0 : n;
+            });
+            const max = nums.length ? Math.max(...nums) : 0;
+            return 'M' + String(max + 1).padStart(4, '0');
+        }
 
-function deleteAsset(id) {
-    if (confirm('Delete asset "' + id + '"?')) {
-        DB.deleteMachine(id);
-        toast('Deleted!');
-        refreshAssetView();
-        refreshList();
-        refreshDashboard();
-    }
-}
+        function esc(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                if (m === '"') return '&quot;';
+                if (m === "'") return '&#039;';
+                return m;
+            });
+        }
 
-// ============================================================
-// ALL MACHINES LIST
-// ============================================================
-function refreshList(){
-    var el = document.getElementById('machineList');
-    var machines = DB.getMachines();
-    document.getElementById('listCount').textContent = machines.length;
-    if (!machines.length) { el.innerHTML = '<p style="text-align:center;padding:30px;opacity:0.5;">No machines</p>'; return; }
-    machines.sort(function(a,b){ return a.machineId.localeCompare(b.machineId); });
-    el.innerHTML = machines.map(function(m){
-        var sc = statusCls(m.status);
-        return '<div class="machine-item"><div class="machine-info"><span class="machine-id">' + esc(m.machineId) + '</span><span class="machine-section">' + esc(m.section || 'N/A') + '</span><span class="machine-name">' + esc(m.machineName) + '</span><span class="status-badge ' + sc + '">' + esc(m.status || 'Working') + '</span></div><div class="btn-group"><button onclick="switchToTab(\'qr\');document.getElementById(\'qrMachineId\').value=\'' + esc(m.machineId) + '\';generateQR();" class="btn btn-info btn-sm"><i class="fas fa-qrcode"></i></button><button onclick="openEditModal(\'' + esc(m.machineId) + '\')" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button><button onclick="deleteAsset(\'' + esc(m.machineId) + '\')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
-    }).join('');
-}
+        function fmtDate(d) {
+            if (!d) return '-';
+            try {
+                const dt = new Date(d);
+                return dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+            } catch (e) { return d; }
+        }
 
-// ============================================================
-// LOOKUP
-// ============================================================
-function doLookup(){
-    var id = document.getElementById('lookupId').value.trim();
-    if (!id) return;
-    var m = DB.getMachineById(id);
-    var el = document.getElementById('lookupResult');
-    if (!m) { el.innerHTML = '<p style="color:var(--danger);text-align:center;padding:16px;">Not found: ' + esc(id) + '</p>'; return; }
-    var sc = statusCls(m.status);
-    el.innerHTML = '<div class="result-card"><h3>' + esc(m.machineName) + ' <span class="status-badge ' + sc + '">' + esc(m.status || 'Working') + '</span></h3><div class="result-grid">' +
-        '<div class="result-item"><label>Machine ID</label><value>' + esc(m.machineId) + '</value></div>' +
-        '<div class="result-item"><label>Section</label><value>' + esc(m.section || 'N/A') + '</value></div>' +
-        '<div class="result-item"><label>Model</label><value>' + esc(m.modelNumber || 'N/A') + '</value></div>' +
-        '<div class="result-item"><label>Manufacturer</label><value>' + esc(m.manufacturer || 'N/A') + '</value></div>' +
-        '<div class="result-item"><label>Install Date</label><value>' + fmtDate(m.installDate) + '</value></div>' +
-        '<div class="result-item"><label>Seller</label><value>' + esc(m.sellerName || 'N/A') + '</value></div>' +
-        '<div class="result-item"><label>Seller Phone</label><value>' + esc(m.sellerPhone || 'N/A') + '</value></div>' +
-        '<div class="result-item"><label>Contact Person</label><value>' + esc(m.contactPerson || 'N/A') + '</value></div>' +
-        '<div class="result-item"><label>Next Service</label><value>' + fmtDate(m.nextService) + '</value></div>' +
-        '<div class="result-item"><label>Last Service</label><value>' + fmtDate(m.lastService) + '</value></div>' +
-        '<div class="result-item" style="grid-column:1/-1;"><label>Spare Parts</label><value>' + esc(m.spareParts || 'N/A') + '</value></div>' +
-        '<div class="result-item" style="grid-column:1/-1;"><label>Maintenance</label><value>' + esc(m.maintenanceHistory || 'None') + '</value></div>' +
-        '<div class="result-item" style="grid-column:1/-1;"><label>Other Details</label><value>' + esc(m.notes || 'None') + '</value></div>' +
-        '</div></div>';
-}
+        function statusCls(s) {
+            if (s === 'working') return 'working';
+            if (s === 'maintenance') return 'maintenance';
+            if (s === 'out-of-service') return 'out-of-service';
+            return '';
+        }
 
-// ============================================================
-// EDIT MODAL
-// ============================================================
-function openEditModal(id){
-    var m = DB.getMachineById(id); if (!m) return;
-    loadSectionsDropdown();
-    setTimeout(function(){
-        document.getElementById('editSection').value = m.section || '';
-    }, 100);
-    document.getElementById('editMachineId').value = m.machineId;
-    document.getElementById('editMachineName').value = m.machineName || '';
-    document.getElementById('editModelNumber').value = m.modelNumber || '';
-    document.getElementById('editManufacturer').value = m.manufacturer || '';
-    document.getElementById('editInstallDate').value = m.installDate || '';
-    document.getElementById('editSellerName').value = m.sellerName || '';
-    document.getElementById('editSellerPhone').value = m.sellerPhone || '';
-    document.getElementById('editSellerEmail').value = m.sellerEmail || '';
-    document.getElementById('editContactPerson').value = m.contactPerson || '';
-    document.getElementById('editContactPhone').value = m.contactPhone || '';
-    document.getElementById('editSellerAddress').value = m.sellerAddress || '';
-    document.getElementById('editStatus').value = m.status || 'Working';
-    document.getElementById('editNextService').value = m.nextService || '';
-    document.getElementById('editLastService').value = m.lastService || '';
-    document.getElementById('editSpareParts').value = m.spareParts || '';
-    document.getElementById('editMaintenanceHistory').value = m.maintenanceHistory || '';
-    document.getElementById('editNotes').value = m.notes || '';
-    document.getElementById('editModal').classList.add('active');
-}
-function closeEditModal(){ document.getElementById('editModal').classList.remove('active'); }
+        function statusLabel(s) {
+            const map = { working: '✅ Working', maintenance: '🔧 Maintenance', 'out-of-service': '⛔ Out of Service' };
+            return map[s] || s;
+        }
 
-document.getElementById('editForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    var updated = {
-        machineId: document.getElementById('editMachineId').value,
-        section: document.getElementById('editSection').value,
-        machineName: document.getElementById('editMachineName').value.trim(),
-        modelNumber: document.getElementById('editModelNumber').value.trim(),
-        manufacturer: document.getElementById('editManufacturer').value.trim(),
-        installDate: document.getElementById('editInstallDate').value,
-        sellerName: document.getElementById('editSellerName').value.trim(),
-        sellerPhone: document.getElementById('editSellerPhone').value.trim(),
-        sellerEmail: document.getElementById('editSellerEmail').value.trim(),
-        contactPerson: document.getElementById('editContactPerson').value.trim(),
-        contactPhone: document.getElementById('editContactPhone').value.trim(),
-        sellerAddress: document.getElementById('editSellerAddress').value.trim(),
-        status: document.getElementById('editStatus').value,
-        nextService: document.getElementById('editNextService').value,
-        lastService: document.getElementById('editLastService').value,
-        spareParts: document.getElementById('editSpareParts').value.trim(),
-        maintenanceHistory: document.getElementById('editMaintenanceHistory').value.trim(),
-        notes: document.getElementById('editNotes').value.trim()
-    };
-    DB.saveMachine(updated);
-    toast('✅ Updated!');
-    closeEditModal();
-    refreshAssetView();
-    refreshList();
-    refreshDashboard();
-});
+        function toast(msg, isError) {
+            const c = document.getElementById('toastContainer');
+            const el = document.createElement('div');
+            el.className = 'toast' + (isError ? ' error' : '');
+            el.textContent = msg;
+            c.appendChild(el);
+            setTimeout(() => { if (el.parentNode) el.remove(); }, 3000);
+        }
 
-document.getElementById('deleteBtn').addEventListener('click', function(){
-    var id = document.getElementById('editMachineId').value;
-    if (id && confirm('Delete?')) { DB.deleteMachine(id); toast('Deleted!'); closeEditModal(); refreshAssetView(); refreshList(); refreshDashboard(); }
-});
-document.getElementById('editModal').addEventListener('click', function(e){ if(e.target === this) closeEditModal(); });
+        function getSectionName(id) {
+            if (!id) return 'Uncategorised';
+            const sections = getSections();
+            const found = sections.find(s => s.id === id);
+            return found ? found.name : id;
+        }
 
-// ============================================================
-// QR CODE (FIXED ENCODING)
-// ============================================================
-function base64urlEncode(str) {
-    var bytes = new TextEncoder().encode(str);
-    var binStr = Array.from(bytes, function(b) { return String.fromCharCode(b); }).join('');
-    var base64 = btoa(binStr);
-    return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-function base64urlDecode(str) {
-    str = str.replace(/-/g, '+').replace(/_/g, '/');
-    while (str.length % 4) str += '=';
-    var binStr = atob(str);
-    var bytes = new Uint8Array(binStr.length);
-    for (var i = 0; i < binStr.length; i++) bytes[i] = binStr.charCodeAt(i);
-    return new TextDecoder().decode(bytes);
-}
+        function getSectionColor(id) {
+            if (!id) return '#2e7d32';
+            const sections = getSections();
+            const found = sections.find(s => s.id === id);
+            return found && found.color ? found.color : '#2e7d32';
+        }
 
-function getQRText(machineId) {
-    var m = DB.getMachineById(machineId);
-    if (!m) return '';
-    var data = {
-        id: m.machineId, nm: m.machineName, sc: m.section || '',
-        md: m.modelNumber || '', mf: m.manufacturer || '', ind: m.installDate || '',
-        sn: m.sellerName || '', sp: m.sellerPhone || '', se: m.sellerEmail || '',
-        cp: m.contactPerson || '', cph: m.contactPhone || '', sa: m.sellerAddress || '',
-        st: m.status || 'Working', ns: m.nextService || '', ls: m.lastService || '',
-        spt: m.spareParts || '', mh: m.maintenanceHistory || '', nt: m.notes || ''
-    };
-    var json = JSON.stringify(data);
-    var encoded = base64urlEncode(json);
-    return window.location.href.split('?')[0].split('#')[0] + '#data=' + encoded;
-}
+        // ============================================================
+        // RENDER HELPERS
+        // ============================================================
+        function renderMachineItem(m) {
+            const secName = getSectionName(m.section);
+            return `
+                <div class="machine-item" style="border-left:5px solid ${getSectionColor(m.section)};">
+                    <div class="machine-info">
+                        <span class="machine-id">${esc(m.id)}</span>
+                        <span class="machine-name">${esc(m.name)}</span>
+                        <span class="machine-section"><i class="fas fa-folder"></i> ${esc(secName)}</span>
+                        <span class="status-badge ${statusCls(m.status)}">${statusLabel(m.status)}</span>
+                    </div>
+                    <div class="btn-group">
+                        <button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
+                        <button onclick="viewMachine('${esc(m.id)}')" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i> View</button>
+                        <button onclick="deleteMachine('${esc(m.id)}')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        }
 
-function generateQR() {
-    var id = document.getElementById('qrMachineId').value.trim();
-    if (!id) { toast('Enter Machine ID', 'warning'); return; }
-    var m = DB.getMachineById(id);
-    var qrDisplay = document.getElementById('qrDisplay');
-    var qrInfoPanel = document.getElementById('qrInfoPanel');
-    if (!m) { qrDisplay.innerHTML = '<p style="color:var(--danger);">Not found!</p>'; qrInfoPanel.innerHTML = '<p>Not found</p>'; return; }
-    var qrText = getQRText(id);
-    qrDisplay.innerHTML = '<div id="qrCodeTarget"></div>';
-    try {
-        new QRCode(document.getElementById('qrCodeTarget'), {
-            text: qrText,
-            width: 250,
-            height: 250,
-            colorDark: '#1b5e20',
-            colorLight: '#ffffff',
-            correctLevel: QRCode.CorrectLevel.L   // <-- LOW error correction for max data
-        });
-        var label = document.createElement('p'); label.style.cssText = 'margin-top:8px;font-weight:700;color:#1b5e20;'; label.textContent = m.machineName; qrDisplay.appendChild(label);
-        var badge = document.createElement('span'); badge.className = 'status-badge ' + statusCls(m.status); badge.textContent = m.status; qrDisplay.appendChild(badge);
-        var hint = document.createElement('p'); hint.style.cssText = 'font-size:10px;color:#e65100;margin-top:4px;'; hint.textContent = '📱 Scan QR → Shows details on any device!'; qrDisplay.appendChild(hint);
-        var btnDiv = document.createElement('div'); btnDiv.style.marginTop = '8px'; btnDiv.innerHTML = '<button onclick="saveQRImage()" class="btn btn-primary btn-sm"><i class="fas fa-download"></i> Download QR</button>'; qrDisplay.appendChild(btnDiv);
-        qrInfoPanel.innerHTML = '<h4 style="color:var(--primary-dark);">📦 Data in QR:</h4><div style="background:white;padding:8px;border-radius:8px;font-size:11px;">' +
-            '<strong>' + esc(m.machineName) + '</strong><br>ID: ' + esc(m.machineId) + '<br>Section: ' + esc(m.section || 'N/A') + '<br>Status: ' + esc(m.status) + '</div>' +
-            '<p style="font-size:10px;color:#2e7d32;margin-top:6px;">✅ QR contains full data – works offline & cross‑device.</p>';
-        toast('✅ QR generated!');
-    } catch(e) { qrDisplay.innerHTML = '<p style="color:var(--danger);">Error: ' + e.message + '</p>'; }
-}
-
-function saveQRImage() {
-    var canvas = document.querySelector('#qrCodeTarget canvas');
-    if (!canvas) return;
-    var id = document.getElementById('qrMachineId').value.trim();
-    var a = document.createElement('a'); a.download = 'QR-' + id + '.png'; a.href = canvas.toDataURL('image/png'); a.click();
-    toast('💾 QR saved!');
-}
-
-// ============================================================
-// QR SCANNER
-// ============================================================
-var html5QrCode = null, scannerActive = false;
-function startQRScanner() {
-    if (scannerActive) return;
-    document.getElementById('qrReaderContainer').style.display = 'block'; document.getElementById('qrReader').innerHTML = ''; document.getElementById('scanResult').innerHTML = '';
-    if (html5QrCode) { try { html5QrCode.stop(); } catch(e) {} try { html5QrCode.clear(); } catch(e) {} html5QrCode = null; }
-    html5QrCode = new Html5Qrcode("qrReader");
-    html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } },
-        function(decodedText) { scannerActive = false; html5QrCode.stop().then(function() { document.getElementById('qrReaderContainer').style.display = 'none'; html5QrCode.clear(); }).catch(function() { document.getElementById('qrReaderContainer').style.display = 'none'; }); handleScannedQRData(decodedText); },
-        function() {}
-    ).then(function() { scannerActive = true; toast('📷 Camera active!'); }).catch(function(err) { scannerActive = false; document.getElementById('qrReaderContainer').style.display = 'none'; toast('❌ Camera access denied.', 'error'); });
-}
-function stopQRScanner() { scannerActive = false; if (html5QrCode) { html5QrCode.stop().then(function() { document.getElementById('qrReaderContainer').style.display = 'none'; html5QrCode.clear(); }).catch(function() { document.getElementById('qrReaderContainer').style.display = 'none'; }); } }
-function handleScannedQRData(data) {
-    if (data.indexOf('#data=') > -1 || data.indexOf('data=') > -1) {
-        var encoded = data.indexOf('#data=') > -1 ? data.split('#data=')[1].split('&')[0] : data.split('data=')[1].split('&')[0];
-        try {
-            var json = base64urlDecode(encoded); var obj = JSON.parse(json);
-            if (obj.id && obj.nm) {
-                var machine = {
-                    machineId: obj.id, machineName: obj.nm, section: obj.sc || '',
-                    modelNumber: obj.md || '', manufacturer: obj.mf || '', installDate: obj.ind || '',
-                    sellerName: obj.sn || '', sellerPhone: obj.sp || '', sellerEmail: obj.se || '',
-                    contactPerson: obj.cp || '', contactPhone: obj.cph || '', sellerAddress: obj.sa || '',
-                    status: obj.st || 'Working', nextService: obj.ns || '', lastService: obj.ls || '',
-                    spareParts: obj.spt || '', maintenanceHistory: obj.mh || '', notes: obj.nt || ''
-                };
-                showCleanDisplay(machine); return;
-            }
-        } catch(e) {}
-    }
-    if (data.indexOf('machine=') > -1) {
-        var mid = decodeURIComponent(data.split('machine=')[1].split('&')[0]);
-        var m = DB.getMachineById(mid); if (m) { showCleanDisplay(m); return; }
-    }
-    document.getElementById('scanResult').innerHTML = '<div class="result-card"><h3>📱 Scanned Data</h3><p style="word-break:break-all;">' + esc(data) + '</p></div>';
-}
-
-function showCleanDisplay(machine) {
-    var app = document.querySelector('.app-container'); if (app) app.style.display = 'none';
-    var toastEl = document.querySelector('.toast-container'); if (toastEl) toastEl.style.display = 'none';
-    var footer = document.querySelector('.footer'); if (footer) footer.style.display = 'none';
-    document.body.style.cssText = 'background:#e8f5e9;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;font-family:Inter,sans-serif;';
-    var sc = (machine.status || 'Working').toLowerCase().replace(/\s+/g, '-');
-    var colors = { 'working': ['#c8e6c9','#1b5e20'], 'under-maintenance': ['#ffe0b2','#e65100'], 'out-of-service': ['#ffcdd2','#c62828'] };
-    var c = colors[sc] || colors['working'];
-    document.body.innerHTML = '<div style="background:white;border-radius:20px;padding:30px;max-width:500px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,0.15);">' +
-        '<h1 style="color:#1b5e20;font-size:24px;margin-bottom:8px;">🍃 ' + esc(machine.machineName) + '</h1>' +
-        '<span style="display:inline-block;padding:6px 16px;border-radius:50px;font-weight:600;font-size:13px;margin-bottom:16px;background:' + c[0] + ';color:' + c[1] + ';">' + esc(machine.status || 'Working') + '</span>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:14px;">' +
-        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Machine ID</strong>' + esc(machine.machineId) + '</div>' +
-        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Section</strong>' + esc(machine.section || 'N/A') + '</div>' +
-        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Model</strong>' + esc(machine.modelNumber || 'N/A') + '</div>' +
-        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Manufacturer</strong>' + esc(machine.manufacturer || 'N/A') + '</div>' +
-        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Install Date</strong>' + fmtDate(machine.installDate) + '</div>' +
-        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Seller</strong>' + esc(machine.sellerName || 'N/A') + '</div>' +
-        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Next Service</strong>' + fmtDate(machine.nextService) + '</div>' +
-        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Last Service</strong>' + fmtDate(machine.lastService) + '</div>' +
-        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Spare Parts</strong>' + esc(machine.spareParts || 'N/A') + '</div>' +
-        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Maintenance</strong>' + esc(machine.maintenanceHistory || 'None') + '</div>' +
-        '<div style="padding:8px 0;border-bottom:1px solid #e0e0e0;grid-column:1/-1;"><strong style="display:block;font-size:10px;text-transform:uppercase;color:#666;">Other Details</strong>' + esc(machine.notes || 'None') + '</div>' +
-        '</div><p style="font-size:11px;color:#2e7d32;margin-top:12px;font-weight:600;">✅ Scanned from QR Code</p></div>';
-}
-
-// ============================================================
-// TABS
-// ============================================================
-function switchToTab(name){
-    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
-    var btn = document.querySelector('[data-tab="' + name + '"]'); if (btn) btn.classList.add('active');
-    document.querySelectorAll('.tab-content').forEach(function(t){ t.classList.remove('active'); });
-    var tab = document.getElementById('tab-' + name); if (tab) tab.classList.add('active');
-    if (name === 'list') refreshList();
-    if (name === 'status') refreshDashboard();
-    if (name === 'scan') stopQRScanner();
-    if (name === 'assets') refreshAssetView();
-}
-function setupTabs(){
-    document.querySelectorAll('.tab-btn').forEach(function(btn){
-        btn.addEventListener('click', function(){ switchToTab(this.dataset.tab); });
-    });
-}
-
-// ============================================================
-// DASHBOARD
-// ============================================================
-function refreshDashboard(){
-    var s = DB.getStats(); var el = document.getElementById('statusDashboard');
-    if (!s.total) { el.innerHTML = '<p style="text-align:center;padding:30px;">No machines</p>'; return; }
-    el.innerHTML = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">' +
-        '<div style="background:#c8e6c9;border-radius:14px;padding:18px;text-align:center;"><div style="font-size:28px;font-weight:800;color:#1b5e20;">' + s.working + '</div><div>✅ Working</div></div>' +
-        '<div style="background:#ffe0b2;border-radius:14px;padding:18px;text-align:center;"><div style="font-size:28px;font-weight:800;color:#e65100;">' + s.maintenance + '</div><div>🔧 Maintenance</div></div>' +
-        '<div style="background:#ffcdd2;border-radius:14px;padding:18px;text-align:center;"><div style="font-size:28px;font-weight:800;color:#c62828;">' + s.outOfService + '</div><div>⛔ Out</div></div></div>';
-}
-
-// ============================================================
-// INIT
-// ============================================================
-(function(){
-    var hash = window.location.hash;
-    if (hash && hash.indexOf('#data=') === 0) {
-        var encoded = hash.substring(6);
-        try {
-            var json = base64urlDecode(encoded); var obj = JSON.parse(json);
-            if (obj.id && obj.nm) {
-                var machine = {
-                    machineId: obj.id, machineName: obj.nm, section: obj.sc || '',
-                    modelNumber: obj.md || '', manufacturer: obj.mf || '', installDate: obj.ind || '',
-                    sellerName: obj.sn || '', sellerPhone: obj.sp || '', sellerEmail: obj.se || '',
-                    contactPerson: obj.cp || '', contactPhone: obj.cph || '', sellerAddress: obj.sa || '',
-                    status: obj.st || 'Working', nextService: obj.ns || '', lastService: obj.ls || '',
-                    spareParts: obj.spt || '', maintenanceHistory: obj.mh || '', notes: obj.nt || ''
-                };
-                document.addEventListener('DOMContentLoaded', function(){ showCleanDisplay(machine); });
+        function renderAssetList(machines) {
+            const container = document.getElementById('assetListView');
+            if (!machines || machines.length === 0) {
+                container.innerHTML = '<p style="text-align:center;padding:30px;color:#666;">No assets found. Add one using the "Add Asset" tab.</p>';
+                document.getElementById('assetCount').textContent = '0';
                 return;
             }
-        } catch(e) {}
-    }
-    var params = new URLSearchParams(window.location.search);
-    var machineId = params.get('machine');
-    if (machineId) {
-        document.addEventListener('DOMContentLoaded', function(){
-            var m = DB.getMachineById(machineId);
-            if (m) { showCleanDisplay(m); } else { document.body.innerHTML = '<div style="text-align:center;padding:40px;"><h2>Machine not found</h2></div>'; }
-        }); return;
-    }
-    document.addEventListener('DOMContentLoaded', function(){
-        loadSectionsDropdown();
-        setupTabs();
-        document.getElementById('assetMachineId').value = generateMachineId();
-        document.getElementById('lookupId').addEventListener('keydown', function(e){ if(e.key === 'Enter') doLookup(); });
-        document.getElementById('qrMachineId').addEventListener('keydown', function(e){ if(e.key === 'Enter') generateQR(); });
-        document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeEditModal(); stopQRScanner(); } });
-        refreshAssetView();
-        refreshList();
-        refreshDashboard();
-    });
-})();
-</script>
+            document.getElementById('assetCount').textContent = machines.length;
+            container.innerHTML = machines.map(renderMachineItem).join('');
+        }
+
+        function renderMachineList(machines) {
+            const container = document.getElementById('machineListView');
+            if (!machines || machines.length === 0) {
+                container.innerHTML = '<p style="text-align:center;padding:30px;color:#666;">No machines found.</p>';
+                document.getElementById('listCount').textContent = '0';
+                return;
+            }
+            document.getElementById('listCount').textContent = machines.length;
+            container.innerHTML = machines.map(renderMachineItem).join('');
+        }
+
+        function loadSectionsDropdown(selectId, selected) {
+            const sel = document.getElementById(selectId);
+            if (!sel) return;
+            const sections = getSections();
+            sel.innerHTML = '<option value="">-- Select Section --</option>';
+            sections.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.id;
+                opt.textContent = s.name;
+                if (selected && s.id === selected) opt.selected = true;
+                sel.appendChild(opt);
+            });
+            if (sections.length === 0) {
+                sel.innerHTML = '<option value="">No sections yet. Add one first.</option>';
+            }
+        }
+
+        // ============================================================
+        // REFRESH FUNCTIONS
+        // ============================================================
+        function refreshAssetView() {
+            const filter = document.getElementById('filterSection');
+            const sectionId = filter ? filter.value : 'all';
+            let machines = getMachines();
+            if (sectionId !== 'all') {
+                machines = machines.filter(m => m.section === sectionId);
+            }
+            renderAssetList(machines);
+            loadSectionsDropdown('filterSection', sectionId);
+            const sel = document.getElementById('filterSection');
+            if (sel) {
+                const opt = document.createElement('option');
+                opt.value = 'all';
+                opt.textContent = 'All Sections';
+                sel.prepend(opt);
+                if (sectionId === 'all') opt.selected = true;
+            }
+            loadSectionsDropdown('assetSection');
+            loadSectionsDropdown('editSection');
+            populateQRSelect();
+        }
+
+        function filterAssets() { refreshAssetView(); }
+
+        function refreshList() {
+            renderMachineList(getMachines());
+        }
+
+        function refreshDashboard() {
+            const machines = getMachines();
+            const sections = getSections();
+            const total = machines.length;
+            const working = machines.filter(m => m.status === 'working').length;
+            const maintenance = machines.filter(m => m.status === 'maintenance').length;
+            const out = machines.filter(m => m.status === 'out-of-service').length;
+
+            const grid = document.getElementById('statGrid');
+            grid.innerHTML = `
+                <div class="stat-card green"><div class="num">${total}</div><div class="label">Total Machines</div></div>
+                <div class="stat-card green"><div class="num">${working}</div><div class="label">✅ Working</div></div>
+                <div class="stat-card orange"><div class="num">${maintenance}</div><div class="label">🔧 Maintenance</div></div>
+                <div class="stat-card red"><div class="num">${out}</div><div class="label">⛔ Out of Service</div></div>
+            `;
+
+            const secStats = document.getElementById('sectionStats');
+            if (sections.length === 0) {
+                secStats.innerHTML = '<p style="color:#666;font-size:13px;">No sections defined.</p>';
+                return;
+            }
+            let html = '<div style="display:flex;flex-wrap:wrap;gap:8px;">';
+            sections.forEach(sec => {
+                const count = machines.filter(m => m.section === sec.id).length;
+                const color = sec.color || '#2e7d32';
+                html += `
+                    <div style="background:${color}20;border:2px solid ${color};border-radius:12px;padding:8px 16px;display:flex;align-items:center;gap:8px;">
+                        <span style="font-weight:600;">${esc(sec.name)}</span>
+                        <span style="background:${color};color:white;border-radius:20px;padding:2px 10px;font-size:12px;">${count}</span>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            secStats.innerHTML = html;
+        }
+
+        // ============================================================
+        // QR CODE
+        // ============================================================
+        let qrCodeInstance = null;
+
+        function populateQRSelect() {
+            const sel = document.getElementById('qrMachineSelect');
+            if (!sel) return;
+            const machines = getMachines();
+            sel.innerHTML = '<option value="">-- Select Machine --</option>';
+            machines.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m.id;
+                opt.textContent = m.id + ' - ' + m.name;
+                sel.appendChild(opt);
+            });
+        }
+
+        function generateQR() {
+            const sel = document.getElementById('qrMachineSelect');
+            const id = sel.value;
+            const output = document.getElementById('qrOutput');
+            if (!id) {
+                output.style.display = 'none';
+                toast('Please select a machine.');
+                return;
+            }
+            const machines = getMachines();
+            const m = machines.find(x => x.id === id);
+            if (!m) {
+                toast('Machine not found.', true);
+                return;
+            }
+
+            output.style.display = 'grid';
+
+            const container = document.getElementById('qrCanvasContainer');
+            container.innerHTML = '';
+            const data = JSON.stringify({ id: m.id, name: m.name, section: m.section });
+            try {
+                qrCodeInstance = new QRCode(container, {
+                    text: data,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#1b5e20',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } catch (e) {
+                container.innerHTML = '<p style="color:red;">Error generating QR code.</p>';
+                return;
+            }
+
+            document.getElementById('qrLabel').textContent = m.id + ' - ' + m.name;
+
+            const info = document.getElementById('qrInfoDetails');
+            info.innerHTML = `
+                <div class="result-grid">
+                    <div class="result-item"><label>ID</label>${esc(m.id)}</div>
+                    <div class="result-item"><label>Name</label>${esc(m.name)}</div>
+                    <div class="result-item"><label>Section</label>${esc(getSectionName(m.section))}</div>
+                    <div class="result-item"><label>Manufacturer</label>${esc(m.manufacturer || '-')}</div>
+                    <div class="result-item"><label>Model</label>${esc(m.model || '-')}</div>
+                    <div class="result-item"><label>Serial</label>${esc(m.serialNumber || '-')}</div>
+                    <div class="result-item"><label>Status</label>${statusLabel(m.status)}</div>
+                    <div class="result-item"><label>Installed</label>${fmtDate(m.installationDate)}</div>
+                </div>
+                ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
+            `;
+        }
+
+        function downloadQR() {
+            const container = document.getElementById('qrCanvasContainer');
+            const canvas = container.querySelector('canvas');
+            if (!canvas) {
+                toast('No QR code to download. Generate one first.', true);
+                return;
+            }
+            const link = document.createElement('a');
+            link.download = 'qr-code.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // ============================================================
+        // QR SCANNER
+        // ============================================================
+        let html5QrCode = null;
+        let scannerRunning = false;
+
+        function startQRScanner() {
+            const container = document.getElementById('qrReaderContainer');
+            const result = document.getElementById('scanResult');
+            result.innerHTML = '';
+            container.style.display = 'block';
+
+            if (scannerRunning) {
+                toast('Scanner already running.');
+                return;
+            }
+
+            if (typeof Html5Qrcode === 'undefined') {
+                toast('QR Scanner library not loaded.', true);
+                return;
+            }
+
+            try {
+                html5QrCode = new Html5Qrcode("qrReaderContainer");
+                const config = {
+                    fps: 15,
+                    qrbox: { width: 250, height: 250 },
+                    aspectRatio: 1.0
+                };
+                html5QrCode.start({ facingMode: "environment" },
+                    config,
+                    onScanSuccess,
+                    onScanFailure
+                );
+                scannerRunning = true;
+                toast('Camera started. Point at a QR code.');
+            } catch (err) {
+                toast('Error starting camera: ' + err.message, true);
+                container.style.display = 'none';
+            }
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+            const result = document.getElementById('scanResult');
+            try {
+                const data = JSON.parse(decodedText);
+                if (data.id) {
+                    const machines = getMachines();
+                    const m = machines.find(x => x.id === data.id);
+                    if (m) {
+                        result.innerHTML = `
+                            <div class="result-card">
+                                <h4 style="margin-bottom:8px;">✅ Machine Found</h4>
+                                <div class="result-grid">
+                                    <div class="result-item"><label>ID</label>${esc(m.id)}</div>
+                                    <div class="result-item"><label>Name</label>${esc(m.name)}</div>
+                                    <div class="result-item"><label>Section</label>${esc(getSectionName(m.section))}</div>
+                                    <div class="result-item"><label>Manufacturer</label>${esc(m.manufacturer || '-')}</div>
+                                    <div class="result-item"><label>Model</label>${esc(m.model || '-')}</div>
+                                    <div class="result-item"><label>Serial</label>${esc(m.serialNumber || '-')}</div>
+                                    <div class="result-item"><label>Status</label>${statusLabel(m.status)}</div>
+                                    <div class="result-item"><label>Installed</label>${fmtDate(m.installationDate)}</div>
+                                </div>
+                                ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
+                                <div class="btn-group" style="margin-top:12px;">
+                                    <button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
+                                    <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
+                                </div>
+                            </div>
+                        `;
+                        toast('✅ Found: ' + m.name);
+                        stopQRScanner();
+                        return;
+                    }
+                }
+                result.innerHTML =
+                `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ QR code data not recognised as a valid machine.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;">${esc(decodedText)}</pre></div>`;
+            } catch (e) {
+                result.innerHTML =
+                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not valid JSON.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;">${esc(decodedText)}</pre></div>`;
+            }
+        }
+
+        function onScanFailure(err) { /* ignore */ }
+
+        function stopQRScanner() {
+            if (html5QrCode && scannerRunning) {
+                try {
+                    html5QrCode.stop().then(() => {
+                        scannerRunning = false;
+                        document.getElementById('qrReaderContainer').style.display = 'none';
+                        toast('Scanner stopped.');
+                    }).catch(() => {
+                        scannerRunning = false;
+                        document.getElementById('qrReaderContainer').style.display = 'none';
+                    });
+                } catch (e) {
+                    scannerRunning = false;
+                    document.getElementById('qrReaderContainer').style.display = 'none';
+                }
+            } else {
+                document.getElementById('qrReaderContainer').style.display = 'none';
+            }
+        }
+
+        // ============================================================
+        // LOOKUP
+        // ============================================================
+        function lookupMachine() {
+            const input = document.getElementById('lookupInput');
+            const query = input.value.trim().toLowerCase();
+            const result = document.getElementById('lookupResult');
+            if (!query) {
+                result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;">Type an ID, name, serial or section to search.</p>';
+                return;
+            }
+            const machines = getMachines();
+            const found = machines.filter(m =>
+                m.id.toLowerCase().includes(query) ||
+                (m.name && m.name.toLowerCase().includes(query)) ||
+                (m.serialNumber && m.serialNumber.toLowerCase().includes(query)) ||
+                (m.section && getSectionName(m.section).toLowerCase().includes(query))
+            );
+            if (found.length === 0) {
+                result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;">No machines found matching "' + esc(
+                    query) + '"</p>';
+                return;
+            }
+            result.innerHTML = '<div class="machine-list" style="margin-top:10px;">' + found.map(renderMachineItem).join('') +
+                '</div>';
+        }
+
+        // ============================================================
+        // CRUD
+        // ============================================================
+        document.getElementById('assetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('assetName').value.trim();
+            const section = document.getElementById('assetSection').value;
+            if (!name) { toast('Please enter a machine name.', true); return; }
+            if (!section) { toast('Please select a section.', true); return; }
+
+            const db = getDB();
+            const newMachine = {
+                id: document.getElementById('assetMachineId').value.trim(),
+                name: name,
+                section: section,
+                manufacturer: document.getElementById('assetManufacturer').value.trim(),
+                model: document.getElementById('assetModel').value.trim(),
+                serialNumber: document.getElementById('assetSerial').value.trim(),
+                installationDate: document.getElementById('assetDate').value,
+                status: document.getElementById('assetStatus').value,
+                notes: document.getElementById('assetNotes').value.trim(),
+                createdAt: new Date().toISOString()
+            };
+            db.machines.push(newMachine);
+            saveDB(db);
+            toast('✅ Asset added: ' + newMachine.name);
+            this.reset();
+            document.getElementById('assetMachineId').value = generateMachineId();
+            refreshAssetView();
+            refreshList();
+            refreshDashboard();
+            populateQRSelect();
+        });
+
+        document.getElementById('sectionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('sectionName').value.trim();
+            if (!name) { toast('Please enter a section name.', true); return; }
+            const db = getDB();
+            const id = 'sec_' + Date.now();
+            db.sections.push({
+                id: id,
+                name: name,
+                color: document.getElementById('sectionColor').value,
+                description: document.getElementById('sectionDesc').value.trim()
+            });
+            saveDB(db);
+            toast('✅ Section added: ' + name);
+            this.reset();
+            document.getElementById('sectionColor').value = '#2e7d32';
+            refreshAssetView();
+            refreshDashboard();
+            loadSectionsDropdown('assetSection');
+            loadSectionsDropdown('editSection');
+        });
+
+        let editMachineId = null;
+
+        function editMachine(id) {
+            const machines = getMachines();
+            const m = machines.find(x => x.id === id);
+            if (!m) { toast('Machine not found.', true); return; }
+            editMachineId = id;
+            document.getElementById('editMachineId').value = m.id;
+            document.getElementById('editName').value = m.name || '';
+            document.getElementById('editManufacturer').value = m.manufacturer || '';
+            document.getElementById('editModel').value = m.model || '';
+            document.getElementById('editSerial').value = m.serialNumber || '';
+            document.getElementById('editDate').value = m.installationDate || '';
+            document.getElementById('editStatus').value = m.status || 'working';
+            document.getElementById('editNotes').value = m.notes || '';
+            loadSectionsDropdown('editSection', m.section);
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+            editMachineId = null;
+        }
+
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (!editMachineId) { toast('No machine selected.', true); return; }
+            const name = document.getElementById('editName').value.trim();
+            const section = document.getElementById('editSection').value;
+            if (!name) { toast('Please enter a machine name.', true); return; }
+            if (!section) { toast('Please select a section.', true); return; }
+
+            const db = getDB();
+            const idx = db.machines.findIndex(m => m.id === editMachineId);
+            if (idx === -1) { toast('Machine not found.', true); return; }
+            db.machines[idx].name = name;
+            db.machines[idx].section = section;
+            db.machines[idx].manufacturer = document.getElementById('editManufacturer').value.trim();
+            db.machines[idx].model = document.getElementById('editModel').value.trim();
+            db.machines[idx].serialNumber = document.getElementById('editSerial').value.trim();
+            db.machines[idx].installationDate = document.getElementById('editDate').value;
+            db.machines[idx].status = document.getElementById('editStatus').value;
+            db.machines[idx].notes = document.getElementById('editNotes').value.trim();
+            saveDB(db);
+            toast('✅ Machine updated: ' + name);
+            closeEditModal();
+            refreshAssetView();
+            refreshList();
+            refreshDashboard();
+            populateQRSelect();
+        });
+
+        function deleteMachineFromEdit() {
+            if (!editMachineId) return;
+            if (confirm('Are you sure you want to delete this machine?')) {
+                deleteMachine(editMachineId);
+                closeEditModal();
+            }
+        }
+
+        function deleteMachine(id) {
+            if (!confirm('Delete machine ' + id + '?')) return;
+            const db = getDB();
+            db.machines = db.machines.filter(m => m.id !== id);
+            saveDB(db);
+            toast('🗑️ Machine deleted.');
+            refreshAssetView();
+            refreshList();
+            refreshDashboard();
+            populateQRSelect();
+        }
+
+        function viewMachine(id) {
+            switchToTab('lookup');
+            document.getElementById('lookupInput').value = id;
+            lookupMachine();
+        }
+
+        function exportToCSV() {
+            const machines = getMachines();
+            if (machines.length === 0) { toast('No assets to export.', true); return; }
+            const headers = ['ID', 'Name', 'Section', 'Manufacturer', 'Model', 'Serial Number', 'Installation Date',
+                'Status', 'Notes'
+            ];
+            const rows = machines.map(m => [
+                m.id, m.name, getSectionName(m.section), m.manufacturer || '', m.model || '',
+                m.serialNumber || '', m.installationDate || '', m.status || '', m.notes || ''
+            ]);
+            let csv = headers.join(',') + '\n';
+            rows.forEach(row => {
+                csv += row.map(cell => '"' + String(cell).replace(/"/g, '""') + '"').join(',') + '\n';
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'panilkanda_assets.csv';
+            link.click();
+            toast('📥 CSV exported.');
+        }
+
+        // ============================================================
+        // NAVIGATION
+        // ============================================================
+        function switchToTab(name) {
+            // Top tabs
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            const topBtn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
+            if (topBtn) topBtn.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            const tab = document.getElementById('tab-' + name);
+            if (tab) tab.classList.add('active');
+
+            if (name === 'list') refreshList();
+            if (name === 'status') refreshDashboard();
+            if (name === 'assets') refreshAssetView();
+            if (name === 'qr') populateQRSelect();
+            if (name !== 'scan') stopQRScanner();
+
+            // Sidebar
+            document.querySelectorAll('.sidebar-nav > a').forEach(a => a.classList.remove('active'));
+            const sidebarLink = document.querySelector(`.sidebar-nav > a[data-tab="${name}"]`);
+            if (sidebarLink) sidebarLink.classList.add('active');
+
+            // Bottom nav
+            document.querySelectorAll('#bottomNav a').forEach(a => {
+                a.classList.remove('active');
+                if (a.dataset.tab === name) a.classList.add('active');
+            });
+        }
+
+        // Sidebar clicks
+        document.querySelector('.sidebar-nav').addEventListener('click', function(e) {
+            const link = e.target.closest('a');
+            if (!link) return;
+            e.preventDefault();
+
+            const tab = link.dataset.tab;
+            const sub = link.dataset.sub;
+
+            if (tab === 'assets' && !sub) {
+                const subMenu = document.getElementById('sidebarAssetSub');
+                subMenu.classList.toggle('open');
+                if (subMenu.classList.contains('open')) {
+                    switchToTab('assets');
+                    const firstSub = document.querySelector('#assetSubTabs .sub-tab');
+                    if (firstSub) firstSub.click();
+                }
+                return;
+            }
+
+            if (sub) {
+                switchToTab('assets');
+                document.getElementById('sidebarAssetSub').classList.add('open');
+                const subTab = document.querySelector(`#assetSubTabs .sub-tab[data-sub="${sub}"]`);
+                if (subTab) subTab.click();
+                document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
+                link.classList.add('active');
+                return;
+            }
+
+            if (tab) switchToTab(tab);
+
+            if (window.innerWidth < 769) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.remove('active');
+            }
+        });
+
+        // Top tabs
+        document.getElementById('mainTabs').addEventListener('click', function(e) {
+            const btn = e.target.closest('.tab-btn');
+            if (!btn) return;
+            switchToTab(btn.dataset.tab);
+        });
+
+        // Bottom nav
+        document.getElementById('bottomNav').addEventListener('click', function(e) {
+            e.preventDefault();
+            const link = e.target.closest('a');
+            if (!link) return;
+            switchToTab(link.dataset.tab);
+        });
+
+        // Hamburger
+        document.getElementById('hamburgerBtn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        });
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('open');
+            this.classList.remove('active');
+        });
+
+        // Asset sub-tabs
+        document.getElementById('assetSubTabs').addEventListener('click', function(e) {
+            if (e.target.classList.contains('sub-tab')) {
+                document.querySelectorAll('#assetSubTabs .sub-tab').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                const sub = e.target.dataset.sub;
+                document.querySelectorAll('#tab-assets .sub-content').forEach(c => c.classList.remove('active'));
+                const target = document.getElementById('sub-' + sub);
+                if (target) target.classList.add('active');
+                if (sub === 'viewAssets') refreshAssetView();
+                if (sub === 'addAsset') {
+                    document.getElementById('assetMachineId').value = generateMachineId();
+                    loadSectionsDropdown('assetSection');
+                }
+                document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
+                const sidebarSub = document.querySelector(`#sidebarAssetSub a[data-sub="${sub}"]`);
+                if (sidebarSub) sidebarSub.classList.add('active');
+            }
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Seed data if empty
+            const db = getDB();
+            if (!db.sections || db.sections.length === 0) {
+                db.sections = [
+                    { id: 'sec_1', name: 'Withering', color: '#2e7d32', description: 'Withering process' },
+                    { id: 'sec_2', name: 'Rolling', color: '#1976d2', description: 'CTC Rolling' },
+                    { id: 'sec_3', name: 'Fermentation', color: '#e65100', description: 'Fermentation area' },
+                    { id: 'sec_4', name: 'Drying', color: '#c62828', description: 'Drying / Firing' },
+                    { id: 'sec_5', name: 'Grading', color: '#6a1b9a', description: 'Sorting & Grading' },
+                ];
+                saveDB(db);
+            }
+            const machines = getMachines();
+            if (machines.length === 0) {
+                const sample = [
+                    { id: 'M0001', name: 'CTC Roller 1', section: 'sec_2', manufacturer: 'Marshall',
+                        model: 'CTC-2000', serialNumber: 'SN-001', installationDate: '2023-01-15',
+                        status: 'working', notes: 'Primary roller' },
+                    { id: 'M0002', name: 'Withering Trough 1', section: 'sec_1', manufacturer: 'TeaTech',
+                        model: 'WT-500', serialNumber: 'SN-002', installationDate: '2023-02-10',
+                        status: 'working', notes: 'Capacity 500kg' },
+                    { id: 'M0003', name: 'Fermentation Conveyor', section: 'sec_3', manufacturer: 'ConveyX',
+                        model: 'FC-100', serialNumber: 'SN-003', installationDate: '2023-03-01',
+                        status: 'maintenance', notes: 'Belt needs replacement' },
+                ];
+                db.machines = sample;
+                saveDB(db);
+            }
+
+            loadSectionsDropdown('assetSection');
+            loadSectionsDropdown('editSection');
+            loadSectionsDropdown('filterSection');
+            document.getElementById('assetMachineId').value = generateMachineId();
+            populateQRSelect();
+
+            refreshAssetView();
+            refreshList();
+            refreshDashboard();
+
+            // Ensure first sub-tab is active
+            const firstSub = document.querySelector('#assetSubTabs .sub-tab');
+            if (firstSub) firstSub.click();
+
+            const hash = window.location.hash.replace('#', '');
+            if (hash && ['assets', 'list', 'lookup', 'qr', 'scan', 'status'].includes(hash)) {
+                switchToTab(hash);
+            }
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 769) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.remove('active');
+            }
+        });
+
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEditModal();
+                stopQRScanner();
+            }
+        });
+
+        console.log('🍃 Panilkanda Tea Factory Machine Tracker loaded.');
+        console.log('📦 Machines:', getMachines().length);
+        console.log('📂 Sections:', getSections().length);
+    </script>
 </body>
 </html>
