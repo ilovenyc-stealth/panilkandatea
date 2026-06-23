@@ -140,6 +140,7 @@
                         <option value="all">All Sections</option>
                     </select>
                     <button onclick="refreshAssetView()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    <button onclick="exportToCSV()" class="btn btn-primary btn-sm"><i class="fas fa-file-excel"></i> Export Excel</button>
                 </div>
             </div>
             <div id="assetListView" class="machine-list"><p style="text-align:center;padding:30px;">Loading assets...</p></div>
@@ -202,7 +203,13 @@
 
     <!-- ==================== ALL MACHINES TAB ==================== -->
     <div id="tab-list" class="tab-content">
-        <div class="info-box info"><div class="info-box-content"><strong>Total Machines:</strong> <span id="listCount">0</span></div><button onclick="refreshList()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button></div>
+        <div class="info-box info">
+            <div class="info-box-content"><strong>Total Machines:</strong> <span id="listCount">0</span></div>
+            <div class="btn-group">
+                <button onclick="refreshList()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button>
+                <button onclick="exportToCSV()" class="btn btn-primary btn-sm"><i class="fas fa-file-excel"></i> Export Excel</button>
+            </div>
+        </div>
         <div id="machineList" class="machine-list"><p style="text-align:center;padding:30px;">Loading...</p></div>
     </div>
 
@@ -315,7 +322,6 @@ var DB = {
     }
 };
 
-// Auto-generate Machine ID
 function generateMachineId() {
     var machines = DB.getMachines();
     var maxNum = 0;
@@ -326,9 +332,6 @@ function generateMachineId() {
     return 'PTF-' + String(maxNum + 1).padStart(4, '0');
 }
 
-// ============================================================
-// HELPERS
-// ============================================================
 function esc(str){ if(!str) return ''; var d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
 function fmtDate(d){ if(!d) return 'N/A'; try { var dt = new Date(d); if(isNaN(dt.getTime())) return d; return dt.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); } catch(e){ return d; } }
 function statusCls(s){ if(s==='Under Maintenance') return 'maintenance'; if(s==='Out of Service') return 'out-of-service'; return 'working'; }
@@ -338,6 +341,55 @@ function toast(msg, type){
     var t = document.createElement('div'); t.className = 'toast' + (type !== 'success' ? ' ' + type : '');
     t.innerHTML = '<i class="fas ' + (type==='error'?'fa-exclamation-circle':type==='warning'?'fa-exclamation-triangle':'fa-check-circle') + '"></i><span>' + msg + '</span>';
     document.getElementById('toastContainer').appendChild(t); setTimeout(function(){ t.remove(); }, 3000);
+}
+
+// ============================================================
+// EXPORT TO EXCEL (CSV)
+// ============================================================
+function exportToCSV() {
+    var machines = DB.getMachines();
+    // Apply filter if in View Assets
+    var filter = document.getElementById('filterSection');
+    if (filter && filter.value !== 'all') {
+        machines = machines.filter(function(m) { return m.section === filter.value; });
+    }
+    if (machines.length === 0) { toast('No data to export', 'warning'); return; }
+    
+    var headers = [
+        'Machine ID', 'Section', 'Machine Name', 'Model Number', 'Manufacturer',
+        'Install Date', 'Seller Name', 'Seller Phone', 'Seller Email',
+        'Contact Person', 'Contact Phone', 'Seller Address',
+        'Status', 'Next Service Date', 'Last Service Date', 'Spare Parts',
+        'Maintenance History', 'Other Details'
+    ];
+    
+    var csv = headers.join(',') + '\n';
+    machines.forEach(function(m) {
+        var row = [
+            m.machineId, m.section, m.machineName, m.modelNumber, m.manufacturer,
+            m.installDate, m.sellerName, m.sellerPhone, m.sellerEmail,
+            m.contactPerson, m.contactPhone, m.sellerAddress,
+            m.status, m.nextService, m.lastService, m.spareParts,
+            m.maintenanceHistory, m.notes
+        ].map(function(field) {
+            var str = field ? String(field) : '';
+            // Escape double quotes and wrap in quotes if contains comma, quote, or newline
+            if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+                str = '"' + str.replace(/"/g, '""') + '"';
+            }
+            return str;
+        });
+        csv += row.join(',') + '\n';
+    });
+    
+    var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'Panilkanda_Machines_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('✅ Exported ' + machines.length + ' records!');
 }
 
 // ============================================================
