@@ -1617,7 +1617,6 @@
 
             const container = document.getElementById('qrCanvasContainer');
             container.innerHTML = '';
-            // Use a single-line JSON to avoid multi-line issues
             const qrData = {
                 id: m.id,
                 name: m.name,
@@ -1677,7 +1676,7 @@
         }
 
         // ============================================================
-        // QR SCANNER - IMPROVED: handles multiple JSON objects & opens blank page
+        // QR SCANNER - FIXED: shows details inline + modal
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
@@ -1696,6 +1695,7 @@
             const body = document.getElementById('scanResultModalBody');
             const secName = machine.sectionName || getSectionName(machine.section) || machine.section || '-';
 
+            // Store for "Open in New Tab"
             lastScannedMachine = machine;
 
             body.innerHTML = `
@@ -1795,6 +1795,8 @@ const htmlContent = `
         .btn.primary:hover { background:#1b5e20; }
         .btn.secondary { background:#e5e7eb; color:#1b3b1b; }
         .btn.secondary:hover { background:#d1d5db; }
+        .btn.danger { background:#c62828; color:white; }
+        .btn.danger:hover { background:#b71c1c; }
         .btn.info { background:#1976d2; color:white; }
         .btn.info:hover { background:#1565c0; }
         .footer { margin-top:24px; text-align:center; font-size:13px; color:#6b7280; border-top:1px solid #e5e7eb; padding-top:16px; }
@@ -1951,7 +1953,7 @@ html5QrCode = null;
 }, 300);
 }
 
-// ─── IMPROVED Scan Success ───
+// ─── Scan Success ───
 function onScanSuccess(decodedText, decodedResult) {
 const result = document.getElementById('scanResult');
 showDebug('Decoded: ' + decodedText.substring(0, 100) + (decodedText.length > 100 ? '...' : ''));
@@ -1961,130 +1963,75 @@ let data = null;
 let machineId = null;
 let machineData = null;
 
-// --- Helper: try to extract a valid JSON object from text ---
-function extractJSONObject(text) {
-    // Try parsing the whole text as JSON first
-    try {
-        return JSON.parse(text);
-    } catch (e) {}
-
-    // Try splitting by newlines and parsing each line
-    const lines = text.split('\n');
-    for (let line of lines) {
-        line = line.trim();
-        if (!line) continue;
-        try {
-            const parsed = JSON.parse(line);
-            if (parsed && typeof parsed === 'object' && parsed.id) {
-                return parsed;
-            }
-        } catch (e) {}
-    }
-
-    // Try regex to find first JSON object { ... }
-    const match = text.match(/\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/);
-    if (match) {
-        try {
-            const parsed = JSON.parse(match[0]);
-            if (parsed && typeof parsed === 'object' && parsed.id) {
-                return parsed;
-            }
-        } catch (e) {}
-    }
-
-    return null;
-}
-
-// --- Try to extract JSON data ---
-const extracted = extractJSONObject(decodedText);
-if (extracted) {
-    data = extracted;
-    showDebug('Extracted JSON: ' + JSON.stringify(data).substring(0, 100));
-}
-
-// --- If we have data from JSON ---
-if (data) {
-    if (data.id) {
-        machineId = data.id;
-        if (data.name && data.section) {
-            machineData = data;
-            showDebug('Full machine data from QR: ' + data.name);
-        } else {
-            showDebug('QR contains ID: ' + machineId);
-        }
-    } else {
-        result.innerHTML = `
-            <div class="result-card error">
-                <p>⚠️ JSON does not contain 'id'.</p>
-                <pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre>
-            </div>`;
-        toast('Missing ID in JSON.', true);
-        showDebug('ERROR: No "id" field in JSON');
-        return;
-    }
+try {
+data = JSON.parse(decodedText);
+showDebug('Parsed as JSON');
+} catch (e) {
+if (decodedText.trim().match(/^M\d{4}$/)) {
+machineId = decodedText.trim();
+showDebug('Plain ID detected: ' + machineId);
 } else {
-    // --- If not JSON, check if it's a plain ID ---
-    const trimmed = decodedText.trim();
-    if (trimmed.match(/^M\d{4}$/)) {
-        machineId = trimmed;
-        showDebug('Plain ID detected: ' + machineId);
-    } else {
-        result.innerHTML = `
-            <div class="result-card error">
-                <p>⚠️ Scanned data is not a valid QR.</p>
-                <pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;margin-top:6px;">${esc(decodedText)}</pre>
-            </div>`;
-        toast('Invalid QR format.', true);
-        showDebug('ERROR: Not JSON and not valid ID format');
-        return;
-    }
+result.innerHTML = `
+    <div class="result-card error">
+        <p>⚠️ Scanned data is not a valid QR.</p>
+        <pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;margin-top:6px;">${esc(decodedText)}</pre>
+    </div>`;
+toast('Invalid QR format.', true);
+showDebug('ERROR: Not JSON and not valid ID format');
+return;
+}
 }
 
-// --- Look up the machine ---
+if (data) {
+if (data.id) {
+machineId = data.id;
+if (data.name && data.section) {
+machineData = data;
+showDebug('Full machine data from QR: ' + data.name);
+} else {
+showDebug('QR contains ID: ' + machineId);
+}
+} else {
+result.innerHTML = `
+    <div class="result-card error">
+        <p>⚠️ JSON does not contain 'id'.</p>
+        <pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre>
+    </div>`;
+toast('Missing ID in JSON.', true);
+showDebug('ERROR: No "id" field in JSON');
+return;
+}
+}
+
 if (machineId) {
-    const machines = getMachines();
-    const dbMachine = machines.find(x => x.id === machineId);
-    let displayMachine = null;
+const machines = getMachines();
+const dbMachine = machines.find(x => x.id === machineId);
+let displayMachine = null;
+if (dbMachine) {
+showDebug('Found in DB: ' + dbMachine.name);
+displayMachine = dbMachine;
+} else if (machineData && machineData.id === machineId) {
+showDebug('Using data from QR (self-contained)');
+displayMachine = machineData;
+} else {
+result.innerHTML = `
+    <div class="result-card error">
+        <p>❌ Machine with ID "${esc(machineId)}" not found in database.</p>
+        <p style="font-size:12px;color:#666;margin-top:8px;">Try adding this machine first, or scan a QR code with full data.</p>
+        ${machineData ? `<p style="font-size:12px;color:#666;margin-top:4px;">QR data: ${esc(JSON.stringify(machineData))}</p>` : ''}
+    </div>`;
+toast('Machine not found in database.', true);
+showDebug('ERROR: Machine ID ' + machineId + ' not in DB');
+return;
+}
 
-    if (dbMachine) {
-        showDebug('Found in DB: ' + dbMachine.name);
-        displayMachine = dbMachine;
-    } else if (machineData && machineData.id === machineId) {
-        showDebug('Using data from QR (self-contained)');
-        displayMachine = machineData;
-    } else {
-        result.innerHTML = `
-            <div class="result-card error">
-                <p>❌ Machine with ID "${esc(machineId)}" not found in database.</p>
-                <p style="font-size:12px;color:#666;margin-top:8px;">Try adding this machine first, or scan a QR code with full data.</p>
-                ${machineData ? `<p style="font-size:12px;color:#666;margin-top:4px;">QR data: ${esc(JSON.stringify(machineData))}</p>` : ''}
-            </div>`;
-        toast('Machine not found in database.', true);
-        showDebug('ERROR: Machine ID ' + machineId + ' not in DB');
-        return;
-    }
+// Show the machine details in a modal + inline
+lastScannedMachine = displayMachine;
+showMachineDetailsModal(displayMachine, true);
+toast('✅ Machine found: ' + displayMachine.name);
 
-    // --- ✅ OPEN BLANK PAGE WITH MACHINE DETAILS ---
-    lastScannedMachine = displayMachine;
-    openBlankPageWithMachine(displayMachine);
-    toast('✅ Machine found: ' + displayMachine.name);
-
-    // Also show a brief inline result
-    const secName = displayMachine.sectionName || getSectionName(displayMachine.section) || displayMachine.section || '-';
-    result.innerHTML = `
-        <div class="result-card success">
-            <h4 style="margin-bottom:4px;">✅ Machine Found</h4>
-            <p><strong>${esc(displayMachine.name)}</strong> (${esc(displayMachine.id)}) — ${esc(secName)}</p>
-            <p style="font-size:13px;color:#666;margin-top:6px;">📄 Details opened in a new tab.</p>
-            <div class="btn-group" style="margin-top:10px;">
-                <button onclick="openBlankPageWithMachine(lastScannedMachine || ${JSON.stringify(displayMachine).replace(/"/g,'&quot;')})" class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Re-open Full Page</button>
-                <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
-            </div>
-        </div>
-    `;
-
-    // Auto-stop scanner after successful scan
-    setTimeout(() => stopQRScanner(), 2000);
+// Auto-stop scanner after successful scan
+setTimeout(() => stopQRScanner(), 2000);
 }
 }
 
