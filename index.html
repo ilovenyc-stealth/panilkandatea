@@ -414,6 +414,16 @@
         .scanner-upload-area:hover { background: var(--primary-bg); }
         .scanner-upload-area input[type="file"] { display: none; }
 
+        .debug-text {
+            margin-top: 8px;
+            font-size: 12px;
+            background: #f5f5f5;
+            padding: 8px;
+            border-radius: 8px;
+            word-break: break-all;
+            color: #333;
+        }
+
         /* ─── Responsive ─── */
         @media (max-width: 768px) {
             body { padding: 10px; }
@@ -634,6 +644,10 @@
                     <input type="file" id="qrFileInput" accept="image/*" capture="environment" />
                 </div>
                 <div id="scanResult" style="margin-top:12px;"></div>
+                <!-- Debug area -->
+                <div id="debugArea" style="margin-top:8px; display:none; background:#f9f9f9; padding:10px; border-radius:8px; font-size:12px; color:#555;">
+                    <strong>Debug:</strong> <span id="debugText">Waiting for scan...</span>
+                </div>
             </div>
         </div>
 
@@ -912,7 +926,7 @@
             output.style.display = 'grid';
             const container = document.getElementById('qrCanvasContainer');
             container.innerHTML = '';
-            // QR contains only the machine ID (clean and reliable)
+            // QR contains only the machine ID
             const data = JSON.stringify({ id: m.id });
             try {
                 qrCodeInstance = new QRCode(container, {
@@ -952,19 +966,30 @@
         }
 
         // ============================================================
-        // QR SCANNER
+        // QR SCANNER - IMPROVED WITH DEBUG
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
+
+        function showDebug(msg) {
+            const area = document.getElementById('debugArea');
+            area.style.display = 'block';
+            document.getElementById('debugText').textContent = msg;
+            console.log('QR Debug:', msg);
+        }
 
         function startQRScanner() {
             const container = document.getElementById('qrReaderContainer');
             const result = document.getElementById('scanResult');
             result.innerHTML = '';
+            showDebug('Initializing scanner...');
+
             if (scannerRunning) { toast('Scanner already running.'); return; }
-            if (typeof Html5Qrcode === 'undefined') { toast('QR library not loaded.', true); return; }
+            if (typeof Html5Qrcode === 'undefined') { toast('QR library not loaded.', true); showDebug('Error: QR library not loaded.'); return; }
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                toast('Camera not supported.', true); return;
+                toast('Camera not supported.', true);
+                showDebug('Error: Camera not supported.');
+                return;
             }
             container.style.display = 'block';
             container.innerHTML = `<div class="scanner-loading"><i class="fas fa-spinner fa-spin"></i><div>Initializing camera...</div><div style="font-size:12px;color:#666;margin-top:8px;">Please allow camera access.</div></div>`;
@@ -977,25 +1002,30 @@
                 try {
                     html5QrCode = new Html5Qrcode("qrReaderContainer");
                     const config = { fps: 20, qrbox: { width: 280, height: 280 }, aspectRatio: 1.0 };
+                    showDebug('Starting camera...');
                     html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
                         .then(() => {
                             scannerRunning = true;
                             toast('📷 Camera ready. Point at a QR code.');
+                            showDebug('Camera started (rear).');
                             const loadEl = container.querySelector('.scanner-loading');
                             if (loadEl) loadEl.remove();
                         })
                         .catch(function(err) {
                             console.error('Scanner start error:', err);
+                            showDebug('Error starting camera: ' + err.message);
                             // fallback to front camera
                             html5QrCode.start({ facingMode: "user" }, config, onScanSuccess, onScanFailure)
                                 .then(() => {
                                     scannerRunning = true;
                                     toast('📷 Camera ready (front).');
+                                    showDebug('Camera started (front).');
                                     const loadEl = container.querySelector('.scanner-loading');
                                     if (loadEl) loadEl.remove();
                                 })
                                 .catch(function(err2) {
                                     console.error('Second attempt failed:', err2);
+                                    showDebug('Camera error: ' + err2.message);
                                     if (err2.message && err2.message.includes('NotAllowedError'))
                                         toast('Camera permission denied.', true);
                                     else if (err2.message && err2.message.includes('NotFoundError'))
@@ -1009,6 +1039,7 @@
                         });
                 } catch(err) {
                     console.error('Scanner init error:', err);
+                    showDebug('Init error: ' + err.message);
                     toast('Error: ' + err.message, true);
                     container.style.display = 'none';
                     scannerRunning = false;
@@ -1019,52 +1050,98 @@
 
         function onScanSuccess(decodedText, decodedResult) {
             const result = document.getElementById('scanResult');
+            showDebug('Decoded: ' + decodedText);
             if (navigator.vibrate) navigator.vibrate(100);
+
+            // Try to parse JSON
+            let data = null;
+            let machineId = null;
+            let machineData = null;
+
             try {
-                const data = JSON.parse(decodedText);
-                let machineId = data.id;
-                if (!machineId) {
-                    // maybe the QR is just a plain ID string
-                    if (typeof data === 'string') machineId = data;
-                    else throw new Error('No ID found');
+                data = JSON.parse(decodedText);
+            } catch(e) {
+                // Not JSON – check if it's just a plain ID string
+                if (decodedText.trim().match(/^M\d{4}$/)) {
+                    machineId = decodedText.trim();
+                } else {
+                    // Show raw text
+                    result.innerHTML = `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not a valid QR.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                    toast('Invalid QR format.', true);
+                    showDebug('Invalid format: ' + decodedText);
+                    return;
                 }
+            }
+
+            // If we parsed JSON, extract ID or full data
+            if (data) {
+                if (data.id) {
+                    machineId = data.id;
+                    // If full machine data is present, use it as fallback
+                    if (data.name && data.section) {
+                        machineData = data;
+                    }
+                } else {
+                    // JSON but no id – show raw
+                    result.innerHTML = `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ JSON does not contain 'id'.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                    toast('Missing ID in JSON.', true);
+                    showDebug('No id field in JSON.');
+                    return;
+                }
+            }
+
+            // Now lookup machine by ID in database
+            if (machineId) {
                 const machines = getMachines();
                 const m = machines.find(x => x.id === machineId);
                 if (m) {
-                    result.innerHTML = `
-                        <div class="result-card">
-                            <h4 style="margin-bottom:8px;">✅ Machine Found</h4>
-                            <div class="result-grid">
-                                <div class="result-item"><label>ID</label>${esc(m.id)}</div>
-                                <div class="result-item"><label>Name</label>${esc(m.name)}</div>
-                                <div class="result-item"><label>Section</label>${esc(getSectionName(m.section))}</div>
-                                <div class="result-item"><label>Manufacturer</label>${esc(m.manufacturer || '-')}</div>
-                                <div class="result-item"><label>Model</label>${esc(m.model || '-')}</div>
-                                <div class="result-item"><label>Serial</label>${esc(m.serialNumber || '-')}</div>
-                                <div class="result-item"><label>Status</label>${statusLabel(m.status)}</div>
-                                <div class="result-item"><label>Installed</label>${fmtDate(m.installationDate)}</div>
-                            </div>
-                            ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
-                            <div class="btn-group" style="margin-top:12px;">
-                                <button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
-                                <button onclick="document.getElementById('lookupInput').value='${esc(m.id)}';switchToTab('lookup');lookupMachine();" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-right"></i> View Details</button>
-                                <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
-                            </div>
-                        </div>
-                    `;
+                    // Use database record
+                    displayMachineResult(m, result);
                     toast('✅ Found: ' + m.name);
+                    showDebug('Found machine: ' + m.id);
                     setTimeout(() => stopQRScanner(), 1000);
                     return;
                 } else {
-                    result.innerHTML = `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Machine with ID "${esc(machineId)}" not found in database.</p></div>`;
-                    toast('Machine not found in database.', true);
-                    return;
+                    // Not in DB – check if we have full data from QR
+                    if (machineData && machineData.id === machineId) {
+                        // Use data from QR (if we have enough)
+                        displayMachineResult(machineData, result);
+                        toast('✅ Found (from QR): ' + machineData.name);
+                        showDebug('Found from QR data: ' + machineId);
+                        setTimeout(() => stopQRScanner(), 1000);
+                        return;
+                    } else {
+                        result.innerHTML = `<div class="result-card" style="border-color:var(--danger);"><p>❌ Machine with ID "${esc(machineId)}" not found in database.</p></div>`;
+                        toast('Machine not found in database.', true);
+                        showDebug('Machine not found: ' + machineId);
+                        return;
+                    }
                 }
-            } catch(e) {
-                // Not JSON or invalid – show raw text
-                result.innerHTML = `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not a valid machine QR.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
-                toast('Invalid QR code format.', true);
             }
+        }
+
+        function displayMachineResult(m, result) {
+            result.innerHTML = `
+                <div class="result-card">
+                    <h4 style="margin-bottom:8px;">✅ Machine Found</h4>
+                    <div class="result-grid">
+                        <div class="result-item"><label>ID</label>${esc(m.id)}</div>
+                        <div class="result-item"><label>Name</label>${esc(m.name)}</div>
+                        <div class="result-item"><label>Section</label>${esc(getSectionName(m.section) || m.section || '-')}</div>
+                        <div class="result-item"><label>Manufacturer</label>${esc(m.manufacturer || '-')}</div>
+                        <div class="result-item"><label>Model</label>${esc(m.model || '-')}</div>
+                        <div class="result-item"><label>Serial</label>${esc(m.serialNumber || '-')}</div>
+                        <div class="result-item"><label>Status</label>${statusLabel(m.status)}</div>
+                        <div class="result-item"><label>Installed</label>${fmtDate(m.installationDate)}</div>
+                    </div>
+                    ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
+                    <div class="btn-group" style="margin-top:12px;">
+                        ${m.id && getMachines().find(x => x.id === m.id) ? `<button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>` : ''}
+                        <button onclick="document.getElementById('lookupInput').value='${esc(m.id)}';switchToTab('lookup');lookupMachine();" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-right"></i> View Details</button>
+                        <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
+                    </div>
+                </div>
+            `;
         }
 
         function onScanFailure(err) { /* silent */ }
@@ -1078,6 +1155,7 @@
                         container.style.display = 'none';
                         container.innerHTML = '';
                         toast('Scanner stopped.');
+                        showDebug('Scanner stopped.');
                     }).catch(() => {
                         scannerRunning = false;
                         container.style.display = 'none';
@@ -1101,6 +1179,7 @@
             if (!file) return;
             const result = document.getElementById('scanResult');
             result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;"><i class="fas fa-spinner fa-spin"></i> Decoding QR from image...</p>';
+            showDebug('Uploading image for decoding...');
             const reader = new FileReader();
             reader.onload = function(event) {
                 const img = new Image();
@@ -1109,11 +1188,13 @@
                     const qrScanner = new Html5Qrcode("scanResult");
                     qrScanner.scanFile(file, true)
                         .then(decodedText => {
+                            showDebug('Image decoded: ' + decodedText);
                             onScanSuccess(decodedText, null);
                             qrScanner.clear().catch(()=>{});
                         })
                         .catch(err => {
                             console.error('Image decode error:', err);
+                            showDebug('Image decode error: ' + err.message);
                             result.innerHTML = `<div class="result-card" style="border-color:var(--danger);"><p>❌ Could not decode QR from image. Please try another image.</p></div>`;
                             toast('Failed to decode QR from image.', true);
                         });
