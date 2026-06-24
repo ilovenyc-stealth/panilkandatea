@@ -255,6 +255,7 @@
         .btn-warning { background: var(--warning); color: white; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-scan { background: #6a1b9a; color: white; }
+        .btn-success { background: #2e7d32; color: white; }
 
         /* ─── Status Badge ─── */
         .status-badge {
@@ -1152,7 +1153,7 @@
         }
 
         // ============================================================
-        // QR SCANNER
+        // QR SCANNER - AUTOMATIC BLANK PAGE
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
@@ -1259,85 +1260,20 @@
             }, 300);
         }
 
-        function onScanSuccess(decodedText, decodedResult) {
-            const result = document.getElementById('scanResult');
-            showDebug('Decoded: ' + decodedText.substring(0, 100) + (decodedText.length > 100 ? '...' : ''));
-            if (navigator.vibrate) navigator.vibrate(100);
-
-            let data = null;
-            let machineId = null;
-            let machineData = null;
-
-            try {
-                data = JSON.parse(decodedText);
-                showDebug('Parsed as JSON');
-            } catch (e) {
-                if (decodedText.trim().match(/^M\d{4}$/)) {
-                    machineId = decodedText.trim();
-                    showDebug('Plain ID detected: ' + machineId);
-                } else {
-                    result.innerHTML =
-                        `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not a valid QR.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
-                    toast('Invalid QR format.', true);
-                    showDebug('ERROR: Not JSON and not valid ID format');
-                    return;
-                }
-            }
-
-            if (data) {
-                if (data.id) {
-                    machineId = data.id;
-                    if (data.name && data.section) {
-                        machineData = data;
-                        showDebug('Full machine data from QR: ' + data.name);
-                    } else {
-                        showDebug('QR contains ID: ' + machineId);
-                    }
-                } else {
-                    result.innerHTML =
-                        `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ JSON does not contain 'id'.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
-                    toast('Missing ID in JSON.', true);
-                    showDebug('ERROR: No "id" field in JSON');
-                    return;
-                }
-            }
-
-            if (machineId) {
-                const machines = getMachines();
-                const dbMachine = machines.find(x => x.id === machineId);
-                if (dbMachine) {
-                    showDebug('Found in DB: ' + dbMachine.name);
-                    displayMachineResult(dbMachine, result);
-                    toast('✅ Found: ' + dbMachine.name);
-                    setTimeout(() => stopQRScanner(), 1500);
-                    return;
-                } else if (machineData && machineData.id === machineId) {
-                    showDebug('Using data from QR (self-contained)');
-                    displayMachineResult(machineData, result);
-                    toast('✅ Found (from QR): ' + machineData.name);
-                    setTimeout(() => stopQRScanner(), 1500);
-                    return;
-                } else {
-                    result.innerHTML =
-                        `<div class="result-card" style="border-color:var(--danger);"><p>❌ Machine with ID "${esc(machineId)}" not found in database.</p><p style="font-size:12px;color:#666;margin-top:8px;">Try adding this machine first, or scan a QR code with full data.</p></div>`;
-                    toast('Machine not found in database.', true);
-                    showDebug('ERROR: Machine ID ' + machineId + ' not in DB');
-                    return;
-                }
-            }
-        }
-
-        // ============================================================
-        // NEW: View Full Page & Export Single Machine
-        // ============================================================
-        function viewFullPage(machine) {
+        // --- BLANK PAGE GENERATOR ---
+        function openBlankPageWithMachine(machine) {
             const sectionName = machine.sectionName || getSectionName(machine.section) || machine.section || '-';
+            // Escape for JSON to be safely embedded
+            const machineJson = JSON.stringify(machine).replace(/"/g, '&quot;');
             const htmlContent = `
             <!DOCTYPE html>
             <html>
             <head>
                 <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Machine Details - ${esc(machine.id)}</title>
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
                 <style>
                     * { margin:0; padding:0; box-sizing:border-box; }
                     body {
@@ -1416,19 +1352,12 @@
                     .status-badge.working { background: #c8e6c9; color: #1b5e20; }
                     .status-badge.maintenance { background: #ffe0b2; color: #e65100; }
                     .status-badge.out-of-service { background: #ffcdd2; color: #c62828; }
-                    .footer {
-                        margin-top: 24px;
-                        text-align: center;
-                        font-size: 13px;
-                        color: #6b7280;
-                        border-top: 1px solid #e5e7eb;
-                        padding-top: 16px;
-                    }
                     .btn-group {
                         margin-top: 20px;
                         display: flex;
                         gap: 10px;
                         justify-content: center;
+                        flex-wrap: wrap;
                     }
                     .btn {
                         padding: 10px 24px;
@@ -1441,13 +1370,22 @@
                         display: inline-flex;
                         align-items: center;
                         gap: 8px;
-                        background: #2e7d32;
-                        color: white;
                         transition: background 0.2s;
                     }
-                    .btn:hover { background: #1b5e20; }
+                    .btn.primary { background: #2e7d32; color: white; }
+                    .btn.primary:hover { background: #1b5e20; }
                     .btn.secondary { background: #e5e7eb; color: #1b3b1b; }
                     .btn.secondary:hover { background: #d1d5db; }
+                    .btn.danger { background: #c62828; color: white; }
+                    .btn.danger:hover { background: #b71c1c; }
+                    .footer {
+                        margin-top: 24px;
+                        text-align: center;
+                        font-size: 13px;
+                        color: #6b7280;
+                        border-top: 1px solid #e5e7eb;
+                        padding-top: 16px;
+                    }
                     @media (max-width: 600px) {
                         .grid { grid-template-columns: 1fr; }
                         .header { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -1472,12 +1410,39 @@
                     </div>
                     <div class="btn-group">
                         <button onclick="window.print()" class="btn secondary"><i class="fas fa-print"></i> Print</button>
+                        <button onclick="exportMachine()" class="btn primary"><i class="fas fa-file-excel"></i> Export to Excel</button>
                         <button onclick="window.close()" class="btn secondary"><i class="fas fa-times"></i> Close</button>
                     </div>
                     <div class="footer">
                         Panilkanda Tea Factory · Machine Tracker
                     </div>
                 </div>
+                <script>
+                    // Export function embedded in the blank page
+                    function exportMachine() {
+                        const machine = ${machineJson};
+                        const headers = ['ID','Name','Section','Manufacturer','Model','Serial Number','Installation Date','Status','Notes'];
+                        const sectionName = machine.sectionName || '${esc(sectionName)}' || machine.section || '-';
+                        const row = [
+                            machine.id,
+                            machine.name,
+                            sectionName,
+                            machine.manufacturer || '',
+                            machine.model || '',
+                            machine.serialNumber || '',
+                            machine.installationDate || '',
+                            machine.status || '',
+                            machine.notes || ''
+                        ];
+                        let csv = headers.join(',') + '\\n';
+                        csv += row.map(cell => '"' + String(cell).replace(/"/g, '""') + '"').join(',');
+                        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = 'machine_' + machine.id + '.csv';
+                        link.click();
+                    }
+                <\/script>
             </body>
             </html>
             `;
@@ -1487,69 +1452,96 @@
                 win.document.close();
                 win.focus();
             } else {
-                toast('Please allow popups to view full page.', true);
+                toast('Please allow popups to view machine details.', true);
             }
         }
 
-        function exportSingleMachineCSV(machine) {
-            const headers = ['ID', 'Name', 'Section', 'Manufacturer', 'Model', 'Serial Number', 'Installation Date', 'Status', 'Notes'];
-            const sectionName = machine.sectionName || getSectionName(machine.section) || machine.section || '-';
-            const row = [
-                machine.id,
-                machine.name,
-                sectionName,
-                machine.manufacturer || '',
-                machine.model || '',
-                machine.serialNumber || '',
-                machine.installationDate || '',
-                machine.status || '',
-                machine.notes || ''
-            ];
-            let csv = headers.join(',') + '\n';
-            csv += row.map(cell => '"' + String(cell).replace(/"/g, '""') + '"').join(',');
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `machine_${machine.id}.csv`;
-            link.click();
-            toast('📥 CSV exported for ' + machine.id);
+        // --- SCAN SUCCESS HANDLER ---
+        function onScanSuccess(decodedText, decodedResult) {
+            const result = document.getElementById('scanResult');
+            showDebug('Decoded: ' + decodedText.substring(0, 100) + (decodedText.length > 100 ? '...' : ''));
+            if (navigator.vibrate) navigator.vibrate(100);
+
+            let data = null;
+            let machineId = null;
+            let machineData = null;
+
+            try {
+                data = JSON.parse(decodedText);
+                showDebug('Parsed as JSON');
+            } catch (e) {
+                if (decodedText.trim().match(/^M\d{4}$/)) {
+                    machineId = decodedText.trim();
+                    showDebug('Plain ID detected: ' + machineId);
+                } else {
+                    result.innerHTML =
+                        `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not a valid QR.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                    toast('Invalid QR format.', true);
+                    showDebug('ERROR: Not JSON and not valid ID format');
+                    return;
+                }
+            }
+
+            if (data) {
+                if (data.id) {
+                    machineId = data.id;
+                    if (data.name && data.section) {
+                        machineData = data;
+                        showDebug('Full machine data from QR: ' + data.name);
+                    } else {
+                        showDebug('QR contains ID: ' + machineId);
+                    }
+                } else {
+                    result.innerHTML =
+                        `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ JSON does not contain 'id'.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                    toast('Missing ID in JSON.', true);
+                    showDebug('ERROR: No "id" field in JSON');
+                    return;
+                }
+            }
+
+            if (machineId) {
+                const machines = getMachines();
+                const dbMachine = machines.find(x => x.id === machineId);
+                let displayMachine = null;
+                if (dbMachine) {
+                    showDebug('Found in DB: ' + dbMachine.name);
+                    displayMachine = dbMachine;
+                } else if (machineData && machineData.id === machineId) {
+                    showDebug('Using data from QR (self-contained)');
+                    displayMachine = machineData;
+                } else {
+                    result.innerHTML =
+                        `<div class="result-card" style="border-color:var(--danger);"><p>❌ Machine with ID "${esc(machineId)}" not found in database.</p><p style="font-size:12px;color:#666;margin-top:8px;">Try adding this machine first, or scan a QR code with full data.</p></div>`;
+                    toast('Machine not found in database.', true);
+                    showDebug('ERROR: Machine ID ' + machineId + ' not in DB');
+                    return;
+                }
+
+                // Automatically open blank page with machine details
+                openBlankPageWithMachine(displayMachine);
+
+                // Also show a brief inline confirmation
+                result.innerHTML = `
+                    <div class="result-card">
+                        <h4 style="margin-bottom:8px;">✅ Machine Found</h4>
+                        <p><strong>${esc(displayMachine.name)}</strong> (${esc(displayMachine.id)})</p>
+                        <p style="font-size:13px;color:#666;margin-top:6px;">📄 Details opened in a new tab.</p>
+                        <div class="btn-group" style="margin-top:12px;">
+                            ${dbMachine ? `<button onclick="editMachine('${esc(dbMachine.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>` : ''}
+                            <button onclick="openBlankPageWithMachine(${JSON.stringify(displayMachine).replace(/"/g, '&quot;')})" class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Re-open Full Page</button>
+                            <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
+                        </div>
+                    </div>
+                `;
+                toast('✅ Machine details opened in new window!');
+                // Auto-stop scanner after successful scan
+                setTimeout(() => stopQRScanner(), 1000);
+            }
         }
 
-        // ============================================================
-        // DISPLAY MACHINE RESULT (updated with new buttons)
-        // ============================================================
-        function displayMachineResult(m, result) {
-            const sectionName = m.sectionName || getSectionName(m.section) || m.section || '-';
-            const inDB = getMachines().find(x => x.id === m.id) !== undefined;
-            result.innerHTML = `
-                <div class="result-card">
-                    <h4 style="margin-bottom:8px;">✅ Machine Found ${inDB ? '' : '(from QR)'}</h4>
-                    <div class="result-grid">
-                        <div class="result-item"><label>ID</label>${esc(m.id)}</div>
-                        <div class="result-item"><label>Name</label>${esc(m.name)}</div>
-                        <div class="result-item"><label>Section</label>${esc(sectionName)}</div>
-                        <div class="result-item"><label>Manufacturer</label>${esc(m.manufacturer || '-')}</div>
-                        <div class="result-item"><label>Model</label>${esc(m.model || '-')}</div>
-                        <div class="result-item"><label>Serial</label>${esc(m.serialNumber || '-')}</div>
-                        <div class="result-item"><label>Status</label>${statusLabel(m.status)}</div>
-                        <div class="result-item"><label>Installed</label>${fmtDate(m.installationDate)}</div>
-                    </div>
-                    ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
-                    <div class="btn-group" style="margin-top:12px;">
-                        ${inDB ? `<button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>` : ''}
-                        <button onclick="viewFullPage(${JSON.stringify(m).replace(/"/g, '&quot;')})" class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> View Full Page</button>
-                        <button onclick="exportSingleMachineCSV(${JSON.stringify(m).replace(/"/g, '&quot;')})" class="btn btn-success btn-sm" style="background:#2e7d32;color:white;"><i class="fas fa-file-excel"></i> Export to Excel</button>
-                        <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
-                    </div>
-                </div>
-            `;
-            showDebug('Displayed: ' + m.name);
-        }
-
-        // ─── onScanFailure ───
         function onScanFailure(err) { /* silent */ }
 
-        // ─── stopQRScanner ───
         function stopQRScanner() {
             const container = document.getElementById('qrReaderContainer');
 
