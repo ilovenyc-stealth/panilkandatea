@@ -28,9 +28,9 @@
             --warning-light: #ffe0b2;
             --info: #1976d2;
             --info-light: #e3f2fd;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 8px 25px rgba(46, 125, 50, 0.15);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 15px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 25px rgba(46,125,50,0.15);
             --radius-sm: 12px;
             --radius-md: 16px;
             --radius-lg: 20px;
@@ -47,243 +47,143 @@
             display: flex;
             flex-direction: column;
         }
-
-        /* ─── Layout: Sidebar + Main ─── */
-        .layout {
-            display: flex;
-            flex: 1;
-        }
+        .layout { display: flex; flex: 1; }
 
         /* ─── Sidebar ─── */
         .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: var(--sidebar-width);
-            height: 100%;
+            position: fixed; top: 0; left: 0;
+            width: var(--sidebar-width); height: 100%;
             background: var(--white);
             border-right: 2px solid var(--primary-light);
             z-index: 200;
             transform: translateX(-100%);
             transition: transform 0.3s ease;
             overflow-y: auto;
-            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column;
         }
-        .sidebar.open {
-            transform: translateX(0);
-        }
+        .sidebar.open { transform: translateX(0); }
         .sidebar-header {
             padding: 20px;
             border-bottom: 2px solid var(--accent-light);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
         }
-        .sidebar-header i {
-            font-size: 24px;
-            color: var(--primary);
-        }
-        .sidebar-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-dark);
-        }
-        .sidebar-nav {
-            padding: 10px 0;
-            flex: 1;
-        }
+        .sidebar-header i { font-size: 24px; color: var(--primary); }
+        .sidebar-header h2 { font-size: 18px; font-weight: 700; color: var(--primary-dark); }
+        .sidebar-nav { padding: 10px 0; flex: 1; }
         .sidebar-nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display: flex; align-items: center; gap: 12px;
             padding: 12px 20px;
             color: var(--text-dark);
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 14px; font-weight: 500;
             transition: background 0.2s;
             border-left: 4px solid transparent;
             cursor: pointer;
         }
-        .sidebar-nav a:hover {
-            background: var(--primary-bg);
-        }
+        .sidebar-nav a:hover { background: var(--primary-bg); }
         .sidebar-nav a.active {
             background: var(--primary-light);
             color: var(--primary-dark);
             border-left-color: var(--primary);
             font-weight: 600;
         }
-        .sidebar-nav a i {
-            width: 20px;
-            text-align: center;
-        }
-        .sidebar-sub {
-            display: none;
-            padding-left: 20px;
-        }
-        .sidebar-sub.open {
-            display: block;
-        }
-        .sidebar-sub a {
-            padding: 8px 20px;
-            font-size: 13px;
-        }
-
+        .sidebar-nav a i { width: 20px; text-align: center; }
+        .sidebar-sub { display: none; padding-left: 20px; }
+        .sidebar-sub.open { display: block; }
+        .sidebar-sub a { padding: 8px 20px; font-size: 13px; }
         .sidebar-overlay {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
             z-index: 150;
         }
-        .sidebar-overlay.active {
-            display: block;
-        }
+        .sidebar-overlay.active { display: block; }
 
         /* ─── Hamburger ─── */
         .hamburger {
             display: none;
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 300;
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            align-items: center;
-            justify-content: center;
+            position: fixed; top: 15px; left: 15px; z-index: 300;
+            background: var(--primary); color: white;
+            border: none; width: 44px; height: 44px;
+            border-radius: 50%; font-size: 20px;
+            cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            align-items: center; justify-content: center;
         }
 
-        /* ─── Main Container ─── */
+        /* ─── Main Content ─── */
         .main-content {
             flex: 1;
             max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255,255,255,0.95);
             border-radius: var(--radius-lg);
             padding: 25px 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             transition: margin-left 0.3s ease;
             margin: 20px;
             margin-left: calc(var(--sidebar-width) + 20px);
         }
 
-        /* ─── Bottom Nav (mobile) ─── */
+        /* ─── Bottom Nav ─── */
         .bottom-nav {
             display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            position: fixed; bottom: 0; left: 0; right: 0;
             background: var(--white);
             border-top: 2px solid var(--primary-light);
             height: var(--bottom-nav-height);
             justify-content: space-around;
             align-items: center;
             z-index: 100;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
         }
         .bottom-nav a {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; flex-direction: column; align-items: center;
             color: var(--text-dark);
-            text-decoration: none;
-            font-size: 10px;
-            padding: 5px;
-            flex: 1;
-            font-weight: 500;
-            cursor: pointer;
+            text-decoration: none; font-size: 10px;
+            padding: 5px; flex: 1; font-weight: 500; cursor: pointer;
         }
-        .bottom-nav a i {
-            font-size: 20px;
-            margin-bottom: 2px;
-        }
-        .bottom-nav a.active {
-            color: var(--primary);
-            font-weight: 600;
-        }
+        .bottom-nav a i { font-size: 20px; margin-bottom: 2px; }
+        .bottom-nav a.active { color: var(--primary); font-weight: 600; }
 
         /* ─── Header ─── */
         .header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--accent-light);
+            display: flex; align-items: center; gap: 15px;
+            margin-bottom: 20px; flex-wrap: wrap;
+            padding-bottom: 15px; border-bottom: 2px solid var(--accent-light);
         }
         .logo-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.35);
+            width: 60px; height: 60px; border-radius: 50%;
+            box-shadow: 0 8px 25px rgba(46,125,50,0.35);
             flex-shrink: 0;
         }
-        .logo-wrapper i {
-            font-size: 26px;
-            color: white;
-        }
-        .header-text h1 {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--text-dark);
-            line-height: 1.2;
-        }
-        .header-text p {
-            color: #2e5e2e;
-            font-size: 13px;
-        }
+        .logo-wrapper i { font-size: 26px; color: white; }
+        .header-text h1 { font-size: 24px; font-weight: 800; color: var(--text-dark); line-height: 1.2; }
+        .header-text p { color: #2e5e2e; font-size: 13px; }
 
         /* ─── Tabs ─── */
         .tabs {
-            display: flex;
-            gap: 5px;
+            display: flex; gap: 5px;
             background: var(--accent-light);
             padding: 5px;
             border-radius: var(--radius-full);
             margin-bottom: 20px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            flex-wrap: nowrap; overflow-x: auto;
+            -webkit-overflow-scrolling: touch; scrollbar-width: none;
         }
-        .tabs::-webkit-scrollbar {
-            display: none;
-        }
+        .tabs::-webkit-scrollbar { display: none; }
         .tab-btn {
-            flex: 0 0 auto;
-            min-width: 60px;
-            border: none;
-            background: transparent;
+            flex: 0 0 auto; min-width: 60px;
+            border: none; background: transparent;
             padding: 10px 12px;
-            font-weight: 600;
-            font-size: 12px;
+            font-weight: 600; font-size: 12px;
             border-radius: var(--radius-full);
             cursor: pointer;
             color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            white-space: nowrap;
+            display: flex; align-items: center; justify-content: center;
+            gap: 5px; white-space: nowrap;
             transition: all 0.2s;
         }
         .tab-btn.active {
@@ -291,65 +191,35 @@
             box-shadow: var(--shadow-lg);
             color: var(--primary-dark);
         }
-        .tab-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.6);
-        }
+        .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.6); }
 
         /* ─── Tab Content ─── */
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        .tab-content { display: none; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
 
         /* ─── Sub‑tabs ─── */
         .sub-tabs {
-            display: flex;
-            gap: 6px;
+            display: flex; gap: 6px;
             margin-bottom: 16px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            flex-wrap: nowrap; overflow-x: auto;
+            -webkit-overflow-scrolling: touch; scrollbar-width: none;
         }
-        .sub-tabs::-webkit-scrollbar {
-            display: none;
-        }
+        .sub-tabs::-webkit-scrollbar { display: none; }
         .sub-tab {
             flex: 0 0 auto;
             padding: 8px 16px;
             border: 2px solid var(--primary-light);
             border-radius: 30px;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 13px; font-weight: 600;
             background: white;
             white-space: nowrap;
             transition: all 0.2s;
         }
-        .sub-tab.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        .sub-content {
-            display: none;
-        }
-        .sub-content.active {
-            display: block;
-        }
+        .sub-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .sub-content { display: none; }
+        .sub-content.active { display: block; }
 
         /* ─── Cards & Forms ─── */
         .card {
@@ -360,170 +230,77 @@
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--primary-light);
         }
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .form-group.full {
-            grid-column: 1 / -1;
-        }
-        label {
-            font-weight: 600;
-            font-size: 12px;
-            margin-bottom: 4px;
-            color: var(--text-dark);
-        }
-        label i {
-            color: var(--primary);
-            width: 14px;
-        }
-        input,
-        select,
-        textarea {
+        .form-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group.full { grid-column: 1/-1; }
+        label { font-weight: 600; font-size: 12px; margin-bottom: 4px; color: var(--text-dark); }
+        label i { color: var(--primary); width: 14px; }
+        input, select, textarea {
             padding: 10px 14px;
             border: 2px solid var(--primary-light);
             border-radius: 10px;
-            font-size: 14px;
-            font-family: inherit;
-            background: white;
-            width: 100%;
+            font-size: 14px; font-family: inherit;
+            background: white; width: 100%;
         }
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        textarea {
-            resize: vertical;
-            min-height: 50px;
-        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+        textarea { resize: vertical; min-height: 50px; }
 
         .btn {
             padding: 10px 20px;
             border: none;
             border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 13px;
+            font-weight: 600; font-size: 13px;
             cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            display: inline-flex; align-items: center; justify-content: center;
             gap: 6px;
             transition: all 0.2s;
             white-space: nowrap;
             min-height: 44px;
         }
-        .btn:active {
-            transform: scale(0.97);
-        }
-        .btn-sm {
-            padding: 6px 14px;
-            font-size: 11px;
-            min-height: 36px;
-        }
-        .btn-lg {
-            padding: 14px 24px;
-            font-size: 15px;
-        }
-        .btn-block {
-            width: 100%;
-        }
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        .btn-secondary {
-            background: var(--accent-light);
-            color: var(--text-dark);
-        }
-        .btn-info {
-            background: var(--info);
-            color: white;
-        }
-        .btn-warning {
-            background: var(--warning);
-            color: white;
-        }
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-        .btn-scan {
-            background: #6a1b9a;
-            color: white;
-        }
+        .btn:active { transform: scale(0.97); }
+        .btn-sm { padding: 6px 14px; font-size: 11px; min-height: 36px; }
+        .btn-lg { padding: 14px 24px; font-size: 15px; }
+        .btn-block { width: 100%; }
+        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: var(--accent-light); color: var(--text-dark); }
+        .btn-info { background: var(--info); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-scan { background: #6a1b9a; color: white; }
 
         /* ─── Status Badge ─── */
         .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+            display: inline-flex; align-items: center; gap: 4px;
             padding: 4px 12px;
             border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 11px;
+            font-weight: 600; font-size: 11px;
         }
-        .status-badge.working {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-        }
-        .status-badge.maintenance {
-            background: var(--warning-light);
-            color: var(--warning);
-        }
-        .status-badge.out-of-service {
-            background: var(--danger-light);
-            color: var(--danger);
-        }
+        .status-badge.working { background: var(--primary-light); color: var(--primary-dark); }
+        .status-badge.maintenance { background: var(--warning-light); color: var(--warning); }
+        .status-badge.out-of-service { background: var(--danger-light); color: var(--danger); }
 
         /* ─── Machine List ─── */
-        .machine-list {
-            display: grid;
-            gap: 8px;
-        }
+        .machine-list { display: grid; gap: 8px; }
         .machine-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             padding: 12px 16px;
             background: var(--white);
             border-radius: 12px;
             border: 2px solid var(--primary-light);
-            flex-wrap: wrap;
-            gap: 8px;
+            flex-wrap: wrap; gap: 8px;
         }
-        .machine-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+        .machine-info { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .machine-id {
-            font-weight: 700;
-            color: var(--primary-dark);
+            font-weight: 700; color: var(--primary-dark);
             background: var(--primary-bg);
             padding: 3px 10px;
             border-radius: var(--radius-full);
             font-size: 12px;
         }
-        .machine-name {
-            font-weight: 600;
-            font-size: 14px;
-        }
+        .machine-name { font-weight: 600; font-size: 14px; }
         .machine-section {
-            font-size: 11px;
-            color: #666;
+            font-size: 11px; color: #666;
             background: #f5f5f5;
             padding: 2px 10px;
             border-radius: var(--radius-full);
@@ -531,14 +308,11 @@
 
         /* ─── Info Box ─── */
         .info-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            display: flex; align-items: center; justify-content: space-between;
             padding: 12px 16px;
             border-radius: 12px;
             font-size: 13px;
-            flex-wrap: wrap;
-            gap: 8px;
+            flex-wrap: wrap; gap: 8px;
             background: var(--info-light);
             border: 2px solid var(--info);
             color: #0d47a1;
@@ -546,51 +320,23 @@
         }
 
         /* ─── QR ─── */
-        .qr-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        .qr-display {
-            text-align: center;
-            padding: 16px;
-            background: white;
-            border-radius: 14px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        }
-        .qr-display canvas {
-            border-radius: 10px;
-            max-width: 200px;
-        }
-        .qr-info-panel {
-            background: var(--primary-bg);
-            border-radius: 14px;
-            padding: 16px;
-            border: 2px solid var(--primary-light);
-        }
+        .qr-container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .qr-display { text-align: center; padding: 16px; background: white; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .qr-display canvas { border-radius: 10px; max-width: 200px; }
+        .qr-info-panel { background: var(--primary-bg); border-radius: 14px; padding: 16px; border: 2px solid var(--primary-light); }
 
         /* ─── Scanner ─── */
         #qrReaderContainer {
-            margin-top: 12px;
-            padding: 12px;
-            background: #000;
-            border-radius: 14px;
+            margin-top: 12px; padding: 12px;
+            background: #000; border-radius: 14px;
             text-align: center;
             min-height: 250px;
             display: none;
             position: relative;
             overflow: hidden;
         }
-        #qrReaderContainer video {
-            max-width: 100%;
-            border-radius: 10px;
-            max-height: 400px;
-            object-fit: cover;
-            width: 100%;
-        }
-        #qrReaderContainer #qrReaderContainer__scan_region {
-            min-height: 250px;
-        }
+        #qrReaderContainer video { max-width: 100%; border-radius: 10px; max-height: 400px; object-fit: cover; width: 100%; }
+        #qrReaderContainer #qrReaderContainer__scan_region { min-height: 250px; }
 
         /* ─── Result Card ─── */
         .result-card {
@@ -601,156 +347,63 @@
             animation: fadeIn 0.3s;
             margin-top: 10px;
         }
-        .result-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 8px 14px;
-        }
-        .result-item {
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(46, 125, 50, 0.1);
-            font-size: 13px;
-        }
-        .result-item label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #3f6b3f;
-            display: block;
-        }
+        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 8px 14px; }
+        .result-item { padding: 6px 0; border-bottom: 1px solid rgba(46,125,50,0.1); font-size: 13px; }
+        .result-item label { font-size: 10px; text-transform: uppercase; color: #3f6b3f; display: block; }
 
         /* ─── Stats ─── */
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-        }
-        .stat-card {
-            background: var(--white);
-            border-radius: 14px;
-            padding: 16px;
-            text-align: center;
-            border: 2px solid var(--primary-light);
-        }
-        .stat-card .num {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--primary-dark);
-        }
-        .stat-card .label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #666;
-            margin-top: 4px;
-        }
-        .stat-card.green {
-            border-color: var(--primary);
-        }
-        .stat-card.orange {
-            border-color: var(--warning);
-        }
-        .stat-card.red {
-            border-color: var(--danger);
-        }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 12px; }
+        .stat-card { background: var(--white); border-radius: 14px; padding: 16px; text-align: center; border: 2px solid var(--primary-light); }
+        .stat-card .num { font-size: 28px; font-weight: 800; color: var(--primary-dark); }
+        .stat-card .label { font-size: 11px; text-transform: uppercase; color: #666; margin-top: 4px; }
+        .stat-card.green { border-color: var(--primary); }
+        .stat-card.orange { border-color: var(--warning); }
+        .stat-card.red { border-color: var(--danger); }
 
         /* ─── Toast ─── */
         .toast-container {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+            position: fixed; top: 15px; right: 15px; z-index: 9999;
+            display: flex; flex-direction: column; gap: 6px;
         }
         .toast {
-            background: var(--primary);
-            color: white;
+            background: var(--primary); color: white;
             padding: 12px 20px;
             border-radius: 30px;
-            font-weight: 600;
-            font-size: 13px;
+            font-weight: 600; font-size: 13px;
             animation: slideIn 0.3s;
             max-width: 300px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        .toast.error {
-            background: var(--danger);
-        }
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(60px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
+        .toast.error { background: var(--danger); }
+        @keyframes slideIn { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
 
         /* ─── Modal ─── */
         .modal {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
             z-index: 1000;
-            justify-content: center;
-            align-items: center;
+            justify-content: center; align-items: center;
             padding: 15px;
         }
-        .modal.active {
-            display: flex;
-        }
+        .modal.active { display: flex; }
         .modal-content {
             background: var(--white);
             border-radius: 20px;
             padding: 25px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
+            max-width: 600px; width: 100%;
+            max-height: 85vh; overflow-y: auto;
         }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #666; }
 
-        .footer {
-            margin-top: 25px;
-            padding-top: 15px;
-            text-align: center;
-            font-size: 12px;
-            opacity: 0.6;
-            border-top: 2px solid var(--accent-light);
-        }
+        .footer { margin-top: 25px; padding-top: 15px; text-align: center; font-size: 12px; opacity: 0.6; border-top: 2px solid var(--accent-light); }
 
-        .scanner-loading {
-            color: #aaa;
-            font-size: 14px;
-            padding: 30px 20px;
-            text-align: center;
-        }
-        .scanner-loading i {
-            font-size: 32px;
-            display: block;
-            margin-bottom: 12px;
-        }
+        .scanner-loading { color: #aaa; font-size: 14px; padding: 30px 20px; text-align: center; }
+        .scanner-loading i { font-size: 32px; display: block; margin-bottom: 12px; }
 
         .scanner-upload-area {
-            margin-top: 12px;
-            padding: 20px;
+            margin-top: 12px; padding: 20px;
             border: 2px dashed var(--primary-light);
             border-radius: 12px;
             text-align: center;
@@ -758,133 +411,42 @@
             transition: background 0.2s;
             background: #fafffe;
         }
-        .scanner-upload-area:hover {
-            background: var(--primary-bg);
-        }
-        .scanner-upload-area input[type="file"] {
-            display: none;
-        }
+        .scanner-upload-area:hover { background: var(--primary-bg); }
+        .scanner-upload-area input[type="file"] { display: none; }
 
         /* ─── Responsive ─── */
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .main-content {
-                margin: 10px 0;
-                padding: 15px 10px;
-                border-radius: var(--radius-md);
-                margin-left: 0 !important;
-                margin-right: 0;
-            }
-            .sidebar {
-                width: 280px;
-            }
-            .hamburger {
-                display: flex;
-            }
-            .bottom-nav {
-                display: flex;
-            }
-            .header {
-                flex-direction: column;
-                text-align: center;
-            }
-            .header-text h1 {
-                font-size: 20px;
-            }
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            input,
-            select,
-            textarea {
-                font-size: 16px;
-                padding: 12px 14px;
-            }
-            .btn {
-                padding: 12px 20px;
-                font-size: 14px;
-                min-height: 48px;
-            }
-            .btn-sm {
-                padding: 8px 14px;
-                font-size: 12px;
-                min-height: 40px;
-            }
-            .machine-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .machine-info {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-            .qr-container {
-                grid-template-columns: 1fr;
-            }
-            .info-box {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .modal-content {
-                padding: 15px;
-                margin: 10px;
-            }
-            .sub-tabs {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-            }
-            .sub-tabs::-webkit-scrollbar {
-                display: none;
-            }
-            .tabs {
-                gap: 2px;
-                padding: 4px;
-            }
-            .tab-btn {
-                padding: 12px 16px;
-                font-size: 13px;
-                min-height: 44px;
-            }
-            .sidebar-overlay.active {
-                display: block;
-            }
-            .main-content {
-                margin-bottom: 80px;
-            }
-            #qrReaderContainer {
-                min-height: 180px;
-                padding: 8px;
-            }
-            #qrReaderContainer video {
-                max-height: 250px;
-            }
+            body { padding: 10px; }
+            .main-content { margin: 10px 0; padding: 15px 10px; border-radius: var(--radius-md); margin-left: 0 !important; margin-right: 0; }
+            .sidebar { width: 280px; }
+            .hamburger { display: flex; }
+            .bottom-nav { display: flex; }
+            .header { flex-direction: column; text-align: center; }
+            .header-text h1 { font-size: 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+            input, select, textarea { font-size: 16px; padding: 12px 14px; }
+            .btn { padding: 12px 20px; font-size: 14px; min-height: 48px; }
+            .btn-sm { padding: 8px 14px; font-size: 12px; min-height: 40px; }
+            .machine-item { flex-direction: column; align-items: flex-start; }
+            .machine-info { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .qr-container { grid-template-columns: 1fr; }
+            .info-box { flex-direction: column; align-items: flex-start; }
+            .modal-content { padding: 15px; margin: 10px; }
+            .sub-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .sub-tabs::-webkit-scrollbar { display: none; }
+            .tabs { gap: 2px; padding: 4px; }
+            .tab-btn { padding: 12px 16px; font-size: 13px; min-height: 44px; }
+            .sidebar-overlay.active { display: block; }
+            .main-content { margin-bottom: 80px; }
+            #qrReaderContainer { min-height: 180px; padding: 8px; }
+            #qrReaderContainer video { max-height: 250px; }
         }
-
         @media (min-width: 769px) {
-            .hamburger {
-                display: none;
-            }
-            .bottom-nav {
-                display: none;
-            }
-            .sidebar {
-                transform: translateX(0);
-                position: fixed;
-                height: 100vh;
-                box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-            }
-            .sidebar-overlay {
-                display: none !important;
-            }
-            .main-content {
-                margin-left: calc(var(--sidebar-width) + 20px);
-                margin-top: 20px;
-                margin-bottom: 20px;
-            }
+            .hamburger { display: none; }
+            .bottom-nav { display: none; }
+            .sidebar { transform: translateX(0); position: fixed; height: 100vh; box-shadow: 2px 0 15px rgba(0,0,0,0.1); }
+            .sidebar-overlay { display: none !important; }
+            .main-content { margin-left: calc(var(--sidebar-width) + 20px); margin-top: 20px; margin-bottom: 20px; }
         }
     </style>
 </head>
@@ -912,7 +474,7 @@
             <div class="sidebar-sub open" id="sidebarAssetSub">
                 <a href="#" class="active" data-sub="viewAssets"><i class="fas fa-eye"></i> View Assets</a>
                 <a href="#" data-sub="addAsset"><i class="fas fa-plus-circle"></i> Add Asset</a>
-                <a href="#" data-sub="addSection"><i class="fas-fa-folder-plus"></i> Add Section</a>
+                <a href="#" data-sub="addSection"><i class="fas fa-folder-plus"></i> Add Section</a>
             </div>
             <a href="#" data-tab="list"><i class="fas fa-list"></i> All Machines</a>
             <a href="#" data-tab="lookup"><i class="fas fa-search"></i> Lookup</a>
@@ -970,46 +532,15 @@
                     <h3 style="margin-bottom:14px;"><i class="fas fa-plus-circle"></i> Add New Asset</h3>
                     <form id="assetForm" autocomplete="off">
                         <div class="form-grid">
-                            <div class="form-group">
-                                <label><i class="fas fa-hashtag"></i> Machine ID</label>
-                                <input type="text" id="assetMachineId" readonly class="auto-id" />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-tag"></i> Machine Name *</label>
-                                <input type="text" id="assetName" placeholder="e.g. CTC Roller" required />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-building"></i> Section *</label>
-                                <select id="assetSection" required></select>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-industry"></i> Manufacturer</label>
-                                <input type="text" id="assetManufacturer" placeholder="e.g. Marshall" />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-cube"></i> Model</label>
-                                <input type="text" id="assetModel" placeholder="e.g. CTC-2000" />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-barcode"></i> Serial Number</label>
-                                <input type="text" id="assetSerial" placeholder="e.g. SN-2024-001" />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-calendar-alt"></i> Installation Date</label>
-                                <input type="date" id="assetDate" />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-info-circle"></i> Status</label>
-                                <select id="assetStatus">
-                                    <option value="working">Working</option>
-                                    <option value="maintenance">Maintenance</option>
-                                    <option value="out-of-service">Out of Service</option>
-                                </select>
-                            </div>
-                            <div class="form-group full">
-                                <label><i class="fas fa-sticky-note"></i> Notes</label>
-                                <textarea id="assetNotes" rows="2" placeholder="Additional details..."></textarea>
-                            </div>
+                            <div class="form-group"><label><i class="fas fa-hashtag"></i> Machine ID</label><input type="text" id="assetMachineId" readonly class="auto-id" /></div>
+                            <div class="form-group"><label><i class="fas fa-tag"></i> Machine Name *</label><input type="text" id="assetName" placeholder="e.g. CTC Roller" required /></div>
+                            <div class="form-group"><label><i class="fas fa-building"></i> Section *</label><select id="assetSection" required></select></div>
+                            <div class="form-group"><label><i class="fas fa-industry"></i> Manufacturer</label><input type="text" id="assetManufacturer" placeholder="e.g. Marshall" /></div>
+                            <div class="form-group"><label><i class="fas fa-cube"></i> Model</label><input type="text" id="assetModel" placeholder="e.g. CTC-2000" /></div>
+                            <div class="form-group"><label><i class="fas fa-barcode"></i> Serial Number</label><input type="text" id="assetSerial" placeholder="e.g. SN-2024-001" /></div>
+                            <div class="form-group"><label><i class="fas fa-calendar-alt"></i> Installation Date</label><input type="date" id="assetDate" /></div>
+                            <div class="form-group"><label><i class="fas fa-info-circle"></i> Status</label><select id="assetStatus"><option value="working">Working</option><option value="maintenance">Maintenance</option><option value="out-of-service">Out of Service</option></select></div>
+                            <div class="form-group full"><label><i class="fas fa-sticky-note"></i> Notes</label><textarea id="assetNotes" rows="2" placeholder="Additional details..."></textarea></div>
                         </div>
                         <div class="btn-group" style="margin-top:12px;">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Asset</button>
@@ -1024,18 +555,9 @@
                     <h3 style="margin-bottom:14px;"><i class="fas fa-folder-plus"></i> Add New Section</h3>
                     <form id="sectionForm" autocomplete="off">
                         <div class="form-grid">
-                            <div class="form-group">
-                                <label><i class="fas fa-tag"></i> Section Name *</label>
-                                <input type="text" id="sectionName" placeholder="e.g. Fermentation" required />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-palette"></i> Color (optional)</label>
-                                <input type="color" id="sectionColor" value="#2e7d32" />
-                            </div>
-                            <div class="form-group full">
-                                <label><i class="fas fa-sticky-note"></i> Description</label>
-                                <textarea id="sectionDesc" rows="2" placeholder="Section details..."></textarea>
-                            </div>
+                            <div class="form-group"><label><i class="fas fa-tag"></i> Section Name *</label><input type="text" id="sectionName" placeholder="e.g. Fermentation" required /></div>
+                            <div class="form-group"><label><i class="fas fa-palette"></i> Color (optional)</label><input type="color" id="sectionColor" value="#2e7d32" /></div>
+                            <div class="form-group full"><label><i class="fas fa-sticky-note"></i> Description</label><textarea id="sectionDesc" rows="2" placeholder="Section details..."></textarea></div>
                         </div>
                         <div class="btn-group" style="margin-top:12px;">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Section</button>
@@ -1153,46 +675,15 @@
             </div>
             <form id="editForm" autocomplete="off">
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label><i class="fas fa-hashtag"></i> Machine ID</label>
-                        <input type="text" id="editMachineId" readonly class="auto-id" />
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-tag"></i> Machine Name *</label>
-                        <input type="text" id="editName" required />
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-building"></i> Section *</label>
-                        <select id="editSection" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-industry"></i> Manufacturer</label>
-                        <input type="text" id="editManufacturer" />
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-cube"></i> Model</label>
-                        <input type="text" id="editModel" />
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-barcode"></i> Serial Number</label>
-                        <input type="text" id="editSerial" />
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-calendar-alt"></i> Installation Date</label>
-                        <input type="date" id="editDate" />
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-info-circle"></i> Status</label>
-                        <select id="editStatus">
-                            <option value="working">Working</option>
-                            <option value="maintenance">Maintenance</option>
-                            <option value="out-of-service">Out of Service</option>
-                        </select>
-                    </div>
-                    <div class="form-group full">
-                        <label><i class="fas fa-sticky-note"></i> Notes</label>
-                        <textarea id="editNotes" rows="2"></textarea>
-                    </div>
+                    <div class="form-group"><label><i class="fas fa-hashtag"></i> Machine ID</label><input type="text" id="editMachineId" readonly class="auto-id" /></div>
+                    <div class="form-group"><label><i class="fas fa-tag"></i> Machine Name *</label><input type="text" id="editName" required /></div>
+                    <div class="form-group"><label><i class="fas fa-building"></i> Section *</label><select id="editSection" required></select></div>
+                    <div class="form-group"><label><i class="fas fa-industry"></i> Manufacturer</label><input type="text" id="editManufacturer" /></div>
+                    <div class="form-group"><label><i class="fas fa-cube"></i> Model</label><input type="text" id="editModel" /></div>
+                    <div class="form-group"><label><i class="fas fa-barcode"></i> Serial Number</label><input type="text" id="editSerial" /></div>
+                    <div class="form-group"><label><i class="fas fa-calendar-alt"></i> Installation Date</label><input type="date" id="editDate" /></div>
+                    <div class="form-group"><label><i class="fas fa-info-circle"></i> Status</label><select id="editStatus"><option value="working">Working</option><option value="maintenance">Maintenance</option><option value="out-of-service">Out of Service</option></select></div>
+                    <div class="form-group full"><label><i class="fas fa-sticky-note"></i> Notes</label><textarea id="editNotes" rows="2"></textarea></div>
                 </div>
                 <div class="btn-group" style="margin-top:12px;">
                     <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
@@ -1204,75 +695,54 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js">
-    </script>
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
     <script>
         // ============================================================
         // DATABASE
         // ============================================================
         function getDB() {
-            try {
-                const data = localStorage.getItem('panilkanda_db');
-                if (data) return JSON.parse(data);
-            } catch (e) { /* ignore */ }
+            try { const data = localStorage.getItem('panilkanda_db'); if (data) return JSON.parse(data); } catch(e) {}
             return { machines: [], sections: [] };
         }
-
-        function saveDB(db) {
-            localStorage.setItem('panilkanda_db', JSON.stringify(db));
-        }
-
-        function getSections() {
-            return getDB().sections || [];
-        }
-
-        function getMachines() {
-            return getDB().machines || [];
-        }
+        function saveDB(db) { localStorage.setItem('panilkanda_db', JSON.stringify(db)); }
+        function getSections() { return getDB().sections || []; }
+        function getMachines() { return getDB().machines || []; }
 
         function generateMachineId() {
             const db = getDB();
             const existing = db.machines || [];
-            const nums = existing.map(m => {
-                const n = parseInt(m.id.replace(/\D/g, ''));
-                return isNaN(n) ? 0 : n;
-            });
+            const nums = existing.map(m => { const n = parseInt(m.id.replace(/\D/g,'')); return isNaN(n)?0:n; });
             const max = nums.length ? Math.max(...nums) : 0;
-            return 'M' + String(max + 1).padStart(4, '0');
+            return 'M' + String(max+1).padStart(4,'0');
         }
 
         function esc(str) {
             if (!str) return '';
             return str.replace(/[&<>"']/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                if (m === '"') return '&quot;';
-                if (m === "'") return '&#039;';
+                if (m==='&') return '&amp;';
+                if (m==='<') return '&lt;';
+                if (m==='>') return '&gt;';
+                if (m==='"') return '&quot;';
+                if (m==="'") return '&#039;';
                 return m;
             });
         }
 
         function fmtDate(d) {
             if (!d) return '-';
-            try {
-                const dt = new Date(d);
-                return dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-            } catch (e) { return d; }
+            try { const dt = new Date(d); return dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}); } catch(e){ return d; }
         }
 
         function statusCls(s) {
-            if (s === 'working') return 'working';
-            if (s === 'maintenance') return 'maintenance';
-            if (s === 'out-of-service') return 'out-of-service';
+            if (s==='working') return 'working';
+            if (s==='maintenance') return 'maintenance';
+            if (s==='out-of-service') return 'out-of-service';
             return '';
         }
-
         function statusLabel(s) {
-            const map = { working: '✅ Working', maintenance: '🔧 Maintenance', 'out-of-service': '⛔ Out of Service' };
+            const map = { working:'✅ Working', maintenance:'🔧 Maintenance', 'out-of-service':'⛔ Out of Service' };
             return map[s] || s;
         }
 
@@ -1291,7 +761,6 @@
             const found = sections.find(s => s.id === id);
             return found ? found.name : id;
         }
-
         function getSectionColor(id) {
             if (!id) return '#2e7d32';
             const sections = getSections();
@@ -1367,9 +836,7 @@
             const filter = document.getElementById('filterSection');
             const sectionId = filter ? filter.value : 'all';
             let machines = getMachines();
-            if (sectionId !== 'all') {
-                machines = machines.filter(m => m.section === sectionId);
-            }
+            if (sectionId !== 'all') machines = machines.filter(m => m.section === sectionId);
             renderAssetList(machines);
             loadSectionsDropdown('filterSection', sectionId);
             const sel = document.getElementById('filterSection');
@@ -1384,12 +851,8 @@
             loadSectionsDropdown('editSection');
             populateQRSelect();
         }
-
         function filterAssets() { refreshAssetView(); }
-
-        function refreshList() {
-            renderMachineList(getMachines());
-        }
+        function refreshList() { renderMachineList(getMachines()); }
 
         function refreshDashboard() {
             const machines = getMachines();
@@ -1398,7 +861,6 @@
             const working = machines.filter(m => m.status === 'working').length;
             const maintenance = machines.filter(m => m.status === 'maintenance').length;
             const out = machines.filter(m => m.status === 'out-of-service').length;
-
             const grid = document.getElementById('statGrid');
             grid.innerHTML = `
                 <div class="stat-card green"><div class="num">${total}</div><div class="label">Total Machines</div></div>
@@ -1406,22 +868,16 @@
                 <div class="stat-card orange"><div class="num">${maintenance}</div><div class="label">🔧 Maintenance</div></div>
                 <div class="stat-card red"><div class="num">${out}</div><div class="label">⛔ Out of Service</div></div>
             `;
-
             const secStats = document.getElementById('sectionStats');
-            if (sections.length === 0) {
-                secStats.innerHTML = '<p style="color:#666;font-size:13px;">No sections defined.</p>';
-                return;
-            }
+            if (sections.length === 0) { secStats.innerHTML = '<p style="color:#666;font-size:13px;">No sections defined.</p>'; return; }
             let html = '<div style="display:flex;flex-wrap:wrap;gap:8px;">';
             sections.forEach(sec => {
                 const count = machines.filter(m => m.section === sec.id).length;
                 const color = sec.color || '#2e7d32';
-                html += `
-                    <div style="background:${color}20;border:2px solid ${color};border-radius:12px;padding:8px 16px;display:flex;align-items:center;gap:8px;">
-                        <span style="font-weight:600;">${esc(sec.name)}</span>
-                        <span style="background:${color};color:white;border-radius:20px;padding:2px 10px;font-size:12px;">${count}</span>
-                    </div>
-                `;
+                html += `<div style="background:${color}20;border:2px solid ${color};border-radius:12px;padding:8px 16px;display:flex;align-items:center;gap:8px;">
+                            <span style="font-weight:600;">${esc(sec.name)}</span>
+                            <span style="background:${color};color:white;border-radius:20px;padding:2px 10px;font-size:12px;">${count}</span>
+                        </div>`;
             });
             html += '</div>';
             secStats.innerHTML = html;
@@ -1449,38 +905,15 @@
             const sel = document.getElementById('qrMachineSelect');
             const id = sel.value;
             const output = document.getElementById('qrOutput');
-            if (!id) {
-                output.style.display = 'none';
-                toast('Please select a machine.');
-                return;
-            }
+            if (!id) { output.style.display = 'none'; toast('Please select a machine.'); return; }
             const machines = getMachines();
             const m = machines.find(x => x.id === id);
-            if (!m) {
-                toast('Machine not found.', true);
-                return;
-            }
-
+            if (!m) { toast('Machine not found.', true); return; }
             output.style.display = 'grid';
-
             const container = document.getElementById('qrCanvasContainer');
             container.innerHTML = '';
-
-            // Store full machine data in QR for self-contained scanning
-            const qrData = {
-                id: m.id,
-                name: m.name,
-                section: m.section,
-                sectionName: getSectionName(m.section),
-                manufacturer: m.manufacturer || '',
-                model: m.model || '',
-                serialNumber: m.serialNumber || '',
-                installationDate: m.installationDate || '',
-                status: m.status || 'working',
-                notes: m.notes || ''
-            };
-            const data = JSON.stringify(qrData);
-
+            // QR contains only the machine ID (clean and reliable)
+            const data = JSON.stringify({ id: m.id });
             try {
                 qrCodeInstance = new QRCode(container, {
                     text: data,
@@ -1490,13 +923,8 @@
                     colorLight: '#ffffff',
                     correctLevel: QRCode.CorrectLevel.H
                 });
-            } catch (e) {
-                container.innerHTML = '<p style="color:red;">Error generating QR code.</p>';
-                return;
-            }
-
+            } catch(e) { container.innerHTML = '<p style="color:red;">Error generating QR code.</p>'; return; }
             document.getElementById('qrLabel').textContent = m.id + ' - ' + m.name;
-
             const info = document.getElementById('qrInfoDetails');
             info.innerHTML = `
                 <div class="result-grid">
@@ -1516,10 +944,7 @@
         function downloadQR() {
             const container = document.getElementById('qrCanvasContainer');
             const canvas = container.querySelector('canvas');
-            if (!canvas) {
-                toast('No QR code to download. Generate one first.', true);
-                return;
-            }
+            if (!canvas) { toast('No QR code to download. Generate one first.', true); return; }
             const link = document.createElement('a');
             link.download = 'qr-code.png';
             link.href = canvas.toDataURL('image/png');
@@ -1527,7 +952,7 @@
         }
 
         // ============================================================
-        // QR SCANNER - ENHANCED FOR MOBILE
+        // QR SCANNER
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
@@ -1536,88 +961,53 @@
             const container = document.getElementById('qrReaderContainer');
             const result = document.getElementById('scanResult');
             result.innerHTML = '';
-
-            if (scannerRunning) {
-                toast('Scanner already running.');
-                return;
-            }
-
-            if (typeof Html5Qrcode === 'undefined') {
-                toast('QR Scanner library not loaded. Please refresh.', true);
-                return;
-            }
-
+            if (scannerRunning) { toast('Scanner already running.'); return; }
+            if (typeof Html5Qrcode === 'undefined') { toast('QR library not loaded.', true); return; }
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                toast('Camera not supported on this device.', true);
-                return;
+                toast('Camera not supported.', true); return;
             }
-
-            // Show container with loading state
             container.style.display = 'block';
-            container.innerHTML = `
-                <div class="scanner-loading">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <div>Initializing camera...</div>
-                    <div style="font-size:12px;color:#666;margin-top:8px;">Please allow camera access when prompted.</div>
-                </div>
-            `;
-
-            // Clean up any existing scanner
+            container.innerHTML = `<div class="scanner-loading"><i class="fas fa-spinner fa-spin"></i><div>Initializing camera...</div><div style="font-size:12px;color:#666;margin-top:8px;">Please allow camera access.</div></div>`;
             if (html5QrCode) {
-                try { html5QrCode.stop().catch(() => {}); } catch (e) {}
-                try { html5QrCode.clear().catch(() => {}); } catch (e) {}
+                try { html5QrCode.stop().catch(()=>{}); } catch(e) {}
+                try { html5QrCode.clear().catch(()=>{}); } catch(e) {}
                 html5QrCode = null;
             }
-
             setTimeout(function() {
                 try {
                     html5QrCode = new Html5Qrcode("qrReaderContainer");
-
-                    const config = {
-                        fps: 20,
-                        qrbox: { width: 280, height: 280 },
-                        aspectRatio: 1.0
-                    };
-
-                    // Try rear camera first, fallback to any camera
-                    html5QrCode.start({ facingMode: "environment" },
-                        config,
-                        onScanSuccess,
-                        onScanFailure
-                    ).then(() => {
-                        scannerRunning = true;
-                        toast('📷 Camera ready. Point at a QR code.');
-                        // Update container - remove loading
-                        const loadEl = container.querySelector('.scanner-loading');
-                        if (loadEl) loadEl.remove();
-                    }).catch(function(err) {
-                        console.error('Scanner start error:', err);
-                        // Try with default camera
-                        html5QrCode.start({ facingMode: "user" },
-                            config,
-                            onScanSuccess,
-                            onScanFailure
-                        ).then(() => {
+                    const config = { fps: 20, qrbox: { width: 280, height: 280 }, aspectRatio: 1.0 };
+                    html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
+                        .then(() => {
                             scannerRunning = true;
-                            toast('📷 Camera ready (front). Point at a QR code.');
+                            toast('📷 Camera ready. Point at a QR code.');
                             const loadEl = container.querySelector('.scanner-loading');
                             if (loadEl) loadEl.remove();
-                        }).catch(function(err2) {
-                            console.error('Second attempt failed:', err2);
-                            if (err2.message && err2.message.includes('NotAllowedError')) {
-                                toast('Camera access denied. Please allow camera permissions.', true);
-                            } else if (err2.message && err2.message.includes('NotFoundError')) {
-                                toast('No camera found on this device.', true);
-                            } else {
-                                toast('Failed to start camera: ' + err2.message, true);
-                            }
-                            container.style.display = 'none';
-                            scannerRunning = false;
-                            html5QrCode = null;
+                        })
+                        .catch(function(err) {
+                            console.error('Scanner start error:', err);
+                            // fallback to front camera
+                            html5QrCode.start({ facingMode: "user" }, config, onScanSuccess, onScanFailure)
+                                .then(() => {
+                                    scannerRunning = true;
+                                    toast('📷 Camera ready (front).');
+                                    const loadEl = container.querySelector('.scanner-loading');
+                                    if (loadEl) loadEl.remove();
+                                })
+                                .catch(function(err2) {
+                                    console.error('Second attempt failed:', err2);
+                                    if (err2.message && err2.message.includes('NotAllowedError'))
+                                        toast('Camera permission denied.', true);
+                                    else if (err2.message && err2.message.includes('NotFoundError'))
+                                        toast('No camera found.', true);
+                                    else
+                                        toast('Failed to start camera: ' + err2.message, true);
+                                    container.style.display = 'none';
+                                    scannerRunning = false;
+                                    html5QrCode = null;
+                                });
                         });
-                    });
-
-                } catch (err) {
+                } catch(err) {
                     console.error('Scanner init error:', err);
                     toast('Error: ' + err.message, true);
                     container.style.display = 'none';
@@ -1630,70 +1020,57 @@
         function onScanSuccess(decodedText, decodedResult) {
             const result = document.getElementById('scanResult');
             if (navigator.vibrate) navigator.vibrate(100);
-
-            // Try to parse as JSON
             try {
                 const data = JSON.parse(decodedText);
-
-                // Check if it's machine data
-                if (data.id) {
-                    // Try to find in database for full info
-                    const machines = getMachines();
-                    const m = machines.find(x => x.id === data.id);
-
-                    // Use QR data as fallback if not in DB
-                    const displayData = m || data;
-
+                let machineId = data.id;
+                if (!machineId) {
+                    // maybe the QR is just a plain ID string
+                    if (typeof data === 'string') machineId = data;
+                    else throw new Error('No ID found');
+                }
+                const machines = getMachines();
+                const m = machines.find(x => x.id === machineId);
+                if (m) {
                     result.innerHTML = `
                         <div class="result-card">
-                            <h4 style="margin-bottom:8px;">✅ Machine Found ${m ? '' : '(from QR)'}</h4>
+                            <h4 style="margin-bottom:8px;">✅ Machine Found</h4>
                             <div class="result-grid">
-                                <div class="result-item"><label>ID</label>${esc(displayData.id)}</div>
-                                <div class="result-item"><label>Name</label>${esc(displayData.name)}</div>
-                                <div class="result-item"><label>Section</label>${esc(displayData.sectionName || getSectionName(displayData.section) || displayData.section || '-')}</div>
-                                <div class="result-item"><label>Manufacturer</label>${esc(displayData.manufacturer || '-')}</div>
-                                <div class="result-item"><label>Model</label>${esc(displayData.model || '-')}</div>
-                                <div class="result-item"><label>Serial</label>${esc(displayData.serialNumber || '-')}</div>
-                                <div class="result-item"><label>Status</label>${statusLabel(displayData.status)}</div>
-                                <div class="result-item"><label>Installed</label>${fmtDate(displayData.installationDate)}</div>
+                                <div class="result-item"><label>ID</label>${esc(m.id)}</div>
+                                <div class="result-item"><label>Name</label>${esc(m.name)}</div>
+                                <div class="result-item"><label>Section</label>${esc(getSectionName(m.section))}</div>
+                                <div class="result-item"><label>Manufacturer</label>${esc(m.manufacturer || '-')}</div>
+                                <div class="result-item"><label>Model</label>${esc(m.model || '-')}</div>
+                                <div class="result-item"><label>Serial</label>${esc(m.serialNumber || '-')}</div>
+                                <div class="result-item"><label>Status</label>${statusLabel(m.status)}</div>
+                                <div class="result-item"><label>Installed</label>${fmtDate(m.installationDate)}</div>
                             </div>
-                            ${displayData.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(displayData.notes)}</p>` : ''}
+                            ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
                             <div class="btn-group" style="margin-top:12px;">
-                                ${m ? `<button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>` : ''}
-                                <button onclick="document.getElementById('lookupInput').value='${esc(displayData.id)}';switchToTab('lookup');lookupMachine();" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-right"></i> View Details</button>
+                                <button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
+                                <button onclick="document.getElementById('lookupInput').value='${esc(m.id)}';switchToTab('lookup');lookupMachine();" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-right"></i> View Details</button>
                                 <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
                             </div>
                         </div>
                     `;
-                    toast('✅ Found: ' + displayData.name);
-                    // Auto-stop after successful scan
+                    toast('✅ Found: ' + m.name);
                     setTimeout(() => stopQRScanner(), 1000);
                     return;
+                } else {
+                    result.innerHTML = `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Machine with ID "${esc(machineId)}" not found in database.</p></div>`;
+                    toast('Machine not found in database.', true);
+                    return;
                 }
-
-                // If not machine data, show raw
-                result.innerHTML =
-                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ QR data is not a machine record.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
-                toast('QR code does not contain machine data.', true);
-
-            } catch (e) {
-                // Not JSON - show raw text
-                result.innerHTML =
-                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned text (not JSON):</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
-                toast('Scanned data is not a machine QR code.', true);
+            } catch(e) {
+                // Not JSON or invalid – show raw text
+                result.innerHTML = `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not a valid machine QR.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                toast('Invalid QR code format.', true);
             }
         }
 
-        function onScanFailure(err) {
-            // Silent - normal during scanning
-            if (err && err !== 'No QR code found' && !err.includes('No QR')) {
-                console.debug('Scan failure:', err);
-            }
-        }
+        function onScanFailure(err) { /* silent */ }
 
         function stopQRScanner() {
             const container = document.getElementById('qrReaderContainer');
-
             if (html5QrCode && scannerRunning) {
                 try {
                     html5QrCode.stop().then(() => {
@@ -1706,7 +1083,7 @@
                         container.style.display = 'none';
                         container.innerHTML = '';
                     });
-                } catch (e) {
+                } catch(e) {
                     scannerRunning = false;
                     container.style.display = 'none';
                     container.innerHTML = '';
@@ -1718,43 +1095,32 @@
             }
         }
 
-        // ─── QR Code Upload (Image File) ───
+        // ─── QR Upload from Image ───
         document.getElementById('qrFileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
-
             const result = document.getElementById('scanResult');
             result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;"><i class="fas fa-spinner fa-spin"></i> Decoding QR from image...</p>';
-
             const reader = new FileReader();
             reader.onload = function(event) {
                 const img = new Image();
                 img.onload = function() {
-                    // Use Html5Qrcode to decode from image
-                    if (typeof Html5Qrcode === 'undefined') {
-                        toast('QR library not loaded.', true);
-                        return;
-                    }
+                    if (typeof Html5Qrcode === 'undefined') { toast('QR library not loaded.', true); return; }
                     const qrScanner = new Html5Qrcode("scanResult");
                     qrScanner.scanFile(file, true)
                         .then(decodedText => {
-                            // Process the decoded text
                             onScanSuccess(decodedText, null);
-                            // Clean up
-                            qrScanner.clear().catch(() => {});
+                            qrScanner.clear().catch(()=>{});
                         })
                         .catch(err => {
                             console.error('Image decode error:', err);
-                            result.innerHTML =
-                                `<div class="result-card" style="border-color:var(--danger);"><p>❌ Could not decode QR from image. Please try another image.</p></div>`;
+                            result.innerHTML = `<div class="result-card" style="border-color:var(--danger);"><p>❌ Could not decode QR from image. Please try another image.</p></div>`;
                             toast('Failed to decode QR from image.', true);
                         });
                 };
                 img.src = event.target.result;
             };
             reader.readAsDataURL(file);
-
-            // Reset input so same file can be selected again
             this.value = '';
         });
 
@@ -1777,12 +1143,10 @@
                 (m.section && getSectionName(m.section).toLowerCase().includes(query))
             );
             if (found.length === 0) {
-                result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;">No machines found matching "' + esc(
-                    query) + '"</p>';
+                result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;">No machines found matching "' + esc(query) + '"</p>';
                 return;
             }
-            result.innerHTML = '<div class="machine-list" style="margin-top:10px;">' + found.map(renderMachineItem).join('') +
-                '</div>';
+            result.innerHTML = '<div class="machine-list" style="margin-top:10px;">' + found.map(renderMachineItem).join('') + '</div>';
         }
 
         // ============================================================
@@ -1794,7 +1158,6 @@
             const section = document.getElementById('assetSection').value;
             if (!name) { toast('Please enter a machine name.', true); return; }
             if (!section) { toast('Please select a section.', true); return; }
-
             const db = getDB();
             const newMachine = {
                 id: document.getElementById('assetMachineId').value.trim(),
@@ -1813,10 +1176,7 @@
             toast('✅ Asset added: ' + newMachine.name);
             this.reset();
             document.getElementById('assetMachineId').value = generateMachineId();
-            refreshAssetView();
-            refreshList();
-            refreshDashboard();
-            populateQRSelect();
+            refreshAssetView(); refreshList(); refreshDashboard(); populateQRSelect();
         });
 
         document.getElementById('sectionForm').addEventListener('submit', function(e) {
@@ -1825,24 +1185,17 @@
             if (!name) { toast('Please enter a section name.', true); return; }
             const db = getDB();
             const id = 'sec_' + Date.now();
-            db.sections.push({
-                id: id,
-                name: name,
-                color: document.getElementById('sectionColor').value,
-                description: document.getElementById('sectionDesc').value.trim()
-            });
+            db.sections.push({ id, name, color: document.getElementById('sectionColor').value, description: document.getElementById('sectionDesc').value.trim() });
             saveDB(db);
             toast('✅ Section added: ' + name);
             this.reset();
             document.getElementById('sectionColor').value = '#2e7d32';
-            refreshAssetView();
-            refreshDashboard();
+            refreshAssetView(); refreshDashboard();
             loadSectionsDropdown('assetSection');
             loadSectionsDropdown('editSection');
         });
 
         let editMachineId = null;
-
         function editMachine(id) {
             const machines = getMachines();
             const m = machines.find(x => x.id === id);
@@ -1860,12 +1213,10 @@
             document.getElementById('editModal').classList.add('active');
             stopQRScanner();
         }
-
         function closeEditModal() {
             document.getElementById('editModal').classList.remove('active');
             editMachineId = null;
         }
-
         document.getElementById('editForm').addEventListener('submit', function(e) {
             e.preventDefault();
             if (!editMachineId) { toast('No machine selected.', true); return; }
@@ -1873,7 +1224,6 @@
             const section = document.getElementById('editSection').value;
             if (!name) { toast('Please enter a machine name.', true); return; }
             if (!section) { toast('Please select a section.', true); return; }
-
             const db = getDB();
             const idx = db.machines.findIndex(m => m.id === editMachineId);
             if (idx === -1) { toast('Machine not found.', true); return; }
@@ -1888,32 +1238,20 @@
             saveDB(db);
             toast('✅ Machine updated: ' + name);
             closeEditModal();
-            refreshAssetView();
-            refreshList();
-            refreshDashboard();
-            populateQRSelect();
+            refreshAssetView(); refreshList(); refreshDashboard(); populateQRSelect();
         });
-
         function deleteMachineFromEdit() {
             if (!editMachineId) return;
-            if (confirm('Are you sure you want to delete this machine?')) {
-                deleteMachine(editMachineId);
-                closeEditModal();
-            }
+            if (confirm('Delete this machine?')) { deleteMachine(editMachineId); closeEditModal(); }
         }
-
         function deleteMachine(id) {
             if (!confirm('Delete machine ' + id + '?')) return;
             const db = getDB();
             db.machines = db.machines.filter(m => m.id !== id);
             saveDB(db);
             toast('🗑️ Machine deleted.');
-            refreshAssetView();
-            refreshList();
-            refreshDashboard();
-            populateQRSelect();
+            refreshAssetView(); refreshList(); refreshDashboard(); populateQRSelect();
         }
-
         function viewMachine(id) {
             switchToTab('lookup');
             document.getElementById('lookupInput').value = id;
@@ -1923,17 +1261,10 @@
         function exportToCSV() {
             const machines = getMachines();
             if (machines.length === 0) { toast('No assets to export.', true); return; }
-            const headers = ['ID', 'Name', 'Section', 'Manufacturer', 'Model', 'Serial Number', 'Installation Date',
-                'Status', 'Notes'
-            ];
-            const rows = machines.map(m => [
-                m.id, m.name, getSectionName(m.section), m.manufacturer || '', m.model || '',
-                m.serialNumber || '', m.installationDate || '', m.status || '', m.notes || ''
-            ]);
+            const headers = ['ID','Name','Section','Manufacturer','Model','Serial Number','Installation Date','Status','Notes'];
+            const rows = machines.map(m => [m.id, m.name, getSectionName(m.section), m.manufacturer||'', m.model||'', m.serialNumber||'', m.installationDate||'', m.status||'', m.notes||'']);
             let csv = headers.join(',') + '\n';
-            rows.forEach(row => {
-                csv += row.map(cell => '"' + String(cell).replace(/"/g, '""') + '"').join(',') + '\n';
-            });
+            rows.forEach(row => { csv += row.map(cell => '"' + String(cell).replace(/"/g,'""') + '"').join(',') + '\n'; });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -1949,36 +1280,29 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             const topBtn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
             if (topBtn) topBtn.classList.add('active');
-
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             const tab = document.getElementById('tab-' + name);
             if (tab) tab.classList.add('active');
-
             if (name === 'list') refreshList();
             if (name === 'status') refreshDashboard();
             if (name === 'assets') refreshAssetView();
             if (name === 'qr') populateQRSelect();
             if (name !== 'scan') stopQRScanner();
-
             document.querySelectorAll('.sidebar-nav > a').forEach(a => a.classList.remove('active'));
             const sidebarLink = document.querySelector(`.sidebar-nav > a[data-tab="${name}"]`);
             if (sidebarLink) sidebarLink.classList.add('active');
-
             document.querySelectorAll('#bottomNav a').forEach(a => {
                 a.classList.remove('active');
                 if (a.dataset.tab === name) a.classList.add('active');
             });
         }
 
-        // Sidebar clicks
         document.querySelector('.sidebar-nav').addEventListener('click', function(e) {
             const link = e.target.closest('a');
             if (!link) return;
             e.preventDefault();
-
             const tab = link.dataset.tab;
             const sub = link.dataset.sub;
-
             if (tab === 'assets' && !sub) {
                 const subMenu = document.getElementById('sidebarAssetSub');
                 subMenu.classList.toggle('open');
@@ -1989,7 +1313,6 @@
                 }
                 return;
             }
-
             if (sub) {
                 switchToTab('assets');
                 document.getElementById('sidebarAssetSub').classList.add('open');
@@ -1999,23 +1322,18 @@
                 link.classList.add('active');
                 return;
             }
-
             if (tab) switchToTab(tab);
-
             if (window.innerWidth < 769) {
                 document.getElementById('sidebar').classList.remove('open');
                 document.getElementById('sidebarOverlay').classList.remove('active');
             }
         });
 
-        // Top tabs
         document.getElementById('mainTabs').addEventListener('click', function(e) {
             const btn = e.target.closest('.tab-btn');
             if (!btn) return;
             switchToTab(btn.dataset.tab);
         });
-
-        // Bottom nav
         document.getElementById('bottomNav').addEventListener('click', function(e) {
             e.preventDefault();
             const link = e.target.closest('a');
@@ -2023,7 +1341,6 @@
             switchToTab(link.dataset.tab);
         });
 
-        // Hamburger
         document.getElementById('hamburgerBtn').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('sidebarOverlay').classList.toggle('active');
@@ -2033,7 +1350,6 @@
             this.classList.remove('active');
         });
 
-        // Asset sub-tabs
         document.getElementById('assetSubTabs').addEventListener('click', function(e) {
             if (e.target.classList.contains('sub-tab')) {
                 document.querySelectorAll('#assetSubTabs .sub-tab').forEach(b => b.classList.remove('active'));
@@ -2071,15 +1387,9 @@
             const machines = getMachines();
             if (machines.length === 0) {
                 const sample = [
-                    { id: 'M0001', name: 'CTC Roller 1', section: 'sec_2', manufacturer: 'Marshall',
-                        model: 'CTC-2000', serialNumber: 'SN-001', installationDate: '2023-01-15',
-                        status: 'working', notes: 'Primary roller' },
-                    { id: 'M0002', name: 'Withering Trough 1', section: 'sec_1', manufacturer: 'TeaTech',
-                        model: 'WT-500', serialNumber: 'SN-002', installationDate: '2023-02-10',
-                        status: 'working', notes: 'Capacity 500kg' },
-                    { id: 'M0003', name: 'Fermentation Conveyor', section: 'sec_3', manufacturer: 'ConveyX',
-                        model: 'FC-100', serialNumber: 'SN-003', installationDate: '2023-03-01',
-                        status: 'maintenance', notes: 'Belt needs replacement' },
+                    { id: 'M0001', name: 'CTC Roller 1', section: 'sec_2', manufacturer: 'Marshall', model: 'CTC-2000', serialNumber: 'SN-001', installationDate: '2023-01-15', status: 'working', notes: 'Primary roller' },
+                    { id: 'M0002', name: 'Withering Trough 1', section: 'sec_1', manufacturer: 'TeaTech', model: 'WT-500', serialNumber: 'SN-002', installationDate: '2023-02-10', status: 'working', notes: 'Capacity 500kg' },
+                    { id: 'M0003', name: 'Fermentation Conveyor', section: 'sec_3', manufacturer: 'ConveyX', model: 'FC-100', serialNumber: 'SN-003', installationDate: '2023-03-01', status: 'maintenance', notes: 'Belt needs replacement' },
                 ];
                 db.machines = sample;
                 saveDB(db);
@@ -2099,13 +1409,11 @@
             if (firstSub) firstSub.click();
 
             const hash = window.location.hash.replace('#', '');
-            if (hash && ['assets', 'list', 'lookup', 'qr', 'scan', 'status'].includes(hash)) {
+            if (hash && ['assets','list','lookup','qr','scan','status'].includes(hash)) {
                 switchToTab(hash);
             }
 
-            window.addEventListener('beforeunload', function() {
-                stopQRScanner();
-            });
+            window.addEventListener('beforeunload', function() { stopQRScanner(); });
         });
 
         window.addEventListener('resize', function() {
@@ -2122,10 +1430,7 @@
         });
 
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeEditModal();
-                stopQRScanner();
-            }
+            if (e.key === 'Escape') { closeEditModal(); stopQRScanner(); }
         });
 
         console.log('🍃 Panilkanda Tea Factory Machine Tracker loaded.');
