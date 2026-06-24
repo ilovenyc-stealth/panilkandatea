@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>🍃 Panilkanda Tea Factory</title>
+    <title>🍃 Panilkanda Tea Factory – Machine QR System</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍃</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
-        /* ─── Reset & Base ─── */
+        /* ─── Reset ─── */
         * {
             margin: 0;
             padding: 0;
@@ -177,7 +177,7 @@
             margin-left: calc(var(--sidebar-width) + 20px);
         }
 
-        /* ─── Bottom Nav (mobile) ─── */
+        /* ─── Bottom Nav ─── */
         .bottom-nav {
             display: none;
             position: fixed;
@@ -785,7 +785,7 @@
             border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        /* ─── Scan Result Detail Modal ─── */
+        /* ─── Scan Result Modal ─── */
         .scan-result-modal .modal-content {
             max-width: 700px;
         }
@@ -816,6 +816,45 @@
             font-weight: 500;
             color: #1b3b1b;
             word-break: break-word;
+        }
+
+        /* ─── QR Print View ─── */
+        .qr-print-area {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--primary-light);
+            margin-top: 12px;
+        }
+        .qr-print-area .qr-label {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary-dark);
+            margin-top: 8px;
+        }
+        .qr-print-area .qr-sub {
+            font-size: 13px;
+            color: #666;
+            margin-top: 2px;
+        }
+        .qr-print-area .qr-code-wrapper {
+            display: inline-block;
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+        .qr-print-area .qr-code-wrapper canvas {
+            display: block;
+            margin: 0 auto;
+        }
+        .qr-print-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 12px;
         }
 
         /* ─── Responsive ─── */
@@ -941,6 +980,44 @@
                 margin-bottom: 20px;
             }
         }
+
+        /* ─── Print styles for QR stickers ─── */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .sidebar,
+            .bottom-nav,
+            .hamburger,
+            .tabs,
+            .header,
+            .footer,
+            .btn,
+            .info-box,
+            .sub-tabs {
+                display: none !important;
+            }
+            .main-content {
+                margin: 0 !important;
+                padding: 10px !important;
+                box-shadow: none !important;
+                background: white !important;
+                border-radius: 0 !important;
+            }
+            .qr-print-area {
+                border: 2px solid #333 !important;
+                page-break-inside: avoid;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            .qr-print-actions {
+                display: none !important;
+            }
+            .scan-result-modal .modal-content {
+                box-shadow: none !important;
+                border: 2px solid #333 !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -981,7 +1058,7 @@
     <!-- Main Content -->
     <div class="main-content" id="mainContainer">
 
-        <div class="header">
+        <div class="header no-print">
             <div class="logo-wrapper"><i class="fas fa-leaf"></i></div>
             <div class="header-text">
                 <h1>Panilkanda Tea Factory Machine Tracker</h1>
@@ -990,7 +1067,7 @@
         </div>
 
         <!-- Top Tabs -->
-        <div class="tabs" id="mainTabs">
+        <div class="tabs no-print" id="mainTabs">
             <button class="tab-btn active" data-tab="assets"><i class="fas fa-boxes"></i>Asset Mgmt</button>
             <button class="tab-btn" data-tab="list"><i class="fas fa-list"></i>All Machines</button>
             <button class="tab-btn" data-tab="lookup"><i class="fas fa-search"></i>Lookup</button>
@@ -1001,7 +1078,7 @@
 
         <!-- ==================== ASSET MANAGEMENT ==================== -->
         <div id="tab-assets" class="tab-content active">
-            <div class="sub-tabs" id="assetSubTabs">
+            <div class="sub-tabs no-print" id="assetSubTabs">
                 <button class="sub-tab active" data-sub="viewAssets"><i class="fas fa-eye"></i> View Assets</button>
                 <button class="sub-tab" data-sub="addAsset"><i class="fas fa-plus-circle"></i> Add Asset</button>
                 <button class="sub-tab" data-sub="addSection"><i class="fas fa-folder-plus"></i> Add Section</button>
@@ -1009,14 +1086,14 @@
             </div>
 
             <div id="sub-viewAssets" class="sub-content active">
-                <div class="info-box">
+                <div class="info-box no-print">
                     <span><strong>Total Assets:</strong> <span id="assetCount">0</span></span>
                     <div class="btn-group">
                         <select id="filterSection" onchange="filterAssets()" style="padding:6px 10px;border-radius:20px;border:2px solid var(--primary-light);">
                             <option value="all">All Sections</option>
                         </select>
                         <button onclick="refreshAssetView()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button>
-                        <button onclick="exportToCSV()" class="btn btn-primary btn-sm"><i class="fas fa-file-excel"></i> Export Excel</button>
+                        <button onclick="exportToCSV()" class="btn btn-primary btn-sm"><i class="fas fa-file-excel"></i> Export</button>
                     </div>
                 </div>
                 <div id="assetListView" class="machine-list"><p style="text-align:center;padding:30px;">Loading assets...</p></div>
@@ -1086,7 +1163,7 @@
                                 <input type="text" id="sectionName" placeholder="e.g. Fermentation" required />
                             </div>
                             <div class="form-group">
-                                <label><i class="fas fa-palette"></i> Color (optional)</label>
+                                <label><i class="fas fa-palette"></i> Color</label>
                                 <input type="color" id="sectionColor" value="#2e7d32" />
                             </div>
                             <div class="form-group full">
@@ -1102,7 +1179,6 @@
                 </div>
             </div>
 
-            <!-- ==================== MANAGE SECTIONS ==================== -->
             <div id="sub-manageSections" class="sub-content">
                 <div class="card">
                     <h3 style="margin-bottom:14px;"><i class="fas fa-cog"></i> Manage Sections</h3>
@@ -1116,7 +1192,7 @@
 
         <!-- ==================== ALL MACHINES ==================== -->
         <div id="tab-list" class="tab-content">
-            <div class="info-box">
+            <div class="info-box no-print">
                 <span><strong>All Machines</strong> <span id="listCount">0</span></span>
                 <button onclick="refreshList()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button>
             </div>
@@ -1135,10 +1211,11 @@
             </div>
         </div>
 
-        <!-- ==================== QR ==================== -->
+        <!-- ==================== QR CODES ==================== -->
         <div id="tab-qr" class="tab-content">
             <div class="card">
-                <h3><i class="fas fa-qrcode"></i> Generate QR Code</h3>
+                <h3><i class="fas fa-qrcode"></i> Generate & Print QR Stickers</h3>
+                <p style="font-size:13px;color:#666;margin-bottom:12px;">Select a machine to generate a QR code. Print and stick on the machine.</p>
                 <div class="form-grid" style="margin-top:10px;">
                     <div class="form-group">
                         <label>Select Machine</label>
@@ -1146,19 +1223,40 @@
                     </div>
                     <div class="form-group" style="justify-content:flex-end; flex-direction:row; gap:8px;">
                         <button onclick="generateQR()" class="btn btn-primary"><i class="fas fa-qrcode"></i> Generate</button>
-                        <button onclick="downloadQR()" class="btn btn-secondary"><i class="fas fa-download"></i> Download</button>
+                        <button onclick="printQRSticker()" class="btn btn-warning"><i class="fas fa-print"></i> Print Sticker</button>
                     </div>
                 </div>
-                <div id="qrOutput" style="display:none; margin-top:15px;" class="qr-container">
-                    <div class="qr-display">
-                        <div id="qrCanvasContainer"></div>
-                        <p id="qrLabel" style="font-weight:600;margin-top:6px;font-size:13px;"></p>
+
+                <!-- QR Output Area -->
+                <div id="qrOutput" style="display:none; margin-top:16px;">
+                    <div class="qr-print-area" id="qrPrintArea">
+                        <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:10px;">
+                            <i class="fas fa-leaf" style="color:var(--primary);font-size:20px;"></i>
+                            <span style="font-weight:700;color:var(--primary-dark);font-size:14px;">Panilkanda Tea Factory</span>
+                        </div>
+                        <div class="qr-code-wrapper">
+                            <div id="qrCanvasContainer"></div>
+                        </div>
+                        <div class="qr-label" id="qrLabel">M0001 - CTC Roller 1</div>
+                        <div class="qr-sub" id="qrSub">Section: Withering · Status: ✅ Working</div>
+                        <div class="qr-sub" style="font-size:11px;color:#999;margin-top:4px;" id="qrSubDetail">Scan to view full details</div>
                     </div>
-                    <div class="qr-info-panel">
-                        <h4>Machine Details</h4>
+                    <div class="qr-print-actions no-print">
+                        <button onclick="downloadQR()" class="btn btn-secondary btn-sm"><i class="fas fa-download"></i> Download PNG</button>
+                        <button onclick="printQRSticker()" class="btn btn-warning btn-sm"><i class="fas fa-print"></i> Print Sticker</button>
+                    </div>
+                    <div style="margin-top:16px; border-top:2px solid var(--accent-light); padding-top:16px;">
+                        <h4 style="margin-bottom:8px;">📋 Machine Details</h4>
                         <div id="qrInfoDetails"><p style="color:#666;font-size:13px;">Select a machine to see details.</p></div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Bulk QR print -->
+            <div class="card no-print">
+                <h4><i class="fas fa-print"></i> Bulk Print QR Stickers</h4>
+                <p style="font-size:13px;color:#666;margin-bottom:10px;">Print QR codes for all machines at once. Each QR will appear on a separate page.</p>
+                <button onclick="printAllQRCodes()" class="btn btn-primary"><i class="fas fa-print"></i> Print All QR Stickers</button>
             </div>
         </div>
 
@@ -1202,11 +1300,11 @@
             </div>
         </div>
 
-        <div class="footer">🍃 Panilkanda Tea Factory Machine Tracker · Developed by MaplyVision Labs</div>
+        <div class="footer no-print">🍃 Panilkanda Tea Factory Machine Tracker · Developed by MaplyVision Labs</div>
     </div>
 
     <!-- Bottom Navigation (Mobile) -->
-    <nav class="bottom-nav" id="bottomNav">
+    <nav class="bottom-nav no-print" id="bottomNav">
         <a href="#" data-tab="assets" class="active"><i class="fas fa-boxes"></i><span>Assets</span></a>
         <a href="#" data-tab="list"><i class="fas fa-list"></i><span>Machines</span></a>
         <a href="#" data-tab="qr"><i class="fas fa-qrcode"></i><span>QR</span></a>
@@ -1215,7 +1313,7 @@
     </nav>
 
     <!-- Edit Modal -->
-    <div class="modal" id="editModal">
+    <div class="modal no-print" id="editModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3><i class="fas fa-edit"></i> Edit Machine</h3>
@@ -1286,7 +1384,7 @@
             <div class="btn-group" style="margin-top:16px;justify-content:center;">
                 <button onclick="closeScanResultModal()" class="btn btn-secondary"><i class="fas fa-times"></i> Close</button>
                 <button onclick="printScanResult()" class="btn btn-primary"><i class="fas fa-print"></i> Print</button>
-                <button id="scanResultOpenNewTabBtn" onclick="openScanResultInNewTab()" class="btn btn-info"><i class="fas fa-external-link-alt"></i> Open in New Tab</button>
+                <button onclick="openScanResultInNewTab()" class="btn btn-info"><i class="fas fa-external-link-alt"></i> Open in New Tab</button>
             </div>
         </div>
     </div>
@@ -1404,6 +1502,7 @@
                         <button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
                         <button onclick="viewMachine('${esc(m.id)}')" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i> View</button>
                         <button onclick="deleteMachine('${esc(m.id)}')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                        <button onclick="generateQRForMachine('${esc(m.id)}')" class="btn btn-primary btn-sm"><i class="fas fa-qrcode"></i> QR</button>
                     </div>
                 </div>
             `;
@@ -1580,9 +1679,10 @@
         }
 
         // ============================================================
-        // QR CODE
+        // QR CODE GENERATION
         // ============================================================
         let qrCodeInstance = null;
+        let currentQRMachine = null;
 
         function populateQRSelect() {
             const sel = document.getElementById('qrMachineSelect');
@@ -1597,9 +1697,18 @@
             });
         }
 
+        function generateQRForMachine(id) {
+            const sel = document.getElementById('qrMachineSelect');
+            if (sel) {
+                sel.value = id;
+            }
+            switchToTab('qr');
+            setTimeout(() => generateQR(), 200);
+        }
+
         function generateQR() {
             const sel = document.getElementById('qrMachineSelect');
-            const id = sel.value;
+            const id = sel ? sel.value : '';
             const output = document.getElementById('qrOutput');
             if (!id) {
                 output.style.display = 'none';
@@ -1613,10 +1722,13 @@
                 return;
             }
 
-            output.style.display = 'grid';
+            currentQRMachine = m;
+            output.style.display = 'block';
 
             const container = document.getElementById('qrCanvasContainer');
             container.innerHTML = '';
+
+            // Include ALL machine data in the QR code
             const qrData = {
                 id: m.id,
                 name: m.name,
@@ -1630,6 +1742,7 @@
                 notes: m.notes || ''
             };
             const data = JSON.stringify(qrData);
+
             try {
                 qrCodeInstance = new QRCode(container, {
                     text: data,
@@ -1644,8 +1757,13 @@
                 return;
             }
 
+            // Update labels
             document.getElementById('qrLabel').textContent = m.id + ' - ' + m.name;
+            document.getElementById('qrSub').textContent = 'Section: ' + getSectionName(m.section) + ' · Status: ' +
+                statusLabel(m.status);
+            document.getElementById('qrSubDetail').textContent = 'Scan to view full details';
 
+            // Show machine details
             const info = document.getElementById('qrInfoDetails');
             info.innerHTML = `
                 <div class="result-grid">
@@ -1660,6 +1778,9 @@
                 </div>
                 ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
             `;
+
+            // Scroll to QR output
+            output.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function downloadQR() {
@@ -1670,13 +1791,169 @@
                 return;
             }
             const link = document.createElement('a');
-            link.download = 'qr-code.png';
+            link.download = 'qr_' + (currentQRMachine ? currentQRMachine.id : 'machine') + '.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
+            toast('📥 QR code downloaded.');
+        }
+
+        function printQRSticker() {
+            const area = document.getElementById('qrPrintArea');
+            if (!area) {
+                toast('Generate a QR code first.', true);
+                return;
+            }
+            const printWin = window.open('', '_blank', 'width=400,height=500');
+            if (!printWin) {
+                toast('Please allow popups to print.', true);
+                return;
+            }
+            const content = area.outerHTML;
+            printWin.document.write(`
+                <html>
+                <head>
+                    <title>QR Sticker - ${currentQRMachine ? currentQRMachine.id : 'Machine'}</title>
+                    <style>
+                        body { font-family: 'Inter', sans-serif; background: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+                        .qr-print-area { max-width: 350px; margin: 0 auto; padding: 20px; border: 2px solid #1b5e20; border-radius: 16px; background: white; text-align: center; }
+                        .qr-print-area .qr-code-wrapper { display: inline-block; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+                        .qr-print-area .qr-code-wrapper canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+                        .qr-print-area .qr-label { font-weight: 700; font-size: 16px; color: #1b5e20; margin-top: 8px; }
+                        .qr-print-area .qr-sub { font-size: 13px; color: #666; margin-top: 2px; }
+                        .qr-print-area .qr-sub-detail { font-size: 11px; color: #999; margin-top: 4px; }
+                        .qr-print-area .header { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
+                        .qr-print-area .header i { color: #2e7d32; font-size: 20px; }
+                        .qr-print-area .header span { font-weight: 700; color: #1b5e20; font-size: 14px; }
+                    </style>
+                </head>
+                <body>
+                    ${content}
+                </body>
+                </html>
+            `);
+            printWin.document.close();
+            setTimeout(() => {
+                printWin.focus();
+                printWin.print();
+            }, 500);
+        }
+
+        function printAllQRCodes() {
+            const machines = getMachines();
+            if (machines.length === 0) {
+                toast('No machines to print.', true);
+                return;
+            }
+
+            const printWin = window.open('', '_blank', 'width=500,height=600');
+            if (!printWin) {
+                toast('Please allow popups to print.', true);
+                return;
+            }
+
+            let html = `
+                <html>
+                <head>
+                    <title>Panilkanda - All QR Stickers</title>
+                    <style>
+                        body { font-family: 'Inter', sans-serif; background: white; padding: 20px; }
+                        .page { page-break-after: always; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+                        .qr-print-area { max-width: 350px; margin: 0 auto; padding: 20px; border: 2px solid #1b5e20; border-radius: 16px; background: white; text-align: center; }
+                        .qr-print-area .qr-code-wrapper { display: inline-block; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+                        .qr-print-area .qr-code-wrapper canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+                        .qr-print-area .qr-label { font-weight: 700; font-size: 16px; color: #1b5e20; margin-top: 8px; }
+                        .qr-print-area .qr-sub { font-size: 13px; color: #666; margin-top: 2px; }
+                        .qr-print-area .header { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
+                        .qr-print-area .header i { color: #2e7d32; font-size: 20px; }
+                        .qr-print-area .header span { font-weight: 700; color: #1b5e20; font-size: 14px; }
+                        .qr-print-area .qr-sub-detail { font-size: 11px; color: #999; margin-top: 4px; }
+                    </style>
+                </head>
+                <body>
+            `;
+
+            machines.forEach((m, index) => {
+                const qrData = {
+                    id: m.id,
+                    name: m.name,
+                    section: m.section,
+                    sectionName: getSectionName(m.section),
+                    manufacturer: m.manufacturer || '',
+                    model: m.model || '',
+                    serialNumber: m.serialNumber || '',
+                    installationDate: m.installationDate || '',
+                    status: m.status || 'working',
+                    notes: m.notes || ''
+                };
+                const data = JSON.stringify(qrData);
+
+                // We need to generate QR codes in the print window
+                // Use a placeholder and generate with JavaScript
+                html += `
+                    <div class="page">
+                        <div class="qr-print-area">
+                            <div class="header">
+                                <i class="fas fa-leaf"></i>
+                                <span>Panilkanda Tea Factory</span>
+                            </div>
+                            <div class="qr-code-wrapper">
+                                <div id="qr_${index}" style="display:inline-block;"></div>
+                            </div>
+                            <div class="qr-label">${esc(m.id)} - ${esc(m.name)}</div>
+                            <div class="qr-sub">Section: ${esc(getSectionName(m.section))} · Status: ${statusLabel(m.status)}</div>
+                            <div class="qr-sub-detail">Scan to view full details</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"><\/script>
+                <script>
+                    // Generate QR codes after page loads
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const machines = ${JSON.stringify(machines)};
+                        machines.forEach((m, index) => {
+                            const container = document.getElementById('qr_' + index);
+                            if (container) {
+                                const qrData = {
+                                    id: m.id,
+                                    name: m.name,
+                                    section: m.section,
+                                    sectionName: m.sectionName || '',
+                                    manufacturer: m.manufacturer || '',
+                                    model: m.model || '',
+                                    serialNumber: m.serialNumber || '',
+                                    installationDate: m.installationDate || '',
+                                    status: m.status || 'working',
+                                    notes: m.notes || ''
+                                };
+                                new QRCode(container, {
+                                    text: JSON.stringify(qrData),
+                                    width: 200,
+                                    height: 200,
+                                    colorDark: '#1b5e20',
+                                    colorLight: '#ffffff',
+                                    correctLevel: QRCode.CorrectLevel.H
+                                });
+                            }
+                        });
+                    });
+                <\/script>
+            `;
+
+            html += `</body></html>`;
+            printWin.document.write(html);
+            printWin.document.close();
+
+            setTimeout(() => {
+                printWin.focus();
+                printWin.print();
+            }, 1500);
         }
 
         // ============================================================
-        // QR SCANNER - FIXED: shows details inline + modal
+        // QR SCANNER
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
@@ -1689,13 +1966,11 @@
             console.log('QR Debug:', msg);
         }
 
-        // ─── Show machine details in modal ───
         function showMachineDetailsModal(machine, fromQR) {
             const modal = document.getElementById('scanResultModal');
             const body = document.getElementById('scanResultModalBody');
             const secName = machine.sectionName || getSectionName(machine.section) || machine.section || '-';
 
-            // Store for "Open in New Tab"
             lastScannedMachine = machine;
 
             body.innerHTML = `
@@ -1717,7 +1992,6 @@
 
             modal.classList.add('active');
 
-            // Also show a brief inline result
             const result = document.getElementById('scanResult');
             result.innerHTML = `
                 <div class="result-card success">
@@ -1742,7 +2016,18 @@
                 const content = body.innerHTML;
                 printWin.document.write(`
                     <html><head><title>Machine Details</title>
-                    <style>body{font-family:Inter,sans-serif;padding:30px;} .machine-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;} .detail-item{background:#f9fafb;border-radius:10px;padding:10px 14px;border:1px solid #e5e7eb;} .detail-item label{font-size:10px;text-transform:uppercase;color:#6b7280;display:block;font-weight:600;} .detail-item .value{font-size:14px;font-weight:500;color:#1b3b1b;} .full{grid-column:1/-1;} .machine-id{font-weight:700;color:#1b5e20;background:#c8e6c9;padding:4px 14px;border-radius:50px;font-size:16px;} .status-badge{padding:4px 12px;border-radius:50px;font-weight:600;font-size:12px;} .status-badge.working{background:#c8e6c9;color:#1b5e20;} .status-badge.maintenance{background:#ffe0b2;color:#e65100;} .status-badge.out-of-service{background:#ffcdd2;color:#c62828;}
+                    <style>
+                        body{font-family:Inter,sans-serif;padding:30px;}
+                        .machine-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+                        .detail-item{background:#f9fafb;border-radius:10px;padding:10px 14px;border:1px solid #e5e7eb;}
+                        .detail-item label{font-size:10px;text-transform:uppercase;color:#6b7280;display:block;font-weight:600;}
+                        .detail-item .value{font-size:14px;font-weight:500;color:#1b3b1b;}
+                        .full{grid-column:1/-1;}
+                        .machine-id{font-weight:700;color:#1b5e20;background:#c8e6c9;padding:4px 14px;border-radius:50px;font-size:16px;}
+                        .status-badge{padding:4px 12px;border-radius:50px;font-weight:600;font-size:12px;}
+                        .status-badge.working{background:#c8e6c9;color:#1b5e20;}
+                        .status-badge.maintenance{background:#ffe0b2;color:#e65100;}
+                        .status-badge.out-of-service{background:#ffcdd2;color:#c62828;}
 </style>
 </head><body><h2>🍃 Machine Details</h2>${content}</body></html>
 `);
@@ -1759,7 +2044,6 @@ if (!machine) { toast('No machine data to open.', true); return; }
 openBlankPageWithMachine(machine);
 }
 
-// ─── Open blank page with machine details ───
 function openBlankPageWithMachine(machine) {
 const secName = machine.sectionName || getSectionName(machine.section) || machine.section || '-';
 const machineJson = JSON.stringify(machine).replace(/"/g, '&quot;');
@@ -1795,8 +2079,6 @@ const htmlContent = `
         .btn.primary:hover { background:#1b5e20; }
         .btn.secondary { background:#e5e7eb; color:#1b3b1b; }
         .btn.secondary:hover { background:#d1d5db; }
-        .btn.danger { background:#c62828; color:white; }
-        .btn.danger:hover { background:#b71c1c; }
         .btn.info { background:#1976d2; color:white; }
         .btn.info:hover { background:#1565c0; }
         .footer { margin-top:24px; text-align:center; font-size:13px; color:#6b7280; border-top:1px solid #e5e7eb; padding-top:16px; }
@@ -1857,8 +2139,7 @@ win.document.close();
 win.focus();
 toast('📄 Machine details opened in new tab.');
 } else {
-toast('⚠️ Popup blocked. Please allow popups or use the modal view.', true);
-// Fallback: show in modal
+toast('⚠️ Popup blocked. Please allow popups.', true);
 showMachineDetailsModal(machine, true);
 }
 }
@@ -2025,12 +2306,10 @@ showDebug('ERROR: Machine ID ' + machineId + ' not in DB');
 return;
 }
 
-// Show the machine details in a modal + inline
 lastScannedMachine = displayMachine;
 showMachineDetailsModal(displayMachine, true);
 toast('✅ Machine found: ' + displayMachine.name);
 
-// Auto-stop scanner after successful scan
 setTimeout(() => stopQRScanner(), 2000);
 }
 }
