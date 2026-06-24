@@ -3,822 +3,136 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>🍃 Panilkanda Tea Factory – Machine QR System</title>
+    <title>🍃 Panilkanda Tea – QR Sticker System</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍃</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
-        /* ─── Reset ─── */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
         :root {
-            --primary: #2e7d32;
-            --primary-dark: #1b5e20;
-            --primary-light: #c8e6c9;
-            --primary-bg: #e8f5e9;
-            --accent-light: #dcedc8;
-            --white: #ffffff;
-            --text-dark: #1b3b1b;
-            --danger: #c62828;
-            --danger-light: #ffcdd2;
-            --warning: #e65100;
-            --warning-light: #ffe0b2;
-            --info: #1976d2;
-            --info-light: #e3f2fd;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 8px 25px rgba(46, 125, 50, 0.15);
-            --radius-sm: 12px;
-            --radius-md: 16px;
-            --radius-lg: 20px;
-            --radius-full: 50px;
-            --sidebar-width: 250px;
-            --bottom-nav-height: 64px;
+            --primary: #2e7d32; --primary-dark: #1b5e20; --primary-light: #c8e6c9;
+            --primary-bg: #e8f5e9; --accent-light: #dcedc8; --white: #ffffff;
+            --text-dark: #1b3b1b; --danger: #c62828; --danger-light: #ffcdd2;
+            --warning: #e65100; --warning-light: #ffe0b2; --info: #1976d2;
+            --info-light: #e3f2fd; --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 15px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 25px rgba(46,125,50,0.15);
+            --radius-sm: 12px; --radius-md: 16px; --radius-lg: 20px;
+            --radius-full: 50px; --sidebar-width: 250px; --bottom-nav-height: 64px;
         }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            min-height: 100vh;
-            color: var(--text-dark);
-            -webkit-tap-highlight-color: transparent;
-            display: flex;
-            flex-direction: column;
-        }
-        .layout {
-            display: flex;
-            flex: 1;
-        }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); min-height: 100vh; color: var(--text-dark); -webkit-tap-highlight-color: transparent; display: flex; flex-direction: column; }
+        .layout { display: flex; flex: 1; }
 
-        /* ─── Sidebar ─── */
+        /* Sidebar */
         .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: var(--sidebar-width);
-            height: 100%;
-            background: var(--white);
-            border-right: 2px solid var(--primary-light);
-            z-index: 200;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            overflow-y: auto;
-            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
+            position: fixed; top: 0; left: 0; width: var(--sidebar-width); height: 100%;
+            background: var(--white); border-right: 2px solid var(--primary-light);
+            z-index: 200; transform: translateX(-100%); transition: transform 0.3s ease;
+            overflow-y: auto; box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column;
         }
-        .sidebar.open {
-            transform: translateX(0);
-        }
-        .sidebar-header {
-            padding: 20px;
-            border-bottom: 2px solid var(--accent-light);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .sidebar-header i {
-            font-size: 24px;
-            color: var(--primary);
-        }
-        .sidebar-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-dark);
-        }
-        .sidebar-nav {
-            padding: 10px 0;
-            flex: 1;
-        }
+        .sidebar.open { transform: translateX(0); }
+        .sidebar-header { padding: 20px; border-bottom: 2px solid var(--accent-light); display: flex; align-items: center; gap: 10px; }
+        .sidebar-header i { font-size: 24px; color: var(--primary); }
+        .sidebar-header h2 { font-size: 18px; font-weight: 700; color: var(--primary-dark); }
+        .sidebar-nav { padding: 10px 0; flex: 1; }
         .sidebar-nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background 0.2s;
-            border-left: 4px solid transparent;
-            cursor: pointer;
+            display: flex; align-items: center; gap: 12px; padding: 12px 20px;
+            color: var(--text-dark); text-decoration: none; font-size: 14px; font-weight: 500;
+            transition: background 0.2s; border-left: 4px solid transparent; cursor: pointer;
         }
-        .sidebar-nav a:hover {
-            background: var(--primary-bg);
-        }
-        .sidebar-nav a.active {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            border-left-color: var(--primary);
-            font-weight: 600;
-        }
-        .sidebar-nav a i {
-            width: 20px;
-            text-align: center;
-        }
-        .sidebar-sub {
-            display: none;
-            padding-left: 20px;
-        }
-        .sidebar-sub.open {
-            display: block;
-        }
-        .sidebar-sub a {
-            padding: 8px 20px;
-            font-size: 13px;
-        }
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 150;
-        }
-        .sidebar-overlay.active {
-            display: block;
-        }
+        .sidebar-nav a:hover { background: var(--primary-bg); }
+        .sidebar-nav a.active { background: var(--primary-light); color: var(--primary-dark); border-left-color: var(--primary); font-weight: 600; }
+        .sidebar-nav a i { width: 20px; text-align: center; }
+        .sidebar-sub { display: none; padding-left: 20px; }
+        .sidebar-sub.open { display: block; }
+        .sidebar-sub a { padding: 8px 20px; font-size: 13px; }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 150; }
+        .sidebar-overlay.active { display: block; }
 
-        /* ─── Hamburger ─── */
-        .hamburger {
-            display: none;
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 300;
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            align-items: center;
-            justify-content: center;
-        }
+        /* Hamburger */
+        .hamburger { display: none; position: fixed; top: 15px; left: 15px; z-index: 300; background: var(--primary); color: white; border: none; width: 44px; height: 44px; border-radius: 50%; font-size: 20px; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.2); align-items: center; justify-content: center; }
 
-        /* ─── Main Container ─── */
+        /* Main Container */
         .main-content {
-            flex: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: var(--radius-lg);
-            padding: 25px 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            transition: margin-left 0.3s ease;
-            margin: 20px;
-            margin-left: calc(var(--sidebar-width) + 20px);
+            flex: 1; max-width: 1200px; margin: 0 auto;
+            background: rgba(255,255,255,0.95); border-radius: var(--radius-lg);
+            padding: 25px 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: margin-left 0.3s ease; margin: 20px; margin-left: calc(var(--sidebar-width) + 20px);
         }
 
-        /* ─── Bottom Nav ─── */
-        .bottom-nav {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--white);
-            border-top: 2px solid var(--primary-light);
-            height: var(--bottom-nav-height);
-            justify-content: space-around;
-            align-items: center;
-            z-index: 100;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-        }
-        .bottom-nav a {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-size: 10px;
-            padding: 5px;
-            flex: 1;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .bottom-nav a i {
-            font-size: 20px;
-            margin-bottom: 2px;
-        }
-        .bottom-nav a.active {
-            color: var(--primary);
-            font-weight: 600;
-        }
+        /* Bottom Nav */
+        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); border-top: 2px solid var(--primary-light); height: var(--bottom-nav-height); justify-content: space-around; align-items: center; z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .bottom-nav a { display: flex; flex-direction: column; align-items: center; color: var(--text-dark); text-decoration: none; font-size: 10px; padding: 5px; flex: 1; font-weight: 500; cursor: pointer; }
+        .bottom-nav a i { font-size: 20px; margin-bottom: 2px; }
+        .bottom-nav a.active { color: var(--primary); font-weight: 600; }
 
-        /* ─── Header ─── */
-        .header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--accent-light);
-        }
-        .logo-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.35);
-            flex-shrink: 0;
-        }
-        .logo-wrapper i {
-            font-size: 26px;
-            color: white;
-        }
-        .header-text h1 {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--text-dark);
-            line-height: 1.2;
-        }
-        .header-text p {
-            color: #2e5e2e;
-            font-size: 13px;
-        }
+        /* Header */
+        .header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; padding-bottom: 15px; border-bottom: 2px solid var(--accent-light); }
+        .logo-wrapper { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); width: 60px; height: 60px; border-radius: 50%; box-shadow: 0 8px 25px rgba(46,125,50,0.35); flex-shrink: 0; }
+        .logo-wrapper i { font-size: 26px; color: white; }
+        .header-text h1 { font-size: 24px; font-weight: 800; color: var(--text-dark); line-height: 1.2; }
+        .header-text p { color: #2e5e2e; font-size: 13px; }
 
-        /* ─── Tabs ─── */
-        .tabs {
-            display: flex;
-            gap: 5px;
-            background: var(--accent-light);
-            padding: 5px;
-            border-radius: var(--radius-full);
-            margin-bottom: 20px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-        .tabs::-webkit-scrollbar {
-            display: none;
-        }
-        .tab-btn {
-            flex: 0 0 auto;
-            min-width: 60px;
-            border: none;
-            background: transparent;
-            padding: 10px 12px;
-            font-weight: 600;
-            font-size: 12px;
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .tab-btn.active {
-            background: var(--white);
-            box-shadow: var(--shadow-lg);
-            color: var(--primary-dark);
-        }
-        .tab-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.6);
-        }
+        /* Tabs */
+        .tabs { display: flex; gap: 5px; background: var(--accent-light); padding: 5px; border-radius: var(--radius-full); margin-bottom: 20px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab-btn { flex: 0 0 auto; min-width: 60px; border: none; background: transparent; padding: 10px 12px; font-weight: 600; font-size: 12px; border-radius: var(--radius-full); cursor: pointer; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 5px; white-space: nowrap; transition: all 0.2s; }
+        .tab-btn.active { background: var(--white); box-shadow: var(--shadow-lg); color: var(--primary-dark); }
+        .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.6); }
 
-        /* ─── Tab Content ─── */
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px)
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
+        /* Tab Content */
+        .tab-content { display: none; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(5px) } to { opacity:1; transform:translateY(0) } }
 
-        /* ─── Sub‑tabs ─── */
-        .sub-tabs {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 16px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-        .sub-tabs::-webkit-scrollbar {
-            display: none;
-        }
-        .sub-tab {
-            flex: 0 0 auto;
-            padding: 8px 16px;
-            border: 2px solid var(--primary-light);
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            background: white;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .sub-tab.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        .sub-content {
-            display: none;
-        }
-        .sub-content.active {
-            display: block;
-        }
+        /* Sub-tabs */
+        .sub-tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .sub-tabs::-webkit-scrollbar { display: none; }
+        .sub-tab { flex: 0 0 auto; padding: 8px 16px; border: 2px solid var(--primary-light); border-radius: 30px; cursor: pointer; font-size: 13px; font-weight: 600; background: white; white-space: nowrap; transition: all 0.2s; }
+        .sub-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .sub-content { display: none; }
+        .sub-content.active { display: block; }
 
-        /* ─── Cards & Forms ─── */
-        .card {
-            background: var(--white);
-            border-radius: var(--radius-md);
-            padding: 18px;
-            margin-bottom: 12px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--primary-light);
-        }
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .form-group.full {
-            grid-column: 1/-1;
-        }
-        label {
-            font-weight: 600;
-            font-size: 12px;
-            margin-bottom: 4px;
-            color: var(--text-dark);
-        }
-        label i {
-            color: var(--primary);
-            width: 14px;
-        }
-        input,
-        select,
-        textarea {
-            padding: 10px 14px;
-            border: 2px solid var(--primary-light);
-            border-radius: 10px;
-            font-size: 14px;
-            font-family: inherit;
-            background: white;
-            width: 100%;
-        }
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        textarea {
-            resize: vertical;
-            min-height: 50px;
-        }
+        /* Cards & Forms */
+        .card { background: var(--white); border-radius: var(--radius-md); padding: 18px; margin-bottom: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--primary-light); }
+        .form-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group.full { grid-column: 1/-1; }
+        label { font-weight: 600; font-size: 12px; margin-bottom: 4px; color: var(--text-dark); }
+        label i { color: var(--primary); width: 14px; }
+        input, select, textarea { padding: 10px 14px; border: 2px solid var(--primary-light); border-radius: 10px; font-size: 14px; font-family: inherit; background: white; width: 100%; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+        textarea { resize: vertical; min-height: 50px; }
 
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.2s;
-            white-space: nowrap;
-            min-height: 44px;
-        }
-        .btn:active {
-            transform: scale(0.97);
-        }
-        .btn-sm {
-            padding: 6px 14px;
-            font-size: 11px;
-            min-height: 36px;
-        }
-        .btn-lg {
-            padding: 14px 24px;
-            font-size: 15px;
-        }
-        .btn-block {
-            width: 100%;
-        }
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        .btn-secondary {
-            background: var(--accent-light);
-            color: var(--text-dark);
-        }
-        .btn-info {
-            background: var(--info);
-            color: white;
-        }
-        .btn-warning {
-            background: var(--warning);
-            color: white;
-        }
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-        .btn-scan {
-            background: #6a1b9a;
-            color: white;
-        }
-        .btn-success {
-            background: #2e7d32;
-            color: white;
-        }
+        .btn { padding: 10px 20px; border: none; border-radius: var(--radius-full); font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; white-space: nowrap; min-height: 44px; }
+        .btn:active { transform: scale(0.97); }
+        .btn-sm { padding: 6px 14px; font-size: 11px; min-height: 36px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: var(--accent-light); color: var(--text-dark); }
+        .btn-info { background: var(--info); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-scan { background: #6a1b9a; color: white; }
 
-        /* ─── Status Badge ─── */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 12px;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 11px;
-        }
-        .status-badge.working {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-        }
-        .status-badge.maintenance {
-            background: var(--warning-light);
-            color: var(--warning);
-        }
-        .status-badge.out-of-service {
-            background: var(--danger-light);
-            color: var(--danger);
-        }
+        /* Status Badge */
+        .status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: var(--radius-full); font-weight: 600; font-size: 11px; }
+        .status-badge.working { background: var(--primary-light); color: var(--primary-dark); }
+        .status-badge.maintenance { background: var(--warning-light); color: var(--warning); }
+        .status-badge.out-of-service { background: var(--danger-light); color: var(--danger); }
 
-        /* ─── Machine List ─── */
-        .machine-list {
-            display: grid;
-            gap: 8px;
-        }
-        .machine-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: var(--white);
-            border-radius: 12px;
-            border: 2px solid var(--primary-light);
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .machine-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .machine-id {
-            font-weight: 700;
-            color: var(--primary-dark);
-            background: var(--primary-bg);
-            padding: 3px 10px;
-            border-radius: var(--radius-full);
-            font-size: 12px;
-        }
-        .machine-name {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .machine-section {
-            font-size: 11px;
-            color: #666;
-            background: #f5f5f5;
-            padding: 2px 10px;
-            border-radius: var(--radius-full);
-        }
+        /* Machine List */
+        .machine-list { display: grid; gap: 8px; }
+        .machine-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--white); border-radius: 12px; border: 2px solid var(--primary-light); flex-wrap: wrap; gap: 8px; }
+        .machine-info { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .machine-id { font-weight: 700; color: var(--primary-dark); background: var(--primary-bg); padding: 3px 10px; border-radius: var(--radius-full); font-size: 12px; }
+        .machine-name { font-weight: 600; font-size: 14px; }
+        .machine-section { font-size: 11px; color: #666; background: #f5f5f5; padding: 2px 10px; border-radius: var(--radius-full); }
 
-        /* ─── Info Box ─── */
-        .info-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 13px;
-            flex-wrap: wrap;
-            gap: 8px;
-            background: var(--info-light);
-            border: 2px solid var(--info);
-            color: #0d47a1;
-            margin-bottom: 15px;
-        }
+        /* Info Box */
+        .info-box { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 12px; font-size: 13px; flex-wrap: wrap; gap: 8px; background: var(--info-light); border: 2px solid var(--info); color: #0d47a1; margin-bottom: 15px; }
 
-        /* ─── QR ─── */
-        .qr-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        .qr-display {
-            text-align: center;
-            padding: 16px;
-            background: white;
-            border-radius: 14px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        }
-        .qr-display canvas {
-            border-radius: 10px;
-            max-width: 200px;
-        }
-        .qr-info-panel {
-            background: var(--primary-bg);
-            border-radius: 14px;
-            padding: 16px;
-            border: 2px solid var(--primary-light);
-        }
-
-        /* ─── Scanner ─── */
-        #qrReaderContainer {
-            margin-top: 12px;
-            padding: 16px;
-            background: #000;
-            border-radius: 14px;
-            text-align: center;
-            min-height: 300px;
-            display: none;
-            position: relative;
-        }
-        #qrReaderContainer video {
-            max-width: 100%;
-            border-radius: 10px;
-            max-height: 400px;
-            object-fit: cover;
-        }
-        #qrReaderContainer #qrReaderContainer__scan_region {
-            min-height: 300px;
-        }
-
-        /* ─── Result Card ─── */
-        .result-card {
-            background: var(--primary-bg);
-            border-radius: var(--radius-md);
-            padding: 18px;
-            border-left: 5px solid var(--primary);
-            animation: fadeIn 0.3s;
-            margin-top: 10px;
-        }
-        .result-card.success {
-            border-left-color: var(--primary);
-            background: var(--primary-bg);
-        }
-        .result-card.error {
-            border-left-color: var(--danger);
-            background: var(--danger-light);
-        }
-        .result-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 8px 14px;
-        }
-        .result-item {
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(46, 125, 50, 0.1);
-            font-size: 13px;
-        }
-        .result-item label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #3f6b3f;
-            display: block;
-        }
-
-        /* ─── Stats ─── */
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-        }
-        .stat-card {
-            background: var(--white);
-            border-radius: 14px;
-            padding: 16px;
-            text-align: center;
-            border: 2px solid var(--primary-light);
-        }
-        .stat-card .num {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--primary-dark);
-        }
-        .stat-card .label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #666;
-            margin-top: 4px;
-        }
-        .stat-card.green {
-            border-color: var(--primary);
-        }
-        .stat-card.orange {
-            border-color: var(--warning);
-        }
-        .stat-card.red {
-            border-color: var(--danger);
-        }
-
-        /* ─── Toast ─── */
-        .toast-container {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .toast {
-            background: var(--primary);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 13px;
-            animation: slideIn 0.3s;
-            max-width: 300px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-        .toast.error {
-            background: var(--danger);
-        }
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(60px)
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0)
-            }
-        }
-
-        /* ─── Modal ─── */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-        }
-        .modal.active {
-            display: flex;
-        }
-        .modal-content {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .footer {
-            margin-top: 25px;
-            padding-top: 15px;
-            text-align: center;
-            font-size: 12px;
-            opacity: 0.6;
-            border-top: 2px solid var(--accent-light);
-        }
-
-        .scanner-loading {
-            color: #aaa;
-            font-size: 14px;
-            padding: 20px;
-            text-align: center;
-        }
-        .scanner-upload-area {
-            margin-top: 12px;
-            padding: 20px;
-            border: 2px dashed var(--primary-light);
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: background 0.2s;
-            background: #fafffe;
-        }
-        .scanner-upload-area:hover {
-            background: var(--primary-bg);
-        }
-        .scanner-upload-area input[type="file"] {
-            display: none;
-        }
-
-        .section-list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 16px;
-            background: var(--white);
-            border-radius: 10px;
-            border: 1px solid var(--primary-light);
-            margin-bottom: 6px;
-        }
-        .section-color-dot {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 10px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        /* ─── Scan Result Modal ─── */
-        .scan-result-modal .modal-content {
-            max-width: 700px;
-        }
-        .scan-result-modal .machine-detail-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-        .scan-result-modal .machine-detail-grid .full {
-            grid-column: 1/-1;
-        }
-        .scan-result-modal .detail-item {
-            background: #f9fafb;
-            border-radius: 10px;
-            padding: 10px 14px;
-            border: 1px solid #e5e7eb;
-        }
-        .scan-result-modal .detail-item label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #6b7280;
-            display: block;
-            margin-bottom: 2px;
-            font-weight: 600;
-        }
-        .scan-result-modal .detail-item .value {
-            font-size: 14px;
-            font-weight: 500;
-            color: #1b3b1b;
-            word-break: break-word;
-        }
-
-        /* ─── QR Print View ─── */
+        /* QR Print Area */
         .qr-print-area {
             background: white;
             border-radius: 16px;
@@ -826,203 +140,103 @@
             text-align: center;
             border: 2px solid var(--primary-light);
             margin-top: 12px;
+            max-width: 360px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .qr-print-area .qr-label {
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--primary-dark);
-            margin-top: 8px;
-        }
-        .qr-print-area .qr-sub {
-            font-size: 13px;
-            color: #666;
-            margin-top: 2px;
-        }
-        .qr-print-area .qr-code-wrapper {
-            display: inline-block;
-            background: white;
-            padding: 12px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        }
-        .qr-print-area .qr-code-wrapper canvas {
-            display: block;
-            margin: 0 auto;
-        }
-        .qr-print-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 12px;
+        .qr-print-area .qr-label { font-weight: 700; font-size: 16px; color: var(--primary-dark); margin-top: 8px; }
+        .qr-print-area .qr-sub { font-size: 13px; color: #666; margin-top: 2px; }
+        .qr-print-area .qr-code-wrapper { display: inline-block; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .qr-print-area .qr-code-wrapper canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+        .qr-print-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+
+        /* Scanner */
+        #qrReaderContainer { margin-top: 12px; padding: 16px; background: #000; border-radius: 14px; text-align: center; min-height: 300px; display: none; position: relative; }
+        #qrReaderContainer video { max-width: 100%; border-radius: 10px; max-height: 400px; object-fit: cover; }
+        .scanner-loading { color: #aaa; font-size: 14px; padding: 20px; text-align: center; }
+        .scanner-upload-area { margin-top: 12px; padding: 20px; border: 2px dashed var(--primary-light); border-radius: 12px; text-align: center; cursor: pointer; transition: background 0.2s; background: #fafffe; }
+        .scanner-upload-area:hover { background: var(--primary-bg); }
+        .scanner-upload-area input[type="file"] { display: none; }
+
+        /* Result Card */
+        .result-card { background: var(--primary-bg); border-radius: var(--radius-md); padding: 18px; border-left: 5px solid var(--primary); animation: fadeIn 0.3s; margin-top: 10px; }
+        .result-card.success { border-left-color: var(--primary); background: var(--primary-bg); }
+        .result-card.error { border-left-color: var(--danger); background: var(--danger-light); }
+        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 8px 14px; }
+        .result-item { padding: 6px 0; border-bottom: 1px solid rgba(46,125,50,0.1); font-size: 13px; }
+        .result-item label { font-size: 10px; text-transform: uppercase; color: #3f6b3f; display: block; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 15px; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--white); border-radius: 20px; padding: 25px; max-width: 600px; width: 100%; max-height: 85vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #666; }
+
+        .scan-result-modal .modal-content { max-width: 700px; }
+        .scan-result-modal .machine-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .scan-result-modal .machine-detail-grid .full { grid-column: 1/-1; }
+        .scan-result-modal .detail-item { background: #f9fafb; border-radius: 10px; padding: 10px 14px; border: 1px solid #e5e7eb; }
+        .scan-result-modal .detail-item label { font-size: 10px; text-transform: uppercase; color: #6b7280; display: block; margin-bottom: 2px; font-weight: 600; }
+        .scan-result-modal .detail-item .value { font-size: 14px; font-weight: 500; color: #1b3b1b; word-break: break-word; }
+
+        .footer { margin-top: 25px; padding-top: 15px; text-align: center; font-size: 12px; opacity: 0.6; border-top: 2px solid var(--accent-light); }
+
+        .section-list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: var(--white); border-radius: 10px; border: 1px solid var(--primary-light); margin-bottom: 6px; }
+        .section-color-dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; margin-right: 10px; border: 1px solid rgba(0,0,0,0.1); }
+
+        .toast-container { position: fixed; top: 15px; right: 15px; z-index: 9999; display: flex; flex-direction: column; gap: 6px; }
+        .toast { background: var(--primary); color: white; padding: 12px 20px; border-radius: 30px; font-weight: 600; font-size: 13px; animation: slideIn 0.3s; max-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .toast.error { background: var(--danger); }
+        @keyframes slideIn { from { opacity:0; transform:translateX(60px) } to { opacity:1; transform:translateX(0) } }
+
+        /* Print styles */
+        @media print {
+            .no-print { display: none !important; }
+            .sidebar, .bottom-nav, .hamburger, .tabs, .header, .footer, .btn, .info-box, .sub-tabs { display: none !important; }
+            .main-content { margin: 0 !important; padding: 10px !important; box-shadow: none !important; background: white !important; border-radius: 0 !important; }
+            .qr-print-area { border: 2px solid #333 !important; page-break-inside: avoid; max-width: 300px; margin: 0 auto; }
+            .qr-print-actions { display: none !important; }
         }
 
-        /* ─── Responsive ─── */
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .main-content {
-                margin: 10px 0;
-                padding: 15px 10px;
-                border-radius: var(--radius-md);
-                margin-left: 0 !important;
-                margin-right: 0;
-            }
-            .sidebar {
-                width: 280px;
-            }
-            .hamburger {
-                display: flex;
-            }
-            .bottom-nav {
-                display: flex;
-            }
-            .header {
-                flex-direction: column;
-                text-align: center;
-            }
-            .header-text h1 {
-                font-size: 20px;
-            }
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            input,
-            select,
-            textarea {
-                font-size: 16px;
-                padding: 12px 14px;
-            }
-            .btn {
-                padding: 12px 20px;
-                font-size: 14px;
-                min-height: 48px;
-            }
-            .btn-sm {
-                padding: 8px 14px;
-                font-size: 12px;
-                min-height: 40px;
-            }
-            .machine-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .machine-info {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-            .qr-container {
-                grid-template-columns: 1fr;
-            }
-            .info-box {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .modal-content {
-                padding: 15px;
-                margin: 10px;
-            }
-            .sub-tabs {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-            }
-            .sub-tabs::-webkit-scrollbar {
-                display: none;
-            }
-            .tabs {
-                gap: 2px;
-                padding: 4px;
-            }
-            .tab-btn {
-                padding: 12px 16px;
-                font-size: 13px;
-                min-height: 44px;
-            }
-            .sidebar-overlay.active {
-                display: block;
-            }
-            .main-content {
-                margin-bottom: 80px;
-            }
-            #qrReaderContainer {
-                min-height: 200px;
-                padding: 8px;
-            }
-            #qrReaderContainer video {
-                max-height: 300px;
-            }
-            .scan-result-modal .machine-detail-grid {
-                grid-template-columns: 1fr;
-            }
+            body { padding: 10px; }
+            .main-content { margin: 10px 0; padding: 15px 10px; border-radius: var(--radius-md); margin-left: 0 !important; margin-right: 0; }
+            .sidebar { width: 280px; }
+            .hamburger { display: flex; }
+            .bottom-nav { display: flex; }
+            .header { flex-direction: column; text-align: center; }
+            .header-text h1 { font-size: 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+            input, select, textarea { font-size: 16px; padding: 12px 14px; }
+            .btn { padding: 12px 20px; font-size: 14px; min-height: 48px; }
+            .btn-sm { padding: 8px 14px; font-size: 12px; min-height: 40px; }
+            .machine-item { flex-direction: column; align-items: flex-start; }
+            .machine-info { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .info-box { flex-direction: column; align-items: flex-start; }
+            .modal-content { padding: 15px; margin: 10px; }
+            .sub-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .sub-tabs::-webkit-scrollbar { display: none; }
+            .tabs { gap: 2px; padding: 4px; }
+            .tab-btn { padding: 12px 16px; font-size: 13px; min-height: 44px; }
+            .sidebar-overlay.active { display: block; }
+            .main-content { margin-bottom: 80px; }
+            #qrReaderContainer { min-height: 200px; padding: 8px; }
+            #qrReaderContainer video { max-height: 300px; }
+            .scan-result-modal .machine-detail-grid { grid-template-columns: 1fr; }
         }
         @media (min-width: 769px) {
-            .hamburger {
-                display: none;
-            }
-            .bottom-nav {
-                display: none;
-            }
-            .sidebar {
-                transform: translateX(0);
-                position: fixed;
-                height: 100vh;
-                box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-            }
-            .sidebar-overlay {
-                display: none !important;
-            }
-            .main-content {
-                margin-left: calc(var(--sidebar-width) + 20px);
-                margin-top: 20px;
-                margin-bottom: 20px;
-            }
-        }
-
-        /* ─── Print styles for QR stickers ─── */
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-            .sidebar,
-            .bottom-nav,
-            .hamburger,
-            .tabs,
-            .header,
-            .footer,
-            .btn,
-            .info-box,
-            .sub-tabs {
-                display: none !important;
-            }
-            .main-content {
-                margin: 0 !important;
-                padding: 10px !important;
-                box-shadow: none !important;
-                background: white !important;
-                border-radius: 0 !important;
-            }
-            .qr-print-area {
-                border: 2px solid #333 !important;
-                page-break-inside: avoid;
-                max-width: 300px;
-                margin: 0 auto;
-            }
-            .qr-print-actions {
-                display: none !important;
-            }
-            .scan-result-modal .modal-content {
-                box-shadow: none !important;
-                border: 2px solid #333 !important;
-            }
+            .hamburger { display: none; }
+            .bottom-nav { display: none; }
+            .sidebar { transform: translateX(0); position: fixed; height: 100vh; box-shadow: 2px 0 15px rgba(0,0,0,0.1); }
+            .sidebar-overlay { display: none !important; }
+            .main-content { margin-left: calc(var(--sidebar-width) + 20px); margin-top: 20px; margin-bottom: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Toast Container -->
+    <!-- Toast -->
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- Hamburger -->
@@ -1049,7 +263,7 @@
             </div>
             <a href="#" data-tab="list"><i class="fas fa-list"></i> All Machines</a>
             <a href="#" data-tab="lookup"><i class="fas fa-search"></i> Lookup</a>
-            <a href="#" data-tab="qr"><i class="fas fa-qrcode"></i> QR Codes</a>
+            <a href="#" data-tab="qr"><i class="fas fa-qrcode"></i> QR Stickers</a>
             <a href="#" data-tab="scan"><i class="fas fa-camera"></i> Scan QR</a>
             <a href="#" data-tab="status"><i class="fas fa-chart-bar"></i> Statistics</a>
         </nav>
@@ -1061,17 +275,17 @@
         <div class="header no-print">
             <div class="logo-wrapper"><i class="fas fa-leaf"></i></div>
             <div class="header-text">
-                <h1>Panilkanda Tea Factory Machine Tracker</h1>
-                <p>📱 Scan QR to View Details | Asset Management System</p>
+                <h1>Panilkanda Tea – QR Sticker System</h1>
+                <p>📱 Generate printable QR stickers · Scan to view machine details</p>
             </div>
         </div>
 
         <!-- Top Tabs -->
         <div class="tabs no-print" id="mainTabs">
-            <button class="tab-btn active" data-tab="assets"><i class="fas fa-boxes"></i>Asset Mgmt</button>
+            <button class="tab-btn active" data-tab="assets"><i class="fas fa-boxes"></i>Assets</button>
             <button class="tab-btn" data-tab="list"><i class="fas fa-list"></i>All Machines</button>
             <button class="tab-btn" data-tab="lookup"><i class="fas fa-search"></i>Lookup</button>
-            <button class="tab-btn" data-tab="qr"><i class="fas fa-qrcode"></i>QR</button>
+            <button class="tab-btn" data-tab="qr"><i class="fas fa-qrcode"></i>QR Stickers</button>
             <button class="tab-btn" data-tab="scan"><i class="fas fa-camera"></i>Scan</button>
             <button class="tab-btn" data-tab="status"><i class="fas fa-chart-bar"></i>Stats</button>
         </div>
@@ -1211,11 +425,11 @@
             </div>
         </div>
 
-        <!-- ==================== QR CODES ==================== -->
+        <!-- ==================== QR STICKERS ==================== -->
         <div id="tab-qr" class="tab-content">
             <div class="card">
                 <h3><i class="fas fa-qrcode"></i> Generate & Print QR Stickers</h3>
-                <p style="font-size:13px;color:#666;margin-bottom:12px;">Select a machine to generate a QR code. Print and stick on the machine.</p>
+                <p style="font-size:13px;color:#666;margin-bottom:12px;">Select a machine to generate a QR code. Print and stick on the machine. <strong>QR contains all machine data</strong> – scanning works offline.</p>
                 <div class="form-grid" style="margin-top:10px;">
                     <div class="form-group">
                         <label>Select Machine</label>
@@ -1227,7 +441,6 @@
                     </div>
                 </div>
 
-                <!-- QR Output Area -->
                 <div id="qrOutput" style="display:none; margin-top:16px;">
                     <div class="qr-print-area" id="qrPrintArea">
                         <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:10px;">
@@ -1239,7 +452,7 @@
                         </div>
                         <div class="qr-label" id="qrLabel">M0001 - CTC Roller 1</div>
                         <div class="qr-sub" id="qrSub">Section: Withering · Status: ✅ Working</div>
-                        <div class="qr-sub" style="font-size:11px;color:#999;margin-top:4px;" id="qrSubDetail">Scan to view full details</div>
+                        <div class="qr-sub" style="font-size:11px;color:#999;margin-top:4px;">Scan to view full details</div>
                     </div>
                     <div class="qr-print-actions no-print">
                         <button onclick="downloadQR()" class="btn btn-secondary btn-sm"><i class="fas fa-download"></i> Download PNG</button>
@@ -1252,10 +465,10 @@
                 </div>
             </div>
 
-            <!-- Bulk QR print -->
+            <!-- Bulk print -->
             <div class="card no-print">
                 <h4><i class="fas fa-print"></i> Bulk Print QR Stickers</h4>
-                <p style="font-size:13px;color:#666;margin-bottom:10px;">Print QR codes for all machines at once. Each QR will appear on a separate page.</p>
+                <p style="font-size:13px;color:#666;margin-bottom:10px;">Print QR codes for all machines at once. Each QR on a separate page.</p>
                 <button onclick="printAllQRCodes()" class="btn btn-primary"><i class="fas fa-print"></i> Print All QR Stickers</button>
             </div>
         </div>
@@ -1264,7 +477,7 @@
         <div id="tab-scan" class="tab-content">
             <div class="card">
                 <h3><i class="fas fa-camera"></i> Scan QR Code</h3>
-                <p style="font-size:13px;color:#666;margin-bottom:8px;">Point your camera at a QR code to instantly see machine details.</p>
+                <p style="font-size:13px;color:#666;margin-bottom:8px;">Point your camera at a QR sticker to instantly see machine details.</p>
                 <div class="btn-group" style="margin:12px 0;">
                     <button onclick="startQRScanner()" class="btn btn-scan" id="startScanBtn"><i class="fas fa-play"></i> Start Camera</button>
                     <button onclick="stopQRScanner()" class="btn btn-danger" id="stopScanBtn"><i class="fas fa-stop"></i> Stop</button>
@@ -1300,10 +513,10 @@
             </div>
         </div>
 
-        <div class="footer no-print">🍃 Panilkanda Tea Factory Machine Tracker · Developed by MaplyVision Labs</div>
+        <div class="footer no-print">🍃 Panilkanda Tea Factory · QR Sticker System · Data stored locally</div>
     </div>
 
-    <!-- Bottom Navigation (Mobile) -->
+    <!-- Bottom Navigation -->
     <nav class="bottom-nav no-print" id="bottomNav">
         <a href="#" data-tab="assets" class="active"><i class="fas fa-boxes"></i><span>Assets</span></a>
         <a href="#" data-tab="list"><i class="fas fa-list"></i><span>Machines</span></a>
@@ -1371,16 +584,14 @@
         </div>
     </div>
 
-    <!-- ==================== SCAN RESULT DETAIL MODAL ==================== -->
+    <!-- Scan Result Modal -->
     <div class="modal scan-result-modal" id="scanResultModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3><i class="fas fa-qrcode"></i> Machine Details</h3>
                 <button class="modal-close" onclick="closeScanResultModal()">&times;</button>
             </div>
-            <div id="scanResultModalBody">
-                <!-- dynamically filled -->
-            </div>
+            <div id="scanResultModalBody"></div>
             <div class="btn-group" style="margin-top:16px;justify-content:center;">
                 <button onclick="closeScanResultModal()" class="btn btn-secondary"><i class="fas fa-times"></i> Close</button>
                 <button onclick="printScanResult()" class="btn btn-primary"><i class="fas fa-print"></i> Print</button>
@@ -1397,7 +608,7 @@
 
     <script>
         // ============================================================
-        // DATABASE
+        // DATABASE (localStorage)
         // ============================================================
         function getDB() {
             try {
@@ -1411,13 +622,9 @@
             localStorage.setItem('panilkanda_db', JSON.stringify(db));
         }
 
-        function getSections() {
-            return getDB().sections || [];
-        }
+        function getSections() { return getDB().sections || []; }
 
-        function getMachines() {
-            return getDB().machines || [];
-        }
+        function getMachines() { return getDB().machines || []; }
 
         function generateMachineId() {
             const db = getDB();
@@ -1575,9 +782,7 @@
 
         function filterAssets() { refreshAssetView(); }
 
-        function refreshList() {
-            renderMachineList(getMachines());
-        }
+        function refreshList() { renderMachineList(getMachines()); }
 
         function refreshDashboard() {
             const machines = getMachines();
@@ -1622,12 +827,10 @@
             const container = document.getElementById('sectionListContainer');
             const sections = getSections();
             const machines = getMachines();
-
             if (sections.length === 0) {
                 container.innerHTML = '<p style="text-align:center;padding:20px;color:#666;">No sections created yet. Add one using the "Add Section" tab.</p>';
                 return;
             }
-
             let html = '';
             sections.forEach(sec => {
                 const count = machines.filter(m => m.section === sec.id).length;
@@ -1653,17 +856,13 @@
             const sections = getSections();
             const section = sections.find(s => s.id === sectionId);
             if (!section) { toast('Section not found.', true); return; }
-
             const machineCount = getMachines().filter(m => m.section === sectionId).length;
             const msg = `Delete section "${section.name}"?\n\n${machineCount} machine${machineCount !== 1 ? 's' : ''} will be set to "Uncategorised".`;
             if (!confirm(msg)) return;
-
             const db = getDB();
             db.sections = db.sections.filter(s => s.id !== sectionId);
             db.machines = db.machines.map(m => {
-                if (m.section === sectionId) {
-                    m.section = '';
-                }
+                if (m.section === sectionId) m.section = '';
                 return m;
             });
             saveDB(db);
@@ -1679,7 +878,7 @@
         }
 
         // ============================================================
-        // QR CODE GENERATION
+        // QR CODE GENERATION (self-contained data)
         // ============================================================
         let qrCodeInstance = null;
         let currentQRMachine = null;
@@ -1699,9 +898,7 @@
 
         function generateQRForMachine(id) {
             const sel = document.getElementById('qrMachineSelect');
-            if (sel) {
-                sel.value = id;
-            }
+            if (sel) { sel.value = id; }
             switchToTab('qr');
             setTimeout(() => generateQR(), 200);
         }
@@ -1728,7 +925,7 @@
             const container = document.getElementById('qrCanvasContainer');
             container.innerHTML = '';
 
-            // Include ALL machine data in the QR code
+            // Build compact JSON with all essential fields
             const qrData = {
                 id: m.id,
                 name: m.name,
@@ -1757,13 +954,11 @@
                 return;
             }
 
-            // Update labels
             document.getElementById('qrLabel').textContent = m.id + ' - ' + m.name;
             document.getElementById('qrSub').textContent = 'Section: ' + getSectionName(m.section) + ' · Status: ' +
                 statusLabel(m.status);
-            document.getElementById('qrSubDetail').textContent = 'Scan to view full details';
 
-            // Show machine details
+            // Show details
             const info = document.getElementById('qrInfoDetails');
             info.innerHTML = `
                 <div class="result-grid">
@@ -1778,18 +973,13 @@
                 </div>
                 ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
             `;
-
-            // Scroll to QR output
             output.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function downloadQR() {
             const container = document.getElementById('qrCanvasContainer');
             const canvas = container.querySelector('canvas');
-            if (!canvas) {
-                toast('No QR code to download. Generate one first.', true);
-                return;
-            }
+            if (!canvas) { toast('No QR code to download.', true); return; }
             const link = document.createElement('a');
             link.download = 'qr_' + (currentQRMachine ? currentQRMachine.id : 'machine') + '.png';
             link.href = canvas.toDataURL('image/png');
@@ -1799,75 +989,55 @@
 
         function printQRSticker() {
             const area = document.getElementById('qrPrintArea');
-            if (!area) {
-                toast('Generate a QR code first.', true);
-                return;
-            }
+            if (!area) { toast('Generate a QR code first.', true); return; }
             const printWin = window.open('', '_blank', 'width=400,height=500');
-            if (!printWin) {
-                toast('Please allow popups to print.', true);
-                return;
-            }
+            if (!printWin) { toast('Please allow popups to print.', true); return; }
             const content = area.outerHTML;
             printWin.document.write(`
                 <html>
-                <head>
-                    <title>QR Sticker - ${currentQRMachine ? currentQRMachine.id : 'Machine'}</title>
-                    <style>
-                        body { font-family: 'Inter', sans-serif; background: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-                        .qr-print-area { max-width: 350px; margin: 0 auto; padding: 20px; border: 2px solid #1b5e20; border-radius: 16px; background: white; text-align: center; }
-                        .qr-print-area .qr-code-wrapper { display: inline-block; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-                        .qr-print-area .qr-code-wrapper canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
-                        .qr-print-area .qr-label { font-weight: 700; font-size: 16px; color: #1b5e20; margin-top: 8px; }
-                        .qr-print-area .qr-sub { font-size: 13px; color: #666; margin-top: 2px; }
-                        .qr-print-area .qr-sub-detail { font-size: 11px; color: #999; margin-top: 4px; }
-                        .qr-print-area .header { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
-                        .qr-print-area .header i { color: #2e7d32; font-size: 20px; }
-                        .qr-print-area .header span { font-weight: 700; color: #1b5e20; font-size: 14px; }
-                    </style>
+                <head><title>QR Sticker - ${currentQRMachine ? currentQRMachine.id : 'Machine'}</title>
+                <style>
+                    body { font-family: 'Inter', sans-serif; background: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+                    .qr-print-area { max-width: 350px; margin: 0 auto; padding: 20px; border: 2px solid #1b5e20; border-radius: 16px; background: white; text-align: center; }
+                    .qr-print-area .qr-code-wrapper { display: inline-block; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+                    .qr-print-area .qr-code-wrapper canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+                    .qr-print-area .qr-label { font-weight: 700; font-size: 16px; color: #1b5e20; margin-top: 8px; }
+                    .qr-print-area .qr-sub { font-size: 13px; color: #666; margin-top: 2px; }
+                    .qr-print-area .qr-sub-detail { font-size: 11px; color: #999; margin-top: 4px; }
+                    .qr-print-area .header { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
+                    .qr-print-area .header i { color: #2e7d32; font-size: 20px; }
+                    .qr-print-area .header span { font-weight: 700; color: #1b5e20; font-size: 14px; }
+                </style>
                 </head>
-                <body>
-                    ${content}
-                </body>
+                <body>${content}</body>
                 </html>
             `);
             printWin.document.close();
-            setTimeout(() => {
-                printWin.focus();
-                printWin.print();
-            }, 500);
+            setTimeout(() => { printWin.focus(); printWin.print(); }, 500);
         }
 
         function printAllQRCodes() {
             const machines = getMachines();
-            if (machines.length === 0) {
-                toast('No machines to print.', true);
-                return;
-            }
-
+            if (machines.length === 0) { toast('No machines to print.', true); return; }
             const printWin = window.open('', '_blank', 'width=500,height=600');
-            if (!printWin) {
-                toast('Please allow popups to print.', true);
-                return;
-            }
+            if (!printWin) { toast('Please allow popups to print.', true); return; }
 
             let html = `
                 <html>
-                <head>
-                    <title>Panilkanda - All QR Stickers</title>
-                    <style>
-                        body { font-family: 'Inter', sans-serif; background: white; padding: 20px; }
-                        .page { page-break-after: always; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-                        .qr-print-area { max-width: 350px; margin: 0 auto; padding: 20px; border: 2px solid #1b5e20; border-radius: 16px; background: white; text-align: center; }
-                        .qr-print-area .qr-code-wrapper { display: inline-block; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-                        .qr-print-area .qr-code-wrapper canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
-                        .qr-print-area .qr-label { font-weight: 700; font-size: 16px; color: #1b5e20; margin-top: 8px; }
-                        .qr-print-area .qr-sub { font-size: 13px; color: #666; margin-top: 2px; }
-                        .qr-print-area .header { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
-                        .qr-print-area .header i { color: #2e7d32; font-size: 20px; }
-                        .qr-print-area .header span { font-weight: 700; color: #1b5e20; font-size: 14px; }
-                        .qr-print-area .qr-sub-detail { font-size: 11px; color: #999; margin-top: 4px; }
-                    </style>
+                <head><title>Panilkanda - All QR Stickers</title>
+                <style>
+                    body { font-family: 'Inter', sans-serif; background: white; padding: 20px; }
+                    .page { page-break-after: always; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+                    .qr-print-area { max-width: 350px; margin: 0 auto; padding: 20px; border: 2px solid #1b5e20; border-radius: 16px; background: white; text-align: center; }
+                    .qr-print-area .qr-code-wrapper { display: inline-block; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+                    .qr-print-area .qr-code-wrapper canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+                    .qr-print-area .qr-label { font-weight: 700; font-size: 16px; color: #1b5e20; margin-top: 8px; }
+                    .qr-print-area .qr-sub { font-size: 13px; color: #666; margin-top: 2px; }
+                    .qr-print-area .header { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
+                    .qr-print-area .header i { color: #2e7d32; font-size: 20px; }
+                    .qr-print-area .header span { font-weight: 700; color: #1b5e20; font-size: 14px; }
+                    .qr-print-area .qr-sub-detail { font-size: 11px; color: #999; margin-top: 4px; }
+                </style>
                 </head>
                 <body>
             `;
@@ -1886,9 +1056,6 @@
                     notes: m.notes || ''
                 };
                 const data = JSON.stringify(qrData);
-
-                // We need to generate QR codes in the print window
-                // Use a placeholder and generate with JavaScript
                 html += `
                     <div class="page">
                         <div class="qr-print-area">
@@ -1910,7 +1077,6 @@
             html += `
                 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"><\/script>
                 <script>
-                    // Generate QR codes after page loads
                     document.addEventListener('DOMContentLoaded', function() {
                         const machines = ${JSON.stringify(machines)};
                         machines.forEach((m, index) => {
@@ -1941,19 +1107,14 @@
                     });
                 <\/script>
             `;
-
             html += `</body></html>`;
             printWin.document.write(html);
             printWin.document.close();
-
-            setTimeout(() => {
-                printWin.focus();
-                printWin.print();
-            }, 1500);
+            setTimeout(() => { printWin.focus(); printWin.print(); }, 1500);
         }
 
         // ============================================================
-        // QR SCANNER
+        // QR SCANNER – decodes JSON and displays details
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
@@ -2144,7 +1305,7 @@ showMachineDetailsModal(machine, true);
 }
 }
 
-// ─── QR Scanner ───
+// ─── QR Scanner start ───
 function startQRScanner() {
 const container = document.getElementById('qrReaderContainer');
 const result = document.getElementById('scanResult');
@@ -2244,10 +1405,12 @@ let data = null;
 let machineId = null;
 let machineData = null;
 
+// Try to parse as JSON
 try {
 data = JSON.parse(decodedText);
 showDebug('Parsed as JSON');
 } catch (e) {
+// If not JSON, check if it's a plain ID (e.g., M0001)
 if (decodedText.trim().match(/^M\d{4}$/)) {
 machineId = decodedText.trim();
 showDebug('Plain ID detected: ' + machineId);
@@ -2288,6 +1451,8 @@ if (machineId) {
 const machines = getMachines();
 const dbMachine = machines.find(x => x.id === machineId);
 let displayMachine = null;
+
+// Prefer database machine if exists, else use QR data
 if (dbMachine) {
 showDebug('Found in DB: ' + dbMachine.name);
 displayMachine = dbMachine;
@@ -2306,10 +1471,12 @@ showDebug('ERROR: Machine ID ' + machineId + ' not in DB');
 return;
 }
 
+// Show the details
 lastScannedMachine = displayMachine;
 showMachineDetailsModal(displayMachine, true);
 toast('✅ Machine found: ' + displayMachine.name);
 
+// Auto-stop scanner after successful scan
 setTimeout(() => stopQRScanner(), 2000);
 }
 }
@@ -2318,7 +1485,6 @@ function onScanFailure(err) { /* silent */ }
 
 function stopQRScanner() {
 const container = document.getElementById('qrReaderContainer');
-
 if (html5QrCode && scannerRunning) {
 try {
 html5QrCode.stop().then(() => {
@@ -2754,7 +1920,7 @@ stopQRScanner();
 }
 });
 
-console.log('🍃 Panilkanda Tea Factory Machine Tracker loaded.');
+console.log('🍃 Panilkanda Tea Factory QR Sticker System loaded.');
 console.log('📦 Machines:', getMachines().length);
 console.log('📂 Sections:', getSections().length);
 </script>
