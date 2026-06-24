@@ -818,6 +818,175 @@
             word-break: break-word;
         }
 
+        /* ─── Full‑screen details overlay (acts like a blank page) ─── */
+        #fullscreenDetails {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 20px;
+            font-family: 'Inter', sans-serif;
+        }
+        #fullscreenDetails.active {
+            display: block;
+        }
+        #fullscreenDetails .close-btn {
+            position: sticky;
+            top: 0;
+            float: right;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        #fullscreenDetails .card {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #f9fafb;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid #e5e7eb;
+        }
+        #fullscreenDetails .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        #fullscreenDetails .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1b3b1b;
+        }
+        #fullscreenDetails .header .id {
+            font-size: 14px;
+            color: #6b7280;
+            background: #e5e7eb;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        #fullscreenDetails .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        #fullscreenDetails .item {
+            background: white;
+            border-radius: 12px;
+            padding: 14px 16px;
+            border: 1px solid #e5e7eb;
+        }
+        #fullscreenDetails .item label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #6b7280;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        #fullscreenDetails .item .value {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1b3b1b;
+            word-break: break-word;
+        }
+        #fullscreenDetails .full {
+            grid-column: 1/-1;
+        }
+        #fullscreenDetails .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        #fullscreenDetails .status-badge.working {
+            background: #c8e6c9;
+            color: #1b5e20;
+        }
+        #fullscreenDetails .status-badge.maintenance {
+            background: #ffe0b2;
+            color: #e65100;
+        }
+        #fullscreenDetails .status-badge.out-of-service {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+        #fullscreenDetails .btn-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        #fullscreenDetails .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        #fullscreenDetails .btn.primary {
+            background: #2e7d32;
+            color: white;
+        }
+        #fullscreenDetails .btn.primary:hover {
+            background: #1b5e20;
+        }
+        #fullscreenDetails .btn.secondary {
+            background: #e5e7eb;
+            color: #1b3b1b;
+        }
+        #fullscreenDetails .btn.secondary:hover {
+            background: #d1d5db;
+        }
+        #fullscreenDetails .btn.info {
+            background: #1976d2;
+            color: white;
+        }
+        #fullscreenDetails .btn.info:hover {
+            background: #1565c0;
+        }
+        #fullscreenDetails .footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 13px;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 16px;
+        }
+        @media (max-width:600px) {
+            #fullscreenDetails .grid {
+                grid-template-columns: 1fr;
+            }
+            #fullscreenDetails .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
         /* ─── Responsive ─── */
         @media (max-width: 768px) {
             body {
@@ -1138,7 +1307,8 @@
         <!-- ==================== QR ==================== -->
         <div id="tab-qr" class="tab-content">
             <div class="card">
-                <h3><i class="fas fa-qrcode"></i> Generate QR Code</h3>
+                <h3><i class="fas fa-qrcode"></i> Generate QR Code (GitHub Pages Link)</h3>
+                <p style="font-size:13px;color:#666;margin-bottom:12px;">Each machine gets a unique QR code that links directly to its details page.</p>
                 <div class="form-grid" style="margin-top:10px;">
                     <div class="form-group">
                         <label>Select Machine</label>
@@ -1153,6 +1323,7 @@
                     <div class="qr-display">
                         <div id="qrCanvasContainer"></div>
                         <p id="qrLabel" style="font-weight:600;margin-top:6px;font-size:13px;"></p>
+                        <p id="qrUrlDisplay" style="font-size:11px;color:#888;word-break:break-all;margin-top:4px;"></p>
                     </div>
                     <div class="qr-info-panel">
                         <h4>Machine Details</h4>
@@ -1291,6 +1462,14 @@
         </div>
     </div>
 
+    <!-- ==================== FULLSCREEN DETAILS OVERLAY ==================== -->
+    <div id="fullscreenDetails">
+        <button class="close-btn" onclick="closeFullscreenDetails()">✕</button>
+        <div class="card" id="fullscreenContent">
+            <!-- filled dynamically -->
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js">
     </script>
@@ -1298,6 +1477,11 @@
     </script>
 
     <script>
+        // ============================================================
+        // CONFIGURATION – CHANGE THIS TO YOUR GITHUB PAGES URL
+        // ============================================================
+        const BASE_URL = window.location.origin + window.location.pathname;
+
         // ============================================================
         // DATABASE
         // ============================================================
@@ -1580,7 +1764,7 @@
         }
 
         // ============================================================
-        // QR CODE
+        // QR CODE – ENCODES A URL WITH MACHINE ID
         // ============================================================
         let qrCodeInstance = null;
 
@@ -1615,24 +1799,14 @@
 
             output.style.display = 'grid';
 
+            // Build the URL with machine ID parameter
+            const url = BASE_URL + '?id=' + encodeURIComponent(id);
+
             const container = document.getElementById('qrCanvasContainer');
             container.innerHTML = '';
-            const qrData = {
-                id: m.id,
-                name: m.name,
-                section: m.section,
-                sectionName: getSectionName(m.section),
-                manufacturer: m.manufacturer || '',
-                model: m.model || '',
-                serialNumber: m.serialNumber || '',
-                installationDate: m.installationDate || '',
-                status: m.status || 'working',
-                notes: m.notes || ''
-            };
-            const data = JSON.stringify(qrData);
             try {
                 qrCodeInstance = new QRCode(container, {
-                    text: data,
+                    text: url,
                     width: 200,
                     height: 200,
                     colorDark: '#1b5e20',
@@ -1645,6 +1819,7 @@
             }
 
             document.getElementById('qrLabel').textContent = m.id + ' - ' + m.name;
+            document.getElementById('qrUrlDisplay').textContent = '🔗 ' + url;
 
             const info = document.getElementById('qrInfoDetails');
             info.innerHTML = `
@@ -1659,6 +1834,9 @@
                     <div class="result-item"><label>Installed</label>${fmtDate(m.installationDate)}</div>
                 </div>
                 ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
+                <p style="margin-top:10px;font-size:12px;color:#666;border-top:1px solid #ddd;padding-top:8px;">
+                    <i class="fas fa-link"></i> QR encodes: <span style="word-break:break-all;">${esc(url)}</span>
+                </p>
             `;
         }
 
@@ -1670,13 +1848,119 @@
                 return;
             }
             const link = document.createElement('a');
-            link.download = 'qr-code.png';
+            link.download = 'qr_' + (document.getElementById('qrMachineSelect').value || 'machine') + '.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
+            toast('📥 QR code downloaded.');
         }
 
         // ============================================================
-        // QR SCANNER - IMPROVED: robust JSON extraction
+        // URL PARAMETER HANDLER – SHOW MACHINE DETAILS FROM URL
+        // ============================================================
+        function showMachineFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            if (!id) return;
+
+            // Hide the main UI and show fullscreen details
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('bottomNav').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'none';
+            document.querySelector('.hamburger').style.display = 'none';
+
+            const machines = getMachines();
+            const machine = machines.find(m => m.id === id);
+
+            const overlay = document.getElementById('fullscreenDetails');
+            const content = document.getElementById('fullscreenContent');
+
+            if (!machine) {
+                content.innerHTML = `
+                    <div style="text-align:center;padding:40px;">
+                        <i class="fas fa-exclamation-triangle" style="font-size:48px;color:var(--danger);"></i>
+                        <h2 style="margin:20px 0;color:var(--danger);">Machine Not Found</h2>
+                        <p style="color:#666;">Machine with ID "${esc(id)}" does not exist in the database.</p>
+                        <p style="margin-top:12px;font-size:13px;color:#888;">Please check the QR code or add this machine in the asset management system.</p>
+                        <button onclick="goBackToApp()" class="btn btn-primary" style="margin-top:20px;">
+                            <i class="fas fa-arrow-left"></i> Back to App
+                        </button>
+                    </div>
+                `;
+                overlay.classList.add('active');
+                return;
+            }
+
+            const secName = getSectionName(machine.section);
+            content.innerHTML = `
+                <div class="header">
+                    <h1>🍃 Machine Details</h1>
+                    <span class="id">${esc(machine.id)}</span>
+                </div>
+                <div class="grid">
+                    <div class="item"><label>Name</label><div class="value">${esc(machine.name)}</div></div>
+                    <div class="item"><label>Section</label><div class="value">${esc(secName)}</div></div>
+                    <div class="item"><label>Manufacturer</label><div class="value">${esc(machine.manufacturer || '-')}</div></div>
+                    <div class="item"><label>Model</label><div class="value">${esc(machine.model || '-')}</div></div>
+                    <div class="item"><label>Serial Number</label><div class="value">${esc(machine.serialNumber || '-')}</div></div>
+                    <div class="item"><label>Installation Date</label><div class="value">${fmtDate(machine.installationDate)}</div></div>
+                    <div class="item full"><label>Status</label><div class="value"><span class="status-badge ${statusCls(machine.status)}">${statusLabel(machine.status)}</span></div></div>
+                    ${machine.notes ? `<div class="item full"><label>Notes</label><div class="value">${esc(machine.notes)}</div></div>` : ''}
+                </div>
+                <div class="btn-group">
+                    <button onclick="window.print()" class="btn secondary"><i class="fas fa-print"></i> Print</button>
+                    <button onclick="exportMachineFromFullscreen()" class="btn primary"><i class="fas fa-file-excel"></i> Export to Excel</button>
+                    <button onclick="goBackToApp()" class="btn secondary"><i class="fas fa-arrow-left"></i> Back to App</button>
+                </div>
+                <div class="footer">Panilkanda Tea Factory · Machine Tracker</div>
+            `;
+
+            overlay.classList.add('active');
+
+            // Store machine for export
+            window._fullscreenMachine = machine;
+        }
+
+        function exportMachineFromFullscreen() {
+            const machine = window._fullscreenMachine;
+            if (!machine) { toast('No machine data to export.', true); return; }
+            const secName = getSectionName(machine.section);
+            const headers = ['ID', 'Name', 'Section', 'Manufacturer', 'Model', 'Serial Number', 'Installation Date',
+                'Status', 'Notes'
+            ];
+            const row = [
+                machine.id, machine.name, secName,
+                machine.manufacturer || '', machine.model || '',
+                machine.serialNumber || '', machine.installationDate || '',
+                machine.status || '', machine.notes || ''
+            ];
+            let csv = headers.join(',') + '\n';
+            csv += row.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'machine_' + machine.id + '.csv';
+            link.click();
+            toast('📥 CSV exported.');
+        }
+
+        function closeFullscreenDetails() {
+            document.getElementById('fullscreenDetails').classList.remove('active');
+            document.getElementById('mainContainer').style.display = 'block';
+            document.getElementById('bottomNav').style.display = 'flex';
+            document.getElementById('sidebar').style.display = 'flex';
+            document.querySelector('.hamburger').style.display = 'flex';
+            // Remove the id param from URL
+            const url = new URL(window.location);
+            url.searchParams.delete('id');
+            window.history.replaceState({}, document.title, url);
+        }
+
+        function goBackToApp() {
+            closeFullscreenDetails();
+        }
+
+        // ============================================================
+        // QR SCANNER
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
@@ -1689,7 +1973,6 @@
             console.log('QR Debug:', msg);
         }
 
-        // ─── Show machine details in modal ───
         function showMachineDetailsModal(machine, fromQR) {
             const modal = document.getElementById('scanResultModal');
             const body = document.getElementById('scanResultModalBody');
@@ -1716,7 +1999,6 @@
 
             modal.classList.add('active');
 
-            // Also show a brief inline result
             const result = document.getElementById('scanResult');
             result.innerHTML = `
                 <div class="result-card success">
@@ -1758,7 +2040,6 @@ if (!machine) { toast('No machine data to open.', true); return; }
 openBlankPageWithMachine(machine);
 }
 
-// ─── Open blank page with machine details ───
 function openBlankPageWithMachine(machine) {
 const secName = machine.sectionName || getSectionName(machine.section) || machine.section || '-';
 const machineJson = JSON.stringify(machine).replace(/"/g, '&quot;');
@@ -1857,7 +2138,6 @@ win.focus();
 toast('📄 Machine details opened in new tab.');
 } else {
 toast('⚠️ Popup blocked. Please allow popups or use the modal view.', true);
-// Fallback: show in modal
 showMachineDetailsModal(machine, true);
 }
 }
@@ -1952,68 +2232,43 @@ html5QrCode = null;
 }, 300);
 }
 
-// ─── Robust JSON extraction ───
-function extractFirstJSON(text) {
-    // Try to find a valid JSON object by scanning for { and matching braces
-    let start = -1;
-    let depth = 0;
-    let i = 0;
-    while (i < text.length) {
-        if (text[i] === '{') {
-            if (start === -1) start = i;
-            depth++;
-        } else if (text[i] === '}') {
-            depth--;
-            if (depth === 0 && start !== -1) {
-                // Potential complete object
-                const candidate = text.substring(start, i + 1);
-                try {
-                    const parsed = JSON.parse(candidate);
-                    if (parsed && typeof parsed === 'object' && parsed.id) {
-                        return parsed;
-                    }
-                } catch (e) { /* ignore */ }
-                // Not valid JSON or missing id, continue searching
-                start = -1;
-                depth = 0;
-            }
-        }
-        i++;
-        // Reset if depth goes negative (shouldn't happen with valid JSON)
-        if (depth < 0) { depth = 0; start = -1; }
+// ─── Extract JSON or URL ───
+function extractMachineIdFromText(text) {
+    // 1. Try to find a URL with ?id= parameter
+    const urlMatch = text.match(/[?&]id=([^&\s]+)/);
+    if (urlMatch) {
+        return decodeURIComponent(urlMatch[1]);
     }
+
+    // 2. Try to extract JSON
+    const jsonMatch = text.match(/\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/);
+    if (jsonMatch) {
+        try {
+            const parsed = JSON.parse(jsonMatch[0]);
+            if (parsed && parsed.id) return parsed.id;
+        } catch (e) {}
+    }
+
+    // 3. Try plain ID (MXXXX)
+    const idMatch = text.match(/M\d{4}/);
+    if (idMatch) return idMatch[0];
+
     return null;
 }
 
 // ─── Scan Success ───
 function onScanSuccess(decodedText, decodedResult) {
     const result = document.getElementById('scanResult');
-    // Show the raw decoded text in debug
     showDebug('Decoded: ' + decodedText.substring(0, 200) + (decodedText.length > 200 ? '...' : ''));
     if (navigator.vibrate) navigator.vibrate(100);
 
-    let machineId = null;
-    let machineData = null;
-
-    // 1. Try to extract a complete JSON object
-    const jsonData = extractFirstJSON(decodedText);
-    if (jsonData && jsonData.id) {
-        machineId = jsonData.id;
-        machineData = jsonData;
-        showDebug('Extracted JSON: ' + JSON.stringify(jsonData).substring(0, 100));
-    } else {
-        // 2. Check if it's a plain machine ID (MXXXX)
-        const trimmed = decodedText.trim();
-        if (trimmed.match(/^M\d{4}$/)) {
-            machineId = trimmed;
-            showDebug('Plain ID detected: ' + machineId);
-        }
-    }
+    const machineId = extractMachineIdFromText(decodedText);
 
     if (!machineId) {
         result.innerHTML = `
             <div class="result-card error">
-                <p>⚠️ Could not find a valid machine ID or JSON in the QR.</p>
+                <p>⚠️ Could not find a machine ID in the QR.</p>
+                <p style="font-size:12px;color:#666;margin-top:6px;">Make sure the QR contains a URL with ?id= or a machine ID like M0001.</p>
                 <pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;margin-top:6px;">${esc(decodedText)}</pre>
             </div>`;
         toast('Invalid QR format.', true);
@@ -2021,46 +2276,24 @@ function onScanSuccess(decodedText, decodedResult) {
         return;
     }
 
-    // Look up the machine
     const machines = getMachines();
     const dbMachine = machines.find(x => x.id === machineId);
-    let displayMachine = null;
 
     if (dbMachine) {
         showDebug('Found in DB: ' + dbMachine.name);
-        displayMachine = dbMachine;
-    } else if (machineData && machineData.id === machineId) {
-        showDebug('Using data from QR (self-contained)');
-        displayMachine = machineData;
+        lastScannedMachine = dbMachine;
+        showMachineDetailsModal(dbMachine, true);
+        toast('✅ Machine found: ' + dbMachine.name);
     } else {
         result.innerHTML = `
             <div class="result-card error">
                 <p>❌ Machine with ID "${esc(machineId)}" not found in database.</p>
                 <p style="font-size:12px;color:#666;margin-top:8px;">Try adding this machine first, or scan a QR code with full data.</p>
-                ${machineData ? `<p style="font-size:12px;color:#666;margin-top:4px;">QR data: ${esc(JSON.stringify(machineData))}</p>` : ''}
             </div>`;
         toast('Machine not found in database.', true);
         showDebug('ERROR: Machine ID ' + machineId + ' not in DB');
         return;
     }
-
-    // ✅ Success – open blank page
-    lastScannedMachine = displayMachine;
-    openBlankPageWithMachine(displayMachine);
-    toast('✅ Machine found: ' + displayMachine.name);
-
-    const secName = displayMachine.sectionName || getSectionName(displayMachine.section) || displayMachine.section || '-';
-    result.innerHTML = `
-        <div class="result-card success">
-            <h4 style="margin-bottom:4px;">✅ Machine Found</h4>
-            <p><strong>${esc(displayMachine.name)}</strong> (${esc(displayMachine.id)}) — ${esc(secName)}</p>
-            <p style="font-size:13px;color:#666;margin-top:6px;">📄 Details opened in a new tab.</p>
-            <div class="btn-group" style="margin-top:10px;">
-                <button onclick="openBlankPageWithMachine(lastScannedMachine || ${JSON.stringify(displayMachine).replace(/"/g,'&quot;')})" class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Re-open Full Page</button>
-                <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
-            </div>
-        </div>
-    `;
 
     // Auto-stop scanner after successful scan
     setTimeout(() => stopQRScanner(), 2000);
@@ -2475,6 +2708,9 @@ refreshDashboard();
 const firstSub = document.querySelector('#assetSubTabs .sub-tab');
 if (firstSub) firstSub.click();
 
+// Check if URL has ?id= parameter
+showMachineFromURL();
+
 const hash = window.location.hash.replace('#', '');
 if (hash && ['assets', 'list', 'lookup', 'qr', 'scan', 'status'].includes(hash)) {
 switchToTab(hash);
@@ -2502,6 +2738,7 @@ document.addEventListener('keydown', function(e) {
 if (e.key === 'Escape') {
 closeEditModal();
 closeScanResultModal();
+closeFullscreenDetails();
 stopQRScanner();
 }
 });
@@ -2509,6 +2746,7 @@ stopQRScanner();
 console.log('🍃 Panilkanda Tea Factory Machine Tracker loaded.');
 console.log('📦 Machines:', getMachines().length);
 console.log('📂 Sections:', getSections().length);
+console.log('🔗 Base URL:', BASE_URL);
 </script>
 </body>
 </html>
