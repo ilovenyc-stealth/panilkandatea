@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🍃 Panilkanda Tea Factory</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍃</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -28,9 +28,9 @@
             --warning-light: #ffe0b2;
             --info: #1976d2;
             --info-light: #e3f2fd;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 15px rgba(0,0,0,0.06);
-            --shadow-lg: 0 8px 25px rgba(46,125,50,0.15);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 8px 25px rgba(46, 125, 50, 0.15);
             --radius-sm: 12px;
             --radius-md: 16px;
             --radius-lg: 20px;
@@ -67,7 +67,7 @@
             transform: translateX(-100%);
             transition: transform 0.3s ease;
             overflow-y: auto;
-            box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
         }
@@ -131,6 +131,7 @@
             padding: 8px 20px;
             font-size: 13px;
         }
+
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -138,7 +139,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0, 0, 0, 0.4);
             z-index: 150;
         }
         .sidebar-overlay.active {
@@ -160,7 +161,7 @@
             border-radius: 50%;
             font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             align-items: center;
             justify-content: center;
         }
@@ -170,10 +171,10 @@
             flex: 1;
             max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: var(--radius-lg);
             padding: 25px 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             transition: margin-left 0.3s ease;
             margin: 20px;
             margin-left: calc(var(--sidebar-width) + 20px);
@@ -192,7 +193,7 @@
             justify-content: space-around;
             align-items: center;
             z-index: 100;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
         }
         .bottom-nav a {
             display: flex;
@@ -233,7 +234,7 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            box-shadow: 0 8px 25px rgba(46,125,50,0.35);
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.35);
             flex-shrink: 0;
         }
         .logo-wrapper i {
@@ -291,7 +292,7 @@
             color: var(--primary-dark);
         }
         .tab-btn:hover:not(.active) {
-            background: rgba(255,255,255,0.6);
+            background: rgba(255, 255, 255, 0.6);
         }
 
         /* ─── Tab Content ─── */
@@ -303,8 +304,14 @@
             display: block;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* ─── Sub‑tabs ─── */
@@ -375,7 +382,9 @@
             color: var(--primary);
             width: 14px;
         }
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             padding: 10px 14px;
             border: 2px solid var(--primary-light);
             border-radius: 10px;
@@ -384,7 +393,9 @@
             background: white;
             width: 100%;
         }
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             outline: none;
             border-color: var(--primary);
         }
@@ -545,7 +556,7 @@
             padding: 16px;
             background: white;
             border-radius: 14px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
         .qr-display canvas {
             border-radius: 10px;
@@ -590,12 +601,12 @@
         }
         .result-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 8px 14px;
         }
         .result-item {
             padding: 6px 0;
-            border-bottom: 1px solid rgba(46,125,50,0.1);
+            border-bottom: 1px solid rgba(46, 125, 50, 0.1);
             font-size: 13px;
         }
         .result-item label {
@@ -608,7 +619,7 @@
         /* ─── Stats ─── */
         .stat-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 12px;
         }
         .stat-card {
@@ -658,14 +669,20 @@
             font-size: 13px;
             animation: slideIn 0.3s;
             max-width: 300px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         .toast.error {
             background: var(--danger);
         }
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(60px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         /* ─── Modal ─── */
@@ -676,7 +693,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -726,7 +743,9 @@
 
         /* ─── Responsive ─── */
         @media (max-width: 768px) {
-            body { padding: 10px; }
+            body {
+                padding: 10px;
+            }
             .main-content {
                 margin: 10px 0;
                 padding: 15px 10px;
@@ -734,13 +753,28 @@
                 margin-left: 0 !important;
                 margin-right: 0;
             }
-            .sidebar { width: 280px; }
-            .hamburger { display: flex; }
-            .bottom-nav { display: flex; }
-            .header { flex-direction: column; text-align: center; }
-            .header-text h1 { font-size: 20px; }
-            .form-grid { grid-template-columns: 1fr; }
-            input, select, textarea {
+            .sidebar {
+                width: 280px;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .bottom-nav {
+                display: flex;
+            }
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .header-text h1 {
+                font-size: 20px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            input,
+            select,
+            textarea {
                 font-size: 16px;
                 padding: 12px 14px;
             }
@@ -763,19 +797,40 @@
                 align-items: flex-start;
                 gap: 5px;
             }
-            .qr-container { grid-template-columns: 1fr; }
-            .info-box { flex-direction: column; align-items: flex-start; }
-            .modal-content { padding: 15px; margin: 10px; }
+            .qr-container {
+                grid-template-columns: 1fr;
+            }
+            .info-box {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .modal-content {
+                padding: 15px;
+                margin: 10px;
+            }
             .sub-tabs {
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: none;
             }
-            .sub-tabs::-webkit-scrollbar { display: none; }
-            .tabs { gap: 2px; padding: 4px; }
-            .tab-btn { padding: 12px 16px; font-size: 13px; min-height: 44px; }
-            .sidebar-overlay.active { display: block; }
-            .main-content { margin-bottom: 80px; }
+            .sub-tabs::-webkit-scrollbar {
+                display: none;
+            }
+            .tabs {
+                gap: 2px;
+                padding: 4px;
+            }
+            .tab-btn {
+                padding: 12px 16px;
+                font-size: 13px;
+                min-height: 44px;
+            }
+            .sidebar-overlay.active {
+                display: block;
+            }
+            .main-content {
+                margin-bottom: 80px;
+            }
             #qrReaderContainer {
                 min-height: 200px;
                 padding: 8px;
@@ -784,16 +839,23 @@
                 max-height: 300px;
             }
         }
+
         @media (min-width: 769px) {
-            .hamburger { display: none; }
-            .bottom-nav { display: none; }
+            .hamburger {
+                display: none;
+            }
+            .bottom-nav {
+                display: none;
+            }
             .sidebar {
                 transform: translateX(0);
                 position: fixed;
                 height: 100vh;
-                box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+                box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
             }
-            .sidebar-overlay { display: none !important; }
+            .sidebar-overlay {
+                display: none !important;
+            }
             .main-content {
                 margin-left: calc(var(--sidebar-width) + 20px);
                 margin-top: 20px;
@@ -1371,20 +1433,7 @@
 
             const container = document.getElementById('qrCanvasContainer');
             container.innerHTML = '';
-            // Store ALL machine data in QR for self-contained scanning
-            const qrData = {
-                id: m.id,
-                name: m.name,
-                section: m.section,
-                sectionName: getSectionName(m.section),
-                manufacturer: m.manufacturer || '',
-                model: m.model || '',
-                serialNumber: m.serialNumber || '',
-                installationDate: m.installationDate || '',
-                status: m.status || 'working',
-                notes: m.notes || ''
-            };
-            const data = JSON.stringify(qrData);
+            const data = JSON.stringify({ id: m.id, name: m.name, section: m.section });
             try {
                 qrCodeInstance = new QRCode(container, {
                     text: data,
@@ -1431,188 +1480,156 @@
         }
 
         // ============================================================
-        // QR SCANNER - IMPROVED FOR RELIABILITY
+        // QR SCANNER - FIXED VERSION
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
+        let scannerInitialized = false;
 
         function startQRScanner() {
             const container = document.getElementById('qrReaderContainer');
             const result = document.getElementById('scanResult');
             result.innerHTML = '';
 
+            // Reset any previous state
             if (scannerRunning) {
                 toast('Scanner already running.');
                 return;
             }
 
             if (typeof Html5Qrcode === 'undefined') {
-                toast('QR Scanner library not loaded. Please refresh.', true);
+                toast('QR Scanner library not loaded. Please refresh and try again.', true);
                 return;
             }
 
+            // Check if browser supports camera
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                toast('Camera not supported on this device.', true);
+                toast('Your browser does not support camera access. Please use a modern browser.', true);
                 return;
             }
 
+            // Show container with loading state
             container.style.display = 'block';
-            container.innerHTML = `
-                <div class="scanner-loading">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <div>Initializing camera...</div>
-                    <div style="font-size:12px;color:#666;margin-top:8px;">Please allow camera access.</div>
-                </div>
-            `;
+            container.innerHTML = '<div class="scanner-loading"><i class="fas fa-spinner fa-spin"></i> Initializing camera...</div>';
 
+            // Clean up any existing scanner instance
             if (html5QrCode) {
-                try { html5QrCode.stop().catch(() => {}); } catch (e) {}
-                try { html5QrCode.clear().catch(() => {}); } catch (e) {}
+                try {
+                    html5QrCode.stop().catch(() => {});
+                } catch (e) {}
+                try {
+                    html5QrCode.clear().catch(() => {});
+                } catch (e) {}
                 html5QrCode = null;
+                scannerInitialized = false;
             }
 
-            // Try rear camera first, fallback to front
+            // Small delay to ensure DOM is ready
             setTimeout(function() {
                 try {
+                    // Create new scanner instance
                     html5QrCode = new Html5Qrcode("qrReaderContainer");
 
                     const config = {
-                        fps: 20,
+                        fps: 15,
                         qrbox: { width: 280, height: 280 },
                         aspectRatio: 1.0
                     };
 
-                    html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
-                        .then(() => {
-                            scannerRunning = true;
-                            toast('📷 Camera ready. Point at a QR code.');
-                            const loadEl = container.querySelector('.scanner-loading');
-                            if (loadEl) loadEl.remove();
-                        })
-                        .catch(function(err) {
-                            console.warn('Rear camera failed, trying front:', err);
-                            // Fallback to front camera
-                            html5QrCode.start({ facingMode: "user" }, config, onScanSuccess, onScanFailure)
-                                .then(() => {
-                                    scannerRunning = true;
-                                    toast('📷 Camera ready (front).');
-                                    const loadEl = container.querySelector('.scanner-loading');
-                                    if (loadEl) loadEl.remove();
-                                })
-                                .catch(function(err2) {
-                                    console.error('All cameras failed:', err2);
-                                    if (err2.message && err2.message.includes('NotAllowedError')) {
-                                        toast('Camera access denied. Please allow camera permissions.', true);
-                                    } else if (err2.message && err2.message.includes('NotFoundError')) {
-                                        toast('No camera found on this device.', true);
-                                    } else {
-                                        toast('Failed to start camera: ' + err2.message, true);
-                                    }
-                                    container.style.display = 'none';
-                                    scannerRunning = false;
-                                    html5QrCode = null;
-                                });
-                        });
+                    // Start scanning
+                    html5QrCode.start({ facingMode: "environment" },
+                        config,
+                        onScanSuccess,
+                        onScanFailure
+                    ).then(() => {
+                        scannerRunning = true;
+                        scannerInitialized = true;
+                        toast('📷 Camera started. Point at a QR code.');
+                    }).catch(function(err) {
+                        console.error('Scanner start error:', err);
+                        // Try with rear camera fallback
+                        if (err.message && err.message.includes('NotAllowedError')) {
+                            toast('Camera access denied. Please allow camera permissions and try again.', true);
+                        } else if (err.message && err.message.includes('NotFoundError')) {
+                            toast('No camera found on this device.', true);
+                        } else {
+                            toast('Failed to start camera: ' + err.message, true);
+                        }
+                        container.style.display = 'none';
+                        scannerRunning = false;
+                        scannerInitialized = false;
+                        html5QrCode = null;
+                    });
 
                 } catch (err) {
-                    console.error('Scanner init error:', err);
-                    toast('Error: ' + err.message, true);
+                    console.error('QR Scanner initialization error:', err);
+                    toast('Error starting camera: ' + err.message, true);
                     container.style.display = 'none';
                     scannerRunning = false;
+                    scannerInitialized = false;
                     html5QrCode = null;
                 }
-            }, 300);
+            }, 200);
         }
 
         function onScanSuccess(decodedText, decodedResult) {
             const result = document.getElementById('scanResult');
+            // Vibrate on success if supported
             if (navigator.vibrate) navigator.vibrate(100);
 
-            // Try to parse as JSON
-            let data = null;
-            let machineId = null;
-            let machineData = null;
-
             try {
-                data = JSON.parse(decodedText);
-            } catch (e) {
-                // Not JSON – check if it's a plain ID (e.g., "M0001")
-                if (decodedText.trim().match(/^M\d{4}$/)) {
-                    machineId = decodedText.trim();
-                } else {
-                    result.innerHTML =
-                        `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not a valid QR.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
-                    toast('Invalid QR format.', true);
-                    return;
-                }
-            }
-
-            if (data) {
+                const data = JSON.parse(decodedText);
                 if (data.id) {
-                    machineId = data.id;
-                    // If full data is present, store it as fallback
-                    if (data.name && data.section) {
-                        machineData = data;
+                    const machines = getMachines();
+                    const m = machines.find(x => x.id === data.id);
+                    if (m) {
+                        result.innerHTML = `
+                            <div class="result-card">
+                                <h4 style="margin-bottom:8px;">✅ Machine Found</h4>
+                                <div class="result-grid">
+                                    <div class="result-item"><label>ID</label>${esc(m.id)}</div>
+                                    <div class="result-item"><label>Name</label>${esc(m.name)}</div>
+                                    <div class="result-item"><label>Section</label>${esc(getSectionName(m.section))}</div>
+                                    <div class="result-item"><label>Manufacturer</label>${esc(m.manufacturer || '-')}</div>
+                                    <div class="result-item"><label>Model</label>${esc(m.model || '-')}</div>
+                                    <div class="result-item"><label>Serial</label>${esc(m.serialNumber || '-')}</div>
+                                    <div class="result-item"><label>Status</label>${statusLabel(m.status)}</div>
+                                    <div class="result-item"><label>Installed</label>${fmtDate(m.installationDate)}</div>
+                                </div>
+                                ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
+                                <div class="btn-group" style="margin-top:12px;">
+                                    <button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
+                                    <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
+                                    <button onclick="document.getElementById('lookupInput').value='${esc(m.id)}';switchToTab('lookup');lookupMachine();" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-right"></i> View Details</button>
+                                </div>
+                            </div>
+                        `;
+                        toast('✅ Found: ' + m.name);
+                        // Auto-stop after successful scan
+                        stopQRScanner();
+                        return;
+                    } else {
+                        result.innerHTML =
+                            `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Machine with ID "${esc(data.id)}" not found in database.</p></div>`;
+                        toast('Machine not found in database.', true);
+                        return;
                     }
-                } else {
-                    result.innerHTML =
-                        `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ JSON does not contain 'id'.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
-                    toast('Missing ID in JSON.', true);
-                    return;
                 }
+                result.innerHTML =
+                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ QR code data does not contain a valid machine ID.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+            } catch (e) {
+                result.innerHTML =
+                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not valid JSON.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                toast('Invalid QR code format.', true);
             }
-
-            if (machineId) {
-                // First, try to find in database
-                const machines = getMachines();
-                const dbMachine = machines.find(x => x.id === machineId);
-                if (dbMachine) {
-                    displayMachineResult(dbMachine, result);
-                    toast('✅ Found: ' + dbMachine.name);
-                    setTimeout(() => stopQRScanner(), 1000);
-                    return;
-                } else if (machineData && machineData.id === machineId) {
-                    // Use data from QR (self-contained)
-                    displayMachineResult(machineData, result);
-                    toast('✅ Found (from QR): ' + machineData.name);
-                    setTimeout(() => stopQRScanner(), 1000);
-                    return;
-                } else {
-                    result.innerHTML =
-                        `<div class="result-card" style="border-color:var(--danger);"><p>❌ Machine with ID "${esc(machineId)}" not found in database.</p></div>`;
-                    toast('Machine not found in database.', true);
-                    return;
-                }
-            }
-        }
-
-        function displayMachineResult(m, result) {
-            const sectionName = m.sectionName || getSectionName(m.section) || m.section || '-';
-            result.innerHTML = `
-                <div class="result-card">
-                    <h4 style="margin-bottom:8px;">✅ Machine Found</h4>
-                    <div class="result-grid">
-                        <div class="result-item"><label>ID</label>${esc(m.id)}</div>
-                        <div class="result-item"><label>Name</label>${esc(m.name)}</div>
-                        <div class="result-item"><label>Section</label>${esc(sectionName)}</div>
-                        <div class="result-item"><label>Manufacturer</label>${esc(m.manufacturer || '-')}</div>
-                        <div class="result-item"><label>Model</label>${esc(m.model || '-')}</div>
-                        <div class="result-item"><label>Serial</label>${esc(m.serialNumber || '-')}</div>
-                        <div class="result-item"><label>Status</label>${statusLabel(m.status)}</div>
-                        <div class="result-item"><label>Installed</label>${fmtDate(m.installationDate)}</div>
-                    </div>
-                    ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
-                    <div class="btn-group" style="margin-top:12px;">
-                        ${m.id && getMachines().find(x => x.id === m.id) ? `<button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>` : ''}
-                        <button onclick="document.getElementById('lookupInput').value='${esc(m.id)}';switchToTab('lookup');lookupMachine();" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-right"></i> View Details</button>
-                        <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
-                    </div>
-                </div>
-            `;
         }
 
         function onScanFailure(err) {
-            // Silent - normal during scanning
+            // Silent - this fires continuously during scanning
+            // Only log if it's an actual error, not the normal "no code found" messages
+            if (err && err !== 'No QR code found' && !err.includes('No QR')) {
+                console.debug('Scan failure:', err);
+            }
         }
 
         function stopQRScanner() {
@@ -1622,16 +1639,19 @@
                 try {
                     html5QrCode.stop().then(() => {
                         scannerRunning = false;
+                        scannerInitialized = false;
                         container.style.display = 'none';
                         container.innerHTML = '';
                         toast('Scanner stopped.');
                     }).catch(() => {
                         scannerRunning = false;
+                        scannerInitialized = false;
                         container.style.display = 'none';
                         container.innerHTML = '';
                     });
                 } catch (e) {
                     scannerRunning = false;
+                    scannerInitialized = false;
                     container.style.display = 'none';
                     container.innerHTML = '';
                 }
@@ -1639,6 +1659,7 @@
                 container.style.display = 'none';
                 container.innerHTML = '';
                 scannerRunning = false;
+                scannerInitialized = false;
             }
         }
 
@@ -1742,6 +1763,7 @@
             document.getElementById('editNotes').value = m.notes || '';
             loadSectionsDropdown('editSection', m.section);
             document.getElementById('editModal').classList.add('active');
+            // Stop scanner if open
             stopQRScanner();
         }
 
@@ -1830,6 +1852,7 @@
         // NAVIGATION
         // ============================================================
         function switchToTab(name) {
+            // Top tabs
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             const topBtn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
             if (topBtn) topBtn.classList.add('active');
@@ -1844,10 +1867,12 @@
             if (name === 'qr') populateQRSelect();
             if (name !== 'scan') stopQRScanner();
 
+            // Sidebar
             document.querySelectorAll('.sidebar-nav > a').forEach(a => a.classList.remove('active'));
             const sidebarLink = document.querySelector(`.sidebar-nav > a[data-tab="${name}"]`);
             if (sidebarLink) sidebarLink.classList.add('active');
 
+            // Bottom nav
             document.querySelectorAll('#bottomNav a').forEach(a => {
                 a.classList.remove('active');
                 if (a.dataset.tab === name) a.classList.add('active');
@@ -1980,6 +2005,7 @@
             refreshList();
             refreshDashboard();
 
+            // Ensure first sub-tab is active
             const firstSub = document.querySelector('#assetSubTabs .sub-tab');
             if (firstSub) firstSub.click();
 
@@ -1988,6 +2014,7 @@
                 switchToTab(hash);
             }
 
+            // Stop scanner on page unload
             window.addEventListener('beforeunload', function() {
                 stopQRScanner();
             });
@@ -2018,4 +2045,4 @@
         console.log('📂 Sections:', getSections().length);
     </script>
 </body>
-</html>
+</html> 
