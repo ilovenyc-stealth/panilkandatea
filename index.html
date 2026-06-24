@@ -724,23 +724,6 @@
             text-align: center;
         }
 
-        .scanner-upload-area {
-            margin-top: 12px;
-            padding: 20px;
-            border: 2px dashed var(--primary-light);
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: background 0.2s;
-            background: #fafffe;
-        }
-        .scanner-upload-area:hover {
-            background: var(--primary-bg);
-        }
-        .scanner-upload-area input[type="file"] {
-            display: none;
-        }
-
         /* ─── Responsive ─── */
         @media (max-width: 768px) {
             body { padding: 10px; }
@@ -1034,14 +1017,6 @@
                     <button onclick="stopQRScanner()" class="btn btn-danger" id="stopScanBtn"><i class="fas fa-stop"></i> Stop</button>
                 </div>
                 <div id="qrReaderContainer"></div>
-                <div style="margin-top:10px; text-align:center; color:#666; font-size:13px;">
-                    <i class="fas fa-arrow-down"></i> Or upload a QR code image:
-                </div>
-                <div class="scanner-upload-area" id="uploadArea" onclick="document.getElementById('qrFileInput').click()">
-                    <i class="fas fa-cloud-upload-alt" style="font-size:24px;color:var(--primary);"></i>
-                    <p style="margin-top:6px;font-size:13px;">Tap to select a QR code image from your device</p>
-                    <input type="file" id="qrFileInput" accept="image/*" />
-                </div>
                 <div id="scanResult" style="margin-top:12px;"></div>
             </div>
         </div>
@@ -1396,7 +1371,7 @@
 
             const container = document.getElementById('qrCanvasContainer');
             container.innerHTML = '';
-            // Store full machine data in QR for self-contained scanning
+            // Store ALL machine data in QR for self-contained scanning
             const qrData = {
                 id: m.id,
                 name: m.name,
@@ -1456,12 +1431,11 @@
         }
 
         // ============================================================
-        // QR SCANNER - ENHANCED FOR MOBILE
+        // QR SCANNER - IMPROVED FOR RELIABILITY
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
 
-        // --- Start camera scanner ---
         function startQRScanner() {
             const container = document.getElementById('qrReaderContainer');
             const result = document.getElementById('scanResult');
@@ -1482,7 +1456,6 @@
                 return;
             }
 
-            // Show container with loading state
             container.style.display = 'block';
             container.innerHTML = `
                 <div class="scanner-loading">
@@ -1492,14 +1465,13 @@
                 </div>
             `;
 
-            // Clean up existing scanner
             if (html5QrCode) {
                 try { html5QrCode.stop().catch(() => {}); } catch (e) {}
                 try { html5QrCode.clear().catch(() => {}); } catch (e) {}
                 html5QrCode = null;
             }
 
-            // Small delay to ensure DOM is ready
+            // Try rear camera first, fallback to front
             setTimeout(function() {
                 try {
                     html5QrCode = new Html5Qrcode("qrReaderContainer");
@@ -1510,17 +1482,15 @@
                         aspectRatio: 1.0
                     };
 
-                    // Start with rear camera
                     html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
                         .then(() => {
                             scannerRunning = true;
                             toast('📷 Camera ready. Point at a QR code.');
-                            // Remove loading
                             const loadEl = container.querySelector('.scanner-loading');
                             if (loadEl) loadEl.remove();
                         })
                         .catch(function(err) {
-                            console.error('Scanner start error:', err);
+                            console.warn('Rear camera failed, trying front:', err);
                             // Fallback to front camera
                             html5QrCode.start({ facingMode: "user" }, config, onScanSuccess, onScanFailure)
                                 .then(() => {
@@ -1530,7 +1500,7 @@
                                     if (loadEl) loadEl.remove();
                                 })
                                 .catch(function(err2) {
-                                    console.error('Fallback error:', err2);
+                                    console.error('All cameras failed:', err2);
                                     if (err2.message && err2.message.includes('NotAllowedError')) {
                                         toast('Camera access denied. Please allow camera permissions.', true);
                                     } else if (err2.message && err2.message.includes('NotFoundError')) {
@@ -1554,12 +1524,11 @@
             }, 300);
         }
 
-        // --- Handle successful scan ---
         function onScanSuccess(decodedText, decodedResult) {
             const result = document.getElementById('scanResult');
             if (navigator.vibrate) navigator.vibrate(100);
 
-            // Try to parse JSON
+            // Try to parse as JSON
             let data = null;
             let machineId = null;
             let machineData = null;
@@ -1567,7 +1536,7 @@
             try {
                 data = JSON.parse(decodedText);
             } catch (e) {
-                // Not JSON – check if it's just a plain ID string (like "M0001")
+                // Not JSON – check if it's a plain ID (e.g., "M0001")
                 if (decodedText.trim().match(/^M\d{4}$/)) {
                     machineId = decodedText.trim();
                 } else {
@@ -1578,11 +1547,10 @@
                 }
             }
 
-            // If we have JSON, extract ID or full data
             if (data) {
                 if (data.id) {
                     machineId = data.id;
-                    // If full machine data is present, use it as fallback
+                    // If full data is present, store it as fallback
                     if (data.name && data.section) {
                         machineData = data;
                     }
@@ -1594,35 +1562,31 @@
                 }
             }
 
-            // Now lookup machine by ID in database
             if (machineId) {
+                // First, try to find in database
                 const machines = getMachines();
-                const m = machines.find(x => x.id === machineId);
-                if (m) {
-                    displayMachineResult(m, result);
-                    toast('✅ Found: ' + m.name);
+                const dbMachine = machines.find(x => x.id === machineId);
+                if (dbMachine) {
+                    displayMachineResult(dbMachine, result);
+                    toast('✅ Found: ' + dbMachine.name);
+                    setTimeout(() => stopQRScanner(), 1000);
+                    return;
+                } else if (machineData && machineData.id === machineId) {
+                    // Use data from QR (self-contained)
+                    displayMachineResult(machineData, result);
+                    toast('✅ Found (from QR): ' + machineData.name);
                     setTimeout(() => stopQRScanner(), 1000);
                     return;
                 } else {
-                    // Not in DB – check if we have full data from QR
-                    if (machineData && machineData.id === machineId) {
-                        displayMachineResult(machineData, result);
-                        toast('✅ Found (from QR): ' + machineData.name);
-                        setTimeout(() => stopQRScanner(), 1000);
-                        return;
-                    } else {
-                        result.innerHTML =
-                            `<div class="result-card" style="border-color:var(--danger);"><p>❌ Machine with ID "${esc(machineId)}" not found in database.</p></div>`;
-                        toast('Machine not found in database.', true);
-                        return;
-                    }
+                    result.innerHTML =
+                        `<div class="result-card" style="border-color:var(--danger);"><p>❌ Machine with ID "${esc(machineId)}" not found in database.</p></div>`;
+                    toast('Machine not found in database.', true);
+                    return;
                 }
             }
         }
 
-        // --- Display machine info ---
         function displayMachineResult(m, result) {
-            // Ensure we have section name
             const sectionName = m.sectionName || getSectionName(m.section) || m.section || '-';
             result.innerHTML = `
                 <div class="result-card">
@@ -1648,7 +1612,7 @@
         }
 
         function onScanFailure(err) {
-            // silent - normal during scanning
+            // Silent - normal during scanning
         }
 
         function stopQRScanner() {
@@ -1677,38 +1641,6 @@
                 scannerRunning = false;
             }
         }
-
-        // --- QR Upload from Image ---
-        document.getElementById('qrFileInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const result = document.getElementById('scanResult');
-            result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;"><i class="fas fa-spinner fa-spin"></i> Decoding QR from image...</p>';
-
-            // Use Html5Qrcode to scan the file
-            if (typeof Html5Qrcode === 'undefined') {
-                toast('QR library not loaded.', true);
-                return;
-            }
-
-            const qrScanner = new Html5Qrcode("scanResult");
-            qrScanner.scanFile(file, true)
-                .then(decodedText => {
-                    // Process the decoded text
-                    onScanSuccess(decodedText, null);
-                    qrScanner.clear().catch(() => {});
-                })
-                .catch(err => {
-                    console.error('Image decode error:', err);
-                    result.innerHTML =
-                        `<div class="result-card" style="border-color:var(--danger);"><p>❌ Could not decode QR from image. Please try another image.</p></div>`;
-                    toast('Failed to decode QR from image.', true);
-                });
-
-            // Reset input so same file can be selected again
-            this.value = '';
-        });
 
         // ============================================================
         // LOOKUP
