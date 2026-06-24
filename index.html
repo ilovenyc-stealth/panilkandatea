@@ -596,7 +596,7 @@
                 </div>
             </div>
 
-            <!-- ==================== MANAGE SECTIONS (NEW) ==================== -->
+            <!-- ==================== MANAGE SECTIONS ==================== -->
             <div id="sub-manageSections" class="sub-content">
                 <div class="card">
                     <h3 style="margin-bottom:14px;"><i class="fas fa-cog"></i> Manage Sections</h3>
@@ -993,7 +993,7 @@
         }
 
         // ============================================================
-        // SECTION MANAGEMENT (NEW)
+        // SECTION MANAGEMENT
         // ============================================================
         function renderSectionList() {
             const container = document.getElementById('sectionListContainer');
@@ -1036,9 +1036,7 @@
             if (!confirm(msg)) return;
 
             const db = getDB();
-            // Remove section
             db.sections = db.sections.filter(s => s.id !== sectionId);
-            // Update machines that had this section
             db.machines = db.machines.map(m => {
                 if (m.section === sectionId) {
                     m.section = ''; // Uncategorised
@@ -1095,7 +1093,6 @@
 
             const container = document.getElementById('qrCanvasContainer');
             container.innerHTML = '';
-            // Store ALL machine data in QR for self-contained scanning
             const qrData = {
                 id: m.id,
                 name: m.name,
@@ -1155,7 +1152,7 @@
         }
 
         // ============================================================
-        // QR SCANNER - IMPROVED
+        // QR SCANNER
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
@@ -1267,7 +1264,6 @@
             showDebug('Decoded: ' + decodedText.substring(0, 100) + (decodedText.length > 100 ? '...' : ''));
             if (navigator.vibrate) navigator.vibrate(100);
 
-            // Try to parse as JSON
             let data = null;
             let machineId = null;
             let machineData = null;
@@ -1276,7 +1272,6 @@
                 data = JSON.parse(decodedText);
                 showDebug('Parsed as JSON');
             } catch (e) {
-                // Not JSON – check if it's a plain ID
                 if (decodedText.trim().match(/^M\d{4}$/)) {
                     machineId = decodedText.trim();
                     showDebug('Plain ID detected: ' + machineId);
@@ -1308,7 +1303,6 @@
             }
 
             if (machineId) {
-                // First, try to find in database
                 const machines = getMachines();
                 const dbMachine = machines.find(x => x.id === machineId);
                 if (dbMachine) {
@@ -1333,6 +1327,197 @@
             }
         }
 
+        // ============================================================
+        // NEW: View Full Page & Export Single Machine
+        // ============================================================
+        function viewFullPage(machine) {
+            const sectionName = machine.sectionName || getSectionName(machine.section) || machine.section || '-';
+            const htmlContent = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Machine Details - ${esc(machine.id)}</title>
+                <style>
+                    * { margin:0; padding:0; box-sizing:border-box; }
+                    body {
+                        font-family: 'Inter', sans-serif;
+                        background: #ffffff;
+                        min-height: 100vh;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 20px;
+                    }
+                    .card {
+                        max-width: 800px;
+                        width: 100%;
+                        background: #f9fafb;
+                        border-radius: 20px;
+                        padding: 30px;
+                        box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+                        border: 1px solid #e5e7eb;
+                    }
+                    .header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 24px;
+                        border-bottom: 2px solid #e5e7eb;
+                        padding-bottom: 16px;
+                    }
+                    .header h1 {
+                        font-size: 24px;
+                        font-weight: 700;
+                        color: #1b3b1b;
+                    }
+                    .header .id {
+                        font-size: 14px;
+                        color: #6b7280;
+                        background: #e5e7eb;
+                        padding: 4px 12px;
+                        border-radius: 20px;
+                    }
+                    .grid {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 16px;
+                    }
+                    .item {
+                        background: white;
+                        border-radius: 12px;
+                        padding: 14px 16px;
+                        border: 1px solid #e5e7eb;
+                    }
+                    .item label {
+                        font-size: 11px;
+                        text-transform: uppercase;
+                        color: #6b7280;
+                        display: block;
+                        margin-bottom: 4px;
+                        font-weight: 600;
+                    }
+                    .item .value {
+                        font-size: 15px;
+                        font-weight: 500;
+                        color: #1b3b1b;
+                        word-break: break-word;
+                    }
+                    .full {
+                        grid-column: 1 / -1;
+                    }
+                    .status-badge {
+                        display: inline-block;
+                        padding: 4px 12px;
+                        border-radius: 50px;
+                        font-weight: 600;
+                        font-size: 12px;
+                    }
+                    .status-badge.working { background: #c8e6c9; color: #1b5e20; }
+                    .status-badge.maintenance { background: #ffe0b2; color: #e65100; }
+                    .status-badge.out-of-service { background: #ffcdd2; color: #c62828; }
+                    .footer {
+                        margin-top: 24px;
+                        text-align: center;
+                        font-size: 13px;
+                        color: #6b7280;
+                        border-top: 1px solid #e5e7eb;
+                        padding-top: 16px;
+                    }
+                    .btn-group {
+                        margin-top: 20px;
+                        display: flex;
+                        gap: 10px;
+                        justify-content: center;
+                    }
+                    .btn {
+                        padding: 10px 24px;
+                        border: none;
+                        border-radius: 50px;
+                        font-weight: 600;
+                        font-size: 13px;
+                        cursor: pointer;
+                        text-decoration: none;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 8px;
+                        background: #2e7d32;
+                        color: white;
+                        transition: background 0.2s;
+                    }
+                    .btn:hover { background: #1b5e20; }
+                    .btn.secondary { background: #e5e7eb; color: #1b3b1b; }
+                    .btn.secondary:hover { background: #d1d5db; }
+                    @media (max-width: 600px) {
+                        .grid { grid-template-columns: 1fr; }
+                        .header { flex-direction: column; align-items: flex-start; gap: 8px; }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="card">
+                    <div class="header">
+                        <h1>🍃 Machine Details</h1>
+                        <span class="id">${esc(machine.id)}</span>
+                    </div>
+                    <div class="grid">
+                        <div class="item"><label>Name</label><div class="value">${esc(machine.name)}</div></div>
+                        <div class="item"><label>Section</label><div class="value">${esc(sectionName)}</div></div>
+                        <div class="item"><label>Manufacturer</label><div class="value">${esc(machine.manufacturer || '-')}</div></div>
+                        <div class="item"><label>Model</label><div class="value">${esc(machine.model || '-')}</div></div>
+                        <div class="item"><label>Serial Number</label><div class="value">${esc(machine.serialNumber || '-')}</div></div>
+                        <div class="item"><label>Installation Date</label><div class="value">${fmtDate(machine.installationDate)}</div></div>
+                        <div class="item full"><label>Status</label><div class="value"><span class="status-badge ${statusCls(machine.status)}">${statusLabel(machine.status)}</span></div></div>
+                        ${machine.notes ? `<div class="item full"><label>Notes</label><div class="value">${esc(machine.notes)}</div></div>` : ''}
+                    </div>
+                    <div class="btn-group">
+                        <button onclick="window.print()" class="btn secondary"><i class="fas fa-print"></i> Print</button>
+                        <button onclick="window.close()" class="btn secondary"><i class="fas fa-times"></i> Close</button>
+                    </div>
+                    <div class="footer">
+                        Panilkanda Tea Factory · Machine Tracker
+                    </div>
+                </div>
+            </body>
+            </html>
+            `;
+            const win = window.open('', '_blank');
+            if (win) {
+                win.document.write(htmlContent);
+                win.document.close();
+                win.focus();
+            } else {
+                toast('Please allow popups to view full page.', true);
+            }
+        }
+
+        function exportSingleMachineCSV(machine) {
+            const headers = ['ID', 'Name', 'Section', 'Manufacturer', 'Model', 'Serial Number', 'Installation Date', 'Status', 'Notes'];
+            const sectionName = machine.sectionName || getSectionName(machine.section) || machine.section || '-';
+            const row = [
+                machine.id,
+                machine.name,
+                sectionName,
+                machine.manufacturer || '',
+                machine.model || '',
+                machine.serialNumber || '',
+                machine.installationDate || '',
+                machine.status || '',
+                machine.notes || ''
+            ];
+            let csv = headers.join(',') + '\n';
+            csv += row.map(cell => '"' + String(cell).replace(/"/g, '""') + '"').join(',');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `machine_${machine.id}.csv`;
+            link.click();
+            toast('📥 CSV exported for ' + machine.id);
+        }
+
+        // ============================================================
+        // DISPLAY MACHINE RESULT (updated with new buttons)
+        // ============================================================
         function displayMachineResult(m, result) {
             const sectionName = m.sectionName || getSectionName(m.section) || m.section || '-';
             const inDB = getMachines().find(x => x.id === m.id) !== undefined;
@@ -1352,7 +1537,8 @@
                     ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
                     <div class="btn-group" style="margin-top:12px;">
                         ${inDB ? `<button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>` : ''}
-                        <button onclick="document.getElementById('lookupInput').value='${esc(m.id)}';switchToTab('lookup');lookupMachine();" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-right"></i> View Details</button>
+                        <button onclick="viewFullPage(${JSON.stringify(m).replace(/"/g, '&quot;')})" class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> View Full Page</button>
+                        <button onclick="exportSingleMachineCSV(${JSON.stringify(m).replace(/"/g, '&quot;')})" class="btn btn-success btn-sm" style="background:#2e7d32;color:white;"><i class="fas fa-file-excel"></i> Export to Excel</button>
                         <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
                     </div>
                 </div>
@@ -1360,10 +1546,10 @@
             showDebug('Displayed: ' + m.name);
         }
 
-        function onScanFailure(err) {
-            // Silent - normal during scanning
-        }
+        // ─── onScanFailure ───
+        function onScanFailure(err) { /* silent */ }
 
+        // ─── stopQRScanner ───
         function stopQRScanner() {
             const container = document.getElementById('qrReaderContainer');
 
@@ -1423,7 +1609,6 @@
                     toast('Failed to decode QR from image.', true);
                 });
 
-            // Reset input so same file can be selected again
             this.value = '';
         });
 
