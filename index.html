@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>🍃 Panilkanda Tea Factory</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍃</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -572,22 +572,24 @@
         /* ─── Scanner ─── */
         #qrReaderContainer {
             margin-top: 12px;
-            padding: 16px;
+            padding: 12px;
             background: #000;
             border-radius: 14px;
             text-align: center;
-            min-height: 300px;
+            min-height: 250px;
             display: none;
             position: relative;
+            overflow: hidden;
         }
         #qrReaderContainer video {
             max-width: 100%;
             border-radius: 10px;
             max-height: 400px;
             object-fit: cover;
+            width: 100%;
         }
         #qrReaderContainer #qrReaderContainer__scan_region {
-            min-height: 300px;
+            min-height: 250px;
         }
 
         /* ─── Result Card ─── */
@@ -737,8 +739,30 @@
         .scanner-loading {
             color: #aaa;
             font-size: 14px;
-            padding: 20px;
+            padding: 30px 20px;
             text-align: center;
+        }
+        .scanner-loading i {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .scanner-upload-area {
+            margin-top: 12px;
+            padding: 20px;
+            border: 2px dashed var(--primary-light);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s;
+            background: #fafffe;
+        }
+        .scanner-upload-area:hover {
+            background: var(--primary-bg);
+        }
+        .scanner-upload-area input[type="file"] {
+            display: none;
         }
 
         /* ─── Responsive ─── */
@@ -832,11 +856,11 @@
                 margin-bottom: 80px;
             }
             #qrReaderContainer {
-                min-height: 200px;
+                min-height: 180px;
                 padding: 8px;
             }
             #qrReaderContainer video {
-                max-height: 300px;
+                max-height: 250px;
             }
         }
 
@@ -888,7 +912,7 @@
             <div class="sidebar-sub open" id="sidebarAssetSub">
                 <a href="#" class="active" data-sub="viewAssets"><i class="fas fa-eye"></i> View Assets</a>
                 <a href="#" data-sub="addAsset"><i class="fas fa-plus-circle"></i> Add Asset</a>
-                <a href="#" data-sub="addSection"><i class="fas fa-folder-plus"></i> Add Section</a>
+                <a href="#" data-sub="addSection"><i class="fas-fa-folder-plus"></i> Add Section</a>
             </div>
             <a href="#" data-tab="list"><i class="fas fa-list"></i> All Machines</a>
             <a href="#" data-tab="lookup"><i class="fas fa-search"></i> Lookup</a>
@@ -1079,6 +1103,14 @@
                     <button onclick="stopQRScanner()" class="btn btn-danger" id="stopScanBtn"><i class="fas fa-stop"></i> Stop</button>
                 </div>
                 <div id="qrReaderContainer"></div>
+                <div style="margin-top:10px; text-align:center; color:#666; font-size:13px;">
+                    <i class="fas fa-arrow-down"></i> Or upload a QR code image:
+                </div>
+                <div class="scanner-upload-area" id="uploadArea" onclick="document.getElementById('qrFileInput').click()">
+                    <i class="fas fa-cloud-upload-alt" style="font-size:24px;color:var(--primary);"></i>
+                    <p style="margin-top:6px;font-size:13px;">Tap to select a QR code image from your device</p>
+                    <input type="file" id="qrFileInput" accept="image/*" capture="environment" />
+                </div>
                 <div id="scanResult" style="margin-top:12px;"></div>
             </div>
         </div>
@@ -1433,7 +1465,22 @@
 
             const container = document.getElementById('qrCanvasContainer');
             container.innerHTML = '';
-            const data = JSON.stringify({ id: m.id, name: m.name, section: m.section });
+
+            // Store full machine data in QR for self-contained scanning
+            const qrData = {
+                id: m.id,
+                name: m.name,
+                section: m.section,
+                sectionName: getSectionName(m.section),
+                manufacturer: m.manufacturer || '',
+                model: m.model || '',
+                serialNumber: m.serialNumber || '',
+                installationDate: m.installationDate || '',
+                status: m.status || 'working',
+                notes: m.notes || ''
+            };
+            const data = JSON.stringify(qrData);
+
             try {
                 qrCodeInstance = new QRCode(container, {
                     text: data,
@@ -1480,153 +1527,165 @@
         }
 
         // ============================================================
-        // QR SCANNER - FIXED VERSION
+        // QR SCANNER - ENHANCED FOR MOBILE
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
-        let scannerInitialized = false;
 
         function startQRScanner() {
             const container = document.getElementById('qrReaderContainer');
             const result = document.getElementById('scanResult');
             result.innerHTML = '';
 
-            // Reset any previous state
             if (scannerRunning) {
                 toast('Scanner already running.');
                 return;
             }
 
             if (typeof Html5Qrcode === 'undefined') {
-                toast('QR Scanner library not loaded. Please refresh and try again.', true);
+                toast('QR Scanner library not loaded. Please refresh.', true);
                 return;
             }
 
-            // Check if browser supports camera
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                toast('Your browser does not support camera access. Please use a modern browser.', true);
+                toast('Camera not supported on this device.', true);
                 return;
             }
 
             // Show container with loading state
             container.style.display = 'block';
-            container.innerHTML = '<div class="scanner-loading"><i class="fas fa-spinner fa-spin"></i> Initializing camera...</div>';
+            container.innerHTML = `
+                <div class="scanner-loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <div>Initializing camera...</div>
+                    <div style="font-size:12px;color:#666;margin-top:8px;">Please allow camera access when prompted.</div>
+                </div>
+            `;
 
-            // Clean up any existing scanner instance
+            // Clean up any existing scanner
             if (html5QrCode) {
-                try {
-                    html5QrCode.stop().catch(() => {});
-                } catch (e) {}
-                try {
-                    html5QrCode.clear().catch(() => {});
-                } catch (e) {}
+                try { html5QrCode.stop().catch(() => {}); } catch (e) {}
+                try { html5QrCode.clear().catch(() => {}); } catch (e) {}
                 html5QrCode = null;
-                scannerInitialized = false;
             }
 
-            // Small delay to ensure DOM is ready
             setTimeout(function() {
                 try {
-                    // Create new scanner instance
                     html5QrCode = new Html5Qrcode("qrReaderContainer");
 
                     const config = {
-                        fps: 15,
+                        fps: 20,
                         qrbox: { width: 280, height: 280 },
                         aspectRatio: 1.0
                     };
 
-                    // Start scanning
+                    // Try rear camera first, fallback to any camera
                     html5QrCode.start({ facingMode: "environment" },
                         config,
                         onScanSuccess,
                         onScanFailure
                     ).then(() => {
                         scannerRunning = true;
-                        scannerInitialized = true;
-                        toast('📷 Camera started. Point at a QR code.');
+                        toast('📷 Camera ready. Point at a QR code.');
+                        // Update container - remove loading
+                        const loadEl = container.querySelector('.scanner-loading');
+                        if (loadEl) loadEl.remove();
                     }).catch(function(err) {
                         console.error('Scanner start error:', err);
-                        // Try with rear camera fallback
-                        if (err.message && err.message.includes('NotAllowedError')) {
-                            toast('Camera access denied. Please allow camera permissions and try again.', true);
-                        } else if (err.message && err.message.includes('NotFoundError')) {
-                            toast('No camera found on this device.', true);
-                        } else {
-                            toast('Failed to start camera: ' + err.message, true);
-                        }
-                        container.style.display = 'none';
-                        scannerRunning = false;
-                        scannerInitialized = false;
-                        html5QrCode = null;
+                        // Try with default camera
+                        html5QrCode.start({ facingMode: "user" },
+                            config,
+                            onScanSuccess,
+                            onScanFailure
+                        ).then(() => {
+                            scannerRunning = true;
+                            toast('📷 Camera ready (front). Point at a QR code.');
+                            const loadEl = container.querySelector('.scanner-loading');
+                            if (loadEl) loadEl.remove();
+                        }).catch(function(err2) {
+                            console.error('Second attempt failed:', err2);
+                            if (err2.message && err2.message.includes('NotAllowedError')) {
+                                toast('Camera access denied. Please allow camera permissions.', true);
+                            } else if (err2.message && err2.message.includes('NotFoundError')) {
+                                toast('No camera found on this device.', true);
+                            } else {
+                                toast('Failed to start camera: ' + err2.message, true);
+                            }
+                            container.style.display = 'none';
+                            scannerRunning = false;
+                            html5QrCode = null;
+                        });
                     });
 
                 } catch (err) {
-                    console.error('QR Scanner initialization error:', err);
-                    toast('Error starting camera: ' + err.message, true);
+                    console.error('Scanner init error:', err);
+                    toast('Error: ' + err.message, true);
                     container.style.display = 'none';
                     scannerRunning = false;
-                    scannerInitialized = false;
                     html5QrCode = null;
                 }
-            }, 200);
+            }, 300);
         }
 
         function onScanSuccess(decodedText, decodedResult) {
             const result = document.getElementById('scanResult');
-            // Vibrate on success if supported
             if (navigator.vibrate) navigator.vibrate(100);
 
+            // Try to parse as JSON
             try {
                 const data = JSON.parse(decodedText);
+
+                // Check if it's machine data
                 if (data.id) {
+                    // Try to find in database for full info
                     const machines = getMachines();
                     const m = machines.find(x => x.id === data.id);
-                    if (m) {
-                        result.innerHTML = `
-                            <div class="result-card">
-                                <h4 style="margin-bottom:8px;">✅ Machine Found</h4>
-                                <div class="result-grid">
-                                    <div class="result-item"><label>ID</label>${esc(m.id)}</div>
-                                    <div class="result-item"><label>Name</label>${esc(m.name)}</div>
-                                    <div class="result-item"><label>Section</label>${esc(getSectionName(m.section))}</div>
-                                    <div class="result-item"><label>Manufacturer</label>${esc(m.manufacturer || '-')}</div>
-                                    <div class="result-item"><label>Model</label>${esc(m.model || '-')}</div>
-                                    <div class="result-item"><label>Serial</label>${esc(m.serialNumber || '-')}</div>
-                                    <div class="result-item"><label>Status</label>${statusLabel(m.status)}</div>
-                                    <div class="result-item"><label>Installed</label>${fmtDate(m.installationDate)}</div>
-                                </div>
-                                ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
-                                <div class="btn-group" style="margin-top:12px;">
-                                    <button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
-                                    <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
-                                    <button onclick="document.getElementById('lookupInput').value='${esc(m.id)}';switchToTab('lookup');lookupMachine();" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-right"></i> View Details</button>
-                                </div>
+
+                    // Use QR data as fallback if not in DB
+                    const displayData = m || data;
+
+                    result.innerHTML = `
+                        <div class="result-card">
+                            <h4 style="margin-bottom:8px;">✅ Machine Found ${m ? '' : '(from QR)'}</h4>
+                            <div class="result-grid">
+                                <div class="result-item"><label>ID</label>${esc(displayData.id)}</div>
+                                <div class="result-item"><label>Name</label>${esc(displayData.name)}</div>
+                                <div class="result-item"><label>Section</label>${esc(displayData.sectionName || getSectionName(displayData.section) || displayData.section || '-')}</div>
+                                <div class="result-item"><label>Manufacturer</label>${esc(displayData.manufacturer || '-')}</div>
+                                <div class="result-item"><label>Model</label>${esc(displayData.model || '-')}</div>
+                                <div class="result-item"><label>Serial</label>${esc(displayData.serialNumber || '-')}</div>
+                                <div class="result-item"><label>Status</label>${statusLabel(displayData.status)}</div>
+                                <div class="result-item"><label>Installed</label>${fmtDate(displayData.installationDate)}</div>
                             </div>
-                        `;
-                        toast('✅ Found: ' + m.name);
-                        // Auto-stop after successful scan
-                        stopQRScanner();
-                        return;
-                    } else {
-                        result.innerHTML =
-                            `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Machine with ID "${esc(data.id)}" not found in database.</p></div>`;
-                        toast('Machine not found in database.', true);
-                        return;
-                    }
+                            ${displayData.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(displayData.notes)}</p>` : ''}
+                            <div class="btn-group" style="margin-top:12px;">
+                                ${m ? `<button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>` : ''}
+                                <button onclick="document.getElementById('lookupInput').value='${esc(displayData.id)}';switchToTab('lookup');lookupMachine();" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-right"></i> View Details</button>
+                                <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
+                            </div>
+                        </div>
+                    `;
+                    toast('✅ Found: ' + displayData.name);
+                    // Auto-stop after successful scan
+                    setTimeout(() => stopQRScanner(), 1000);
+                    return;
                 }
+
+                // If not machine data, show raw
                 result.innerHTML =
-                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ QR code data does not contain a valid machine ID.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ QR data is not a machine record.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                toast('QR code does not contain machine data.', true);
+
             } catch (e) {
+                // Not JSON - show raw text
                 result.innerHTML =
-                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not valid JSON.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
-                toast('Invalid QR code format.', true);
+                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned text (not JSON):</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                toast('Scanned data is not a machine QR code.', true);
             }
         }
 
         function onScanFailure(err) {
-            // Silent - this fires continuously during scanning
-            // Only log if it's an actual error, not the normal "no code found" messages
+            // Silent - normal during scanning
             if (err && err !== 'No QR code found' && !err.includes('No QR')) {
                 console.debug('Scan failure:', err);
             }
@@ -1639,19 +1698,16 @@
                 try {
                     html5QrCode.stop().then(() => {
                         scannerRunning = false;
-                        scannerInitialized = false;
                         container.style.display = 'none';
                         container.innerHTML = '';
                         toast('Scanner stopped.');
                     }).catch(() => {
                         scannerRunning = false;
-                        scannerInitialized = false;
                         container.style.display = 'none';
                         container.innerHTML = '';
                     });
                 } catch (e) {
                     scannerRunning = false;
-                    scannerInitialized = false;
                     container.style.display = 'none';
                     container.innerHTML = '';
                 }
@@ -1659,9 +1715,48 @@
                 container.style.display = 'none';
                 container.innerHTML = '';
                 scannerRunning = false;
-                scannerInitialized = false;
             }
         }
+
+        // ─── QR Code Upload (Image File) ───
+        document.getElementById('qrFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const result = document.getElementById('scanResult');
+            result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;"><i class="fas fa-spinner fa-spin"></i> Decoding QR from image...</p>';
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    // Use Html5Qrcode to decode from image
+                    if (typeof Html5Qrcode === 'undefined') {
+                        toast('QR library not loaded.', true);
+                        return;
+                    }
+                    const qrScanner = new Html5Qrcode("scanResult");
+                    qrScanner.scanFile(file, true)
+                        .then(decodedText => {
+                            // Process the decoded text
+                            onScanSuccess(decodedText, null);
+                            // Clean up
+                            qrScanner.clear().catch(() => {});
+                        })
+                        .catch(err => {
+                            console.error('Image decode error:', err);
+                            result.innerHTML =
+                                `<div class="result-card" style="border-color:var(--danger);"><p>❌ Could not decode QR from image. Please try another image.</p></div>`;
+                            toast('Failed to decode QR from image.', true);
+                        });
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            // Reset input so same file can be selected again
+            this.value = '';
+        });
 
         // ============================================================
         // LOOKUP
@@ -1763,7 +1858,6 @@
             document.getElementById('editNotes').value = m.notes || '';
             loadSectionsDropdown('editSection', m.section);
             document.getElementById('editModal').classList.add('active');
-            // Stop scanner if open
             stopQRScanner();
         }
 
@@ -1852,7 +1946,6 @@
         // NAVIGATION
         // ============================================================
         function switchToTab(name) {
-            // Top tabs
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             const topBtn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
             if (topBtn) topBtn.classList.add('active');
@@ -1867,12 +1960,10 @@
             if (name === 'qr') populateQRSelect();
             if (name !== 'scan') stopQRScanner();
 
-            // Sidebar
             document.querySelectorAll('.sidebar-nav > a').forEach(a => a.classList.remove('active'));
             const sidebarLink = document.querySelector(`.sidebar-nav > a[data-tab="${name}"]`);
             if (sidebarLink) sidebarLink.classList.add('active');
 
-            // Bottom nav
             document.querySelectorAll('#bottomNav a').forEach(a => {
                 a.classList.remove('active');
                 if (a.dataset.tab === name) a.classList.add('active');
@@ -1966,7 +2057,6 @@
         // INIT
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Seed data if empty
             const db = getDB();
             if (!db.sections || db.sections.length === 0) {
                 db.sections = [
@@ -2005,7 +2095,6 @@
             refreshList();
             refreshDashboard();
 
-            // Ensure first sub-tab is active
             const firstSub = document.querySelector('#assetSubTabs .sub-tab');
             if (firstSub) firstSub.click();
 
@@ -2014,7 +2103,6 @@
                 switchToTab(hash);
             }
 
-            // Stop scanner on page unload
             window.addEventListener('beforeunload', function() {
                 stopQRScanner();
             });
