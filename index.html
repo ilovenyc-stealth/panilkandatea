@@ -1676,7 +1676,7 @@
         }
 
         // ============================================================
-        // QR SCANNER - FIXED: ALWAYS OPENS BLANK PAGE
+        // QR SCANNER - IMPROVED: robust JSON extraction
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
@@ -1952,97 +1952,76 @@ html5QrCode = null;
 }, 300);
 }
 
-// ─── Scan Success - ALWAYS OPENS BLANK PAGE ───
-function onScanSuccess(decodedText, decodedResult) {
-const result = document.getElementById('scanResult');
-showDebug('Decoded: ' + decodedText.substring(0, 100) + (decodedText.length > 100 ? '...' : ''));
-if (navigator.vibrate) navigator.vibrate(100);
-
-let data = null;
-let machineId = null;
-let machineData = null;
-
-// --- Helper: try to extract a valid JSON object from text ---
-function extractJSONObject(text) {
-    // Try parsing the whole text as JSON first
-    try {
-        return JSON.parse(text);
-    } catch (e) {}
-
-    // Try splitting by newlines and parsing each line
-    const lines = text.split('\n');
-    for (let line of lines) {
-        line = line.trim();
-        if (!line) continue;
-        try {
-            const parsed = JSON.parse(line);
-            if (parsed && typeof parsed === 'object' && parsed.id) {
-                return parsed;
+// ─── Robust JSON extraction ───
+function extractFirstJSON(text) {
+    // Try to find a valid JSON object by scanning for { and matching braces
+    let start = -1;
+    let depth = 0;
+    let i = 0;
+    while (i < text.length) {
+        if (text[i] === '{') {
+            if (start === -1) start = i;
+            depth++;
+        } else if (text[i] === '}') {
+            depth--;
+            if (depth === 0 && start !== -1) {
+                // Potential complete object
+                const candidate = text.substring(start, i + 1);
+                try {
+                    const parsed = JSON.parse(candidate);
+                    if (parsed && typeof parsed === 'object' && parsed.id) {
+                        return parsed;
+                    }
+                } catch (e) { /* ignore */ }
+                // Not valid JSON or missing id, continue searching
+                start = -1;
+                depth = 0;
             }
-        } catch (e) {}
+        }
+        i++;
+        // Reset if depth goes negative (shouldn't happen with valid JSON)
+        if (depth < 0) { depth = 0; start = -1; }
     }
-
-    // Try regex to find first JSON object { ... }
-    const match = text.match(/\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/);
-    if (match) {
-        try {
-            const parsed = JSON.parse(match[0]);
-            if (parsed && typeof parsed === 'object' && parsed.id) {
-                return parsed;
-            }
-        } catch (e) {}
-    }
-
     return null;
 }
 
-// --- Try to extract JSON data ---
-const extracted = extractJSONObject(decodedText);
-if (extracted) {
-    data = extracted;
-    showDebug('Extracted JSON: ' + JSON.stringify(data).substring(0, 100));
-}
+// ─── Scan Success ───
+function onScanSuccess(decodedText, decodedResult) {
+    const result = document.getElementById('scanResult');
+    // Show the raw decoded text in debug
+    showDebug('Decoded: ' + decodedText.substring(0, 200) + (decodedText.length > 200 ? '...' : ''));
+    if (navigator.vibrate) navigator.vibrate(100);
 
-// --- If we have data from JSON ---
-if (data) {
-    if (data.id) {
-        machineId = data.id;
-        if (data.name && data.section) {
-            machineData = data;
-            showDebug('Full machine data from QR: ' + data.name);
-        } else {
-            showDebug('QR contains ID: ' + machineId);
+    let machineId = null;
+    let machineData = null;
+
+    // 1. Try to extract a complete JSON object
+    const jsonData = extractFirstJSON(decodedText);
+    if (jsonData && jsonData.id) {
+        machineId = jsonData.id;
+        machineData = jsonData;
+        showDebug('Extracted JSON: ' + JSON.stringify(jsonData).substring(0, 100));
+    } else {
+        // 2. Check if it's a plain machine ID (MXXXX)
+        const trimmed = decodedText.trim();
+        if (trimmed.match(/^M\d{4}$/)) {
+            machineId = trimmed;
+            showDebug('Plain ID detected: ' + machineId);
         }
-    } else {
-        result.innerHTML = `
-            <div class="result-card error">
-                <p>⚠️ JSON does not contain 'id'.</p>
-                <pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre>
-            </div>`;
-        toast('Missing ID in JSON.', true);
-        showDebug('ERROR: No "id" field in JSON');
-        return;
     }
-} else {
-    // --- If not JSON, check if it's a plain ID ---
-    const trimmed = decodedText.trim();
-    if (trimmed.match(/^M\d{4}$/)) {
-        machineId = trimmed;
-        showDebug('Plain ID detected: ' + machineId);
-    } else {
+
+    if (!machineId) {
         result.innerHTML = `
             <div class="result-card error">
-                <p>⚠️ Scanned data is not a valid QR.</p>
+                <p>⚠️ Could not find a valid machine ID or JSON in the QR.</p>
                 <pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;margin-top:6px;">${esc(decodedText)}</pre>
             </div>`;
         toast('Invalid QR format.', true);
-        showDebug('ERROR: Not JSON and not valid ID format');
+        showDebug('ERROR: No ID found in decoded text.');
         return;
     }
-}
 
-// --- Look up the machine ---
-if (machineId) {
+    // Look up the machine
     const machines = getMachines();
     const dbMachine = machines.find(x => x.id === machineId);
     let displayMachine = null;
@@ -2065,12 +2044,11 @@ if (machineId) {
         return;
     }
 
-    // --- ✅ ALWAYS OPEN BLANK PAGE WITH MACHINE DETAILS ---
+    // ✅ Success – open blank page
     lastScannedMachine = displayMachine;
     openBlankPageWithMachine(displayMachine);
     toast('✅ Machine found: ' + displayMachine.name);
 
-    // Also show a brief inline result
     const secName = displayMachine.sectionName || getSectionName(displayMachine.section) || displayMachine.section || '-';
     result.innerHTML = `
         <div class="result-card success">
@@ -2086,7 +2064,6 @@ if (machineId) {
 
     // Auto-stop scanner after successful scan
     setTimeout(() => stopQRScanner(), 2000);
-}
 }
 
 function onScanFailure(err) { /* silent */ }
