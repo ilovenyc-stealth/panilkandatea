@@ -576,10 +576,18 @@
             background: #000;
             border-radius: 14px;
             text-align: center;
+            min-height: 300px;
+            display: none;
+            position: relative;
         }
         #qrReaderContainer video {
             max-width: 100%;
             border-radius: 10px;
+            max-height: 400px;
+            object-fit: cover;
+        }
+        #qrReaderContainer #qrReaderContainer__scan_region {
+            min-height: 300px;
         }
 
         /* ─── Result Card ─── */
@@ -726,6 +734,13 @@
             border-top: 2px solid var(--accent-light);
         }
 
+        .scanner-loading {
+            color: #aaa;
+            font-size: 14px;
+            padding: 20px;
+            text-align: center;
+        }
+
         /* ─── Responsive ─── */
         @media (max-width: 768px) {
             body {
@@ -815,6 +830,13 @@
             }
             .main-content {
                 margin-bottom: 80px;
+            }
+            #qrReaderContainer {
+                min-height: 200px;
+                padding: 8px;
+            }
+            #qrReaderContainer video {
+                max-height: 300px;
             }
         }
 
@@ -1053,10 +1075,10 @@
             <div class="card">
                 <h3><i class="fas fa-camera"></i> Scan QR Code</h3>
                 <div class="btn-group" style="margin:12px 0;">
-                    <button onclick="startQRScanner()" class="btn btn-scan"><i class="fas fa-play"></i> Start Camera</button>
-                    <button onclick="stopQRScanner()" class="btn btn-danger"><i class="fas fa-stop"></i> Stop</button>
+                    <button onclick="startQRScanner()" class="btn btn-scan" id="startScanBtn"><i class="fas fa-play"></i> Start Camera</button>
+                    <button onclick="stopQRScanner()" class="btn btn-danger" id="stopScanBtn"><i class="fas fa-stop"></i> Stop</button>
                 </div>
-                <div id="qrReaderContainer" style="display:none;"></div>
+                <div id="qrReaderContainer"></div>
                 <div id="scanResult" style="margin-top:12px;"></div>
             </div>
         </div>
@@ -1458,49 +1480,103 @@
         }
 
         // ============================================================
-        // QR SCANNER
+        // QR SCANNER - FIXED VERSION
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
+        let scannerInitialized = false;
 
         function startQRScanner() {
             const container = document.getElementById('qrReaderContainer');
             const result = document.getElementById('scanResult');
             result.innerHTML = '';
-            container.style.display = 'block';
 
+            // Reset any previous state
             if (scannerRunning) {
                 toast('Scanner already running.');
                 return;
             }
 
             if (typeof Html5Qrcode === 'undefined') {
-                toast('QR Scanner library not loaded.', true);
+                toast('QR Scanner library not loaded. Please refresh and try again.', true);
                 return;
             }
 
-            try {
-                html5QrCode = new Html5Qrcode("qrReaderContainer");
-                const config = {
-                    fps: 15,
-                    qrbox: { width: 250, height: 250 },
-                    aspectRatio: 1.0
-                };
-                html5QrCode.start({ facingMode: "environment" },
-                    config,
-                    onScanSuccess,
-                    onScanFailure
-                );
-                scannerRunning = true;
-                toast('Camera started. Point at a QR code.');
-            } catch (err) {
-                toast('Error starting camera: ' + err.message, true);
-                container.style.display = 'none';
+            // Check if browser supports camera
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                toast('Your browser does not support camera access. Please use a modern browser.', true);
+                return;
             }
+
+            // Show container with loading state
+            container.style.display = 'block';
+            container.innerHTML = '<div class="scanner-loading"><i class="fas fa-spinner fa-spin"></i> Initializing camera...</div>';
+
+            // Clean up any existing scanner instance
+            if (html5QrCode) {
+                try {
+                    html5QrCode.stop().catch(() => {});
+                } catch (e) {}
+                try {
+                    html5QrCode.clear().catch(() => {});
+                } catch (e) {}
+                html5QrCode = null;
+                scannerInitialized = false;
+            }
+
+            // Small delay to ensure DOM is ready
+            setTimeout(function() {
+                try {
+                    // Create new scanner instance
+                    html5QrCode = new Html5Qrcode("qrReaderContainer");
+
+                    const config = {
+                        fps: 15,
+                        qrbox: { width: 280, height: 280 },
+                        aspectRatio: 1.0
+                    };
+
+                    // Start scanning
+                    html5QrCode.start({ facingMode: "environment" },
+                        config,
+                        onScanSuccess,
+                        onScanFailure
+                    ).then(() => {
+                        scannerRunning = true;
+                        scannerInitialized = true;
+                        toast('📷 Camera started. Point at a QR code.');
+                    }).catch(function(err) {
+                        console.error('Scanner start error:', err);
+                        // Try with rear camera fallback
+                        if (err.message && err.message.includes('NotAllowedError')) {
+                            toast('Camera access denied. Please allow camera permissions and try again.', true);
+                        } else if (err.message && err.message.includes('NotFoundError')) {
+                            toast('No camera found on this device.', true);
+                        } else {
+                            toast('Failed to start camera: ' + err.message, true);
+                        }
+                        container.style.display = 'none';
+                        scannerRunning = false;
+                        scannerInitialized = false;
+                        html5QrCode = null;
+                    });
+
+                } catch (err) {
+                    console.error('QR Scanner initialization error:', err);
+                    toast('Error starting camera: ' + err.message, true);
+                    container.style.display = 'none';
+                    scannerRunning = false;
+                    scannerInitialized = false;
+                    html5QrCode = null;
+                }
+            }, 200);
         }
 
         function onScanSuccess(decodedText, decodedResult) {
             const result = document.getElementById('scanResult');
+            // Vibrate on success if supported
+            if (navigator.vibrate) navigator.vibrate(100);
+
             try {
                 const data = JSON.parse(decodedText);
                 if (data.id) {
@@ -1524,41 +1600,66 @@
                                 <div class="btn-group" style="margin-top:12px;">
                                     <button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
                                     <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
+                                    <button onclick="document.getElementById('lookupInput').value='${esc(m.id)}';switchToTab('lookup');lookupMachine();" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-right"></i> View Details</button>
                                 </div>
                             </div>
                         `;
                         toast('✅ Found: ' + m.name);
+                        // Auto-stop after successful scan
                         stopQRScanner();
+                        return;
+                    } else {
+                        result.innerHTML =
+                            `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Machine with ID "${esc(data.id)}" not found in database.</p></div>`;
+                        toast('Machine not found in database.', true);
                         return;
                     }
                 }
                 result.innerHTML =
-                `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ QR code data not recognised as a valid machine.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;">${esc(decodedText)}</pre></div>`;
+                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ QR code data does not contain a valid machine ID.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
             } catch (e) {
                 result.innerHTML =
-                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not valid JSON.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;">${esc(decodedText)}</pre></div>`;
+                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not valid JSON.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                toast('Invalid QR code format.', true);
             }
         }
 
-        function onScanFailure(err) { /* ignore */ }
+        function onScanFailure(err) {
+            // Silent - this fires continuously during scanning
+            // Only log if it's an actual error, not the normal "no code found" messages
+            if (err && err !== 'No QR code found' && !err.includes('No QR')) {
+                console.debug('Scan failure:', err);
+            }
+        }
 
         function stopQRScanner() {
+            const container = document.getElementById('qrReaderContainer');
+
             if (html5QrCode && scannerRunning) {
                 try {
                     html5QrCode.stop().then(() => {
                         scannerRunning = false;
-                        document.getElementById('qrReaderContainer').style.display = 'none';
+                        scannerInitialized = false;
+                        container.style.display = 'none';
+                        container.innerHTML = '';
                         toast('Scanner stopped.');
                     }).catch(() => {
                         scannerRunning = false;
-                        document.getElementById('qrReaderContainer').style.display = 'none';
+                        scannerInitialized = false;
+                        container.style.display = 'none';
+                        container.innerHTML = '';
                     });
                 } catch (e) {
                     scannerRunning = false;
-                    document.getElementById('qrReaderContainer').style.display = 'none';
+                    scannerInitialized = false;
+                    container.style.display = 'none';
+                    container.innerHTML = '';
                 }
             } else {
-                document.getElementById('qrReaderContainer').style.display = 'none';
+                container.style.display = 'none';
+                container.innerHTML = '';
+                scannerRunning = false;
+                scannerInitialized = false;
             }
         }
 
@@ -1662,6 +1763,8 @@
             document.getElementById('editNotes').value = m.notes || '';
             loadSectionsDropdown('editSection', m.section);
             document.getElementById('editModal').classList.add('active');
+            // Stop scanner if open
+            stopQRScanner();
         }
 
         function closeEditModal() {
@@ -1910,6 +2013,11 @@
             if (hash && ['assets', 'list', 'lookup', 'qr', 'scan', 'status'].includes(hash)) {
                 switchToTab(hash);
             }
+
+            // Stop scanner on page unload
+            window.addEventListener('beforeunload', function() {
+                stopQRScanner();
+            });
         });
 
         window.addEventListener('resize', function() {
