@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>🍃 Panilkanda Tea Factory</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍃</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -28,9 +28,9 @@
             --warning-light: #ffe0b2;
             --info: #1976d2;
             --info-light: #e3f2fd;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 8px 25px rgba(46, 125, 50, 0.15);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 15px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 25px rgba(46,125,50,0.15);
             --radius-sm: 12px;
             --radius-md: 16px;
             --radius-lg: 20px;
@@ -47,123 +47,59 @@
             display: flex;
             flex-direction: column;
         }
-
-        /* ─── Layout: Sidebar + Main ─── */
-        .layout {
-            display: flex;
-            flex: 1;
-        }
+        .layout { display: flex; flex: 1; }
 
         /* ─── Sidebar ─── */
         .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: var(--sidebar-width);
-            height: 100%;
+            position: fixed; top: 0; left: 0;
+            width: var(--sidebar-width); height: 100%;
             background: var(--white);
             border-right: 2px solid var(--primary-light);
             z-index: 200;
             transform: translateX(-100%);
             transition: transform 0.3s ease;
             overflow-y: auto;
-            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column;
         }
-        .sidebar.open {
-            transform: translateX(0);
-        }
-        .sidebar-header {
-            padding: 20px;
-            border-bottom: 2px solid var(--accent-light);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .sidebar-header i {
-            font-size: 24px;
-            color: var(--primary);
-        }
-        .sidebar-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-dark);
-        }
-        .sidebar-nav {
-            padding: 10px 0;
-            flex: 1;
-        }
+        .sidebar.open { transform: translateX(0); }
+        .sidebar-header { padding: 20px; border-bottom: 2px solid var(--accent-light); display: flex; align-items: center; gap: 10px; }
+        .sidebar-header i { font-size: 24px; color: var(--primary); }
+        .sidebar-header h2 { font-size: 18px; font-weight: 700; color: var(--primary-dark); }
+        .sidebar-nav { padding: 10px 0; flex: 1; }
         .sidebar-nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display: flex; align-items: center; gap: 12px;
             padding: 12px 20px;
             color: var(--text-dark);
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 14px; font-weight: 500;
             transition: background 0.2s;
             border-left: 4px solid transparent;
             cursor: pointer;
         }
-        .sidebar-nav a:hover {
-            background: var(--primary-bg);
-        }
-        .sidebar-nav a.active {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            border-left-color: var(--primary);
-            font-weight: 600;
-        }
-        .sidebar-nav a i {
-            width: 20px;
-            text-align: center;
-        }
-        .sidebar-sub {
-            display: none;
-            padding-left: 20px;
-        }
-        .sidebar-sub.open {
-            display: block;
-        }
-        .sidebar-sub a {
-            padding: 8px 20px;
-            font-size: 13px;
-        }
-
+        .sidebar-nav a:hover { background: var(--primary-bg); }
+        .sidebar-nav a.active { background: var(--primary-light); color: var(--primary-dark); border-left-color: var(--primary); font-weight: 600; }
+        .sidebar-nav a i { width: 20px; text-align: center; }
+        .sidebar-sub { display: none; padding-left: 20px; }
+        .sidebar-sub.open { display: block; }
+        .sidebar-sub a { padding: 8px 20px; font-size: 13px; }
         .sidebar-overlay {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
             z-index: 150;
         }
-        .sidebar-overlay.active {
-            display: block;
-        }
+        .sidebar-overlay.active { display: block; }
 
         /* ─── Hamburger ─── */
         .hamburger {
             display: none;
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 300;
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            align-items: center;
-            justify-content: center;
+            position: fixed; top: 15px; left: 15px; z-index: 300;
+            background: var(--primary); color: white;
+            border: none; width: 44px; height: 44px;
+            border-radius: 50%; font-size: 20px;
+            cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            align-items: center; justify-content: center;
         }
 
         /* ─── Main Container ─── */
@@ -171,10 +107,10 @@
             flex: 1;
             max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255,255,255,0.95);
             border-radius: var(--radius-lg);
             padding: 25px 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             transition: margin-left 0.3s ease;
             margin: 20px;
             margin-left: calc(var(--sidebar-width) + 20px);
@@ -183,173 +119,94 @@
         /* ─── Bottom Nav (mobile) ─── */
         .bottom-nav {
             display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            position: fixed; bottom: 0; left: 0; right: 0;
             background: var(--white);
             border-top: 2px solid var(--primary-light);
             height: var(--bottom-nav-height);
             justify-content: space-around;
             align-items: center;
             z-index: 100;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
         }
         .bottom-nav a {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; flex-direction: column; align-items: center;
             color: var(--text-dark);
-            text-decoration: none;
-            font-size: 10px;
-            padding: 5px;
-            flex: 1;
-            font-weight: 500;
-            cursor: pointer;
+            text-decoration: none; font-size: 10px;
+            padding: 5px; flex: 1; font-weight: 500; cursor: pointer;
         }
-        .bottom-nav a i {
-            font-size: 20px;
-            margin-bottom: 2px;
-        }
-        .bottom-nav a.active {
-            color: var(--primary);
-            font-weight: 600;
-        }
+        .bottom-nav a i { font-size: 20px; margin-bottom: 2px; }
+        .bottom-nav a.active { color: var(--primary); font-weight: 600; }
 
         /* ─── Header ─── */
         .header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--accent-light);
+            display: flex; align-items: center; gap: 15px;
+            margin-bottom: 20px; flex-wrap: wrap;
+            padding-bottom: 15px; border-bottom: 2px solid var(--accent-light);
         }
         .logo-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.35);
+            width: 60px; height: 60px; border-radius: 50%;
+            box-shadow: 0 8px 25px rgba(46,125,50,0.35);
             flex-shrink: 0;
         }
-        .logo-wrapper i {
-            font-size: 26px;
-            color: white;
-        }
-        .header-text h1 {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--text-dark);
-            line-height: 1.2;
-        }
-        .header-text p {
-            color: #2e5e2e;
-            font-size: 13px;
-        }
+        .logo-wrapper i { font-size: 26px; color: white; }
+        .header-text h1 { font-size: 24px; font-weight: 800; color: var(--text-dark); line-height: 1.2; }
+        .header-text p { color: #2e5e2e; font-size: 13px; }
 
         /* ─── Tabs ─── */
         .tabs {
-            display: flex;
-            gap: 5px;
+            display: flex; gap: 5px;
             background: var(--accent-light);
             padding: 5px;
             border-radius: var(--radius-full);
             margin-bottom: 20px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            flex-wrap: nowrap; overflow-x: auto;
+            -webkit-overflow-scrolling: touch; scrollbar-width: none;
         }
-        .tabs::-webkit-scrollbar {
-            display: none;
-        }
+        .tabs::-webkit-scrollbar { display: none; }
         .tab-btn {
-            flex: 0 0 auto;
-            min-width: 60px;
-            border: none;
-            background: transparent;
+            flex: 0 0 auto; min-width: 60px;
+            border: none; background: transparent;
             padding: 10px 12px;
-            font-weight: 600;
-            font-size: 12px;
+            font-weight: 600; font-size: 12px;
             border-radius: var(--radius-full);
             cursor: pointer;
             color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            white-space: nowrap;
+            display: flex; align-items: center; justify-content: center;
+            gap: 5px; white-space: nowrap;
             transition: all 0.2s;
         }
-        .tab-btn.active {
-            background: var(--white);
-            box-shadow: var(--shadow-lg);
-            color: var(--primary-dark);
-        }
-        .tab-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.6);
-        }
+        .tab-btn.active { background: var(--white); box-shadow: var(--shadow-lg); color: var(--primary-dark); }
+        .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.6); }
 
         /* ─── Tab Content ─── */
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        .tab-content { display: none; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
 
         /* ─── Sub‑tabs ─── */
         .sub-tabs {
-            display: flex;
-            gap: 6px;
+            display: flex; gap: 6px;
             margin-bottom: 16px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            flex-wrap: nowrap; overflow-x: auto;
+            -webkit-overflow-scrolling: touch; scrollbar-width: none;
         }
-        .sub-tabs::-webkit-scrollbar {
-            display: none;
-        }
+        .sub-tabs::-webkit-scrollbar { display: none; }
         .sub-tab {
             flex: 0 0 auto;
             padding: 8px 16px;
             border: 2px solid var(--primary-light);
             border-radius: 30px;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 13px; font-weight: 600;
             background: white;
             white-space: nowrap;
             transition: all 0.2s;
         }
-        .sub-tab.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        .sub-content {
-            display: none;
-        }
-        .sub-content.active {
-            display: block;
-        }
+        .sub-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .sub-content { display: none; }
+        .sub-content.active { display: block; }
 
         /* ─── Cards & Forms ─── */
         .card {
@@ -360,185 +217,78 @@
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--primary-light);
         }
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .form-group.full {
-            grid-column: 1 / -1;
-        }
-        label {
-            font-weight: 600;
-            font-size: 12px;
-            margin-bottom: 4px;
-            color: var(--text-dark);
-        }
-        label i {
-            color: var(--primary);
-            width: 14px;
-        }
-        input,
-        select,
-        textarea {
+        .form-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group.full { grid-column: 1/-1; }
+        label { font-weight: 600; font-size: 12px; margin-bottom: 4px; color: var(--text-dark); }
+        label i { color: var(--primary); width: 14px; }
+        input, select, textarea {
             padding: 10px 14px;
             border: 2px solid var(--primary-light);
             border-radius: 10px;
-            font-size: 14px;
-            font-family: inherit;
-            background: white;
-            width: 100%;
+            font-size: 14px; font-family: inherit;
+            background: white; width: 100%;
         }
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        textarea {
-            resize: vertical;
-            min-height: 50px;
-        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+        textarea { resize: vertical; min-height: 50px; }
 
         .btn {
             padding: 10px 20px;
             border: none;
             border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 13px;
+            font-weight: 600; font-size: 13px;
             cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            display: inline-flex; align-items: center; justify-content: center;
             gap: 6px;
             transition: all 0.2s;
             white-space: nowrap;
             min-height: 44px;
         }
-        .btn:active {
-            transform: scale(0.97);
-        }
-        .btn-sm {
-            padding: 6px 14px;
-            font-size: 11px;
-            min-height: 36px;
-        }
-        .btn-lg {
-            padding: 14px 24px;
-            font-size: 15px;
-        }
-        .btn-block {
-            width: 100%;
-        }
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        .btn-secondary {
-            background: var(--accent-light);
-            color: var(--text-dark);
-        }
-        .btn-info {
-            background: var(--info);
-            color: white;
-        }
-        .btn-warning {
-            background: var(--warning);
-            color: white;
-        }
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-        .btn-scan {
-            background: #6a1b9a;
-            color: white;
-        }
+        .btn:active { transform: scale(0.97); }
+        .btn-sm { padding: 6px 14px; font-size: 11px; min-height: 36px; }
+        .btn-lg { padding: 14px 24px; font-size: 15px; }
+        .btn-block { width: 100%; }
+        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: var(--accent-light); color: var(--text-dark); }
+        .btn-info { background: var(--info); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-scan { background: #6a1b9a; color: white; }
 
         /* ─── Status Badge ─── */
         .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+            display: inline-flex; align-items: center; gap: 4px;
             padding: 4px 12px;
             border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 11px;
+            font-weight: 600; font-size: 11px;
         }
-        .status-badge.working {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-        }
-        .status-badge.maintenance {
-            background: var(--warning-light);
-            color: var(--warning);
-        }
-        .status-badge.out-of-service {
-            background: var(--danger-light);
-            color: var(--danger);
-        }
+        .status-badge.working { background: var(--primary-light); color: var(--primary-dark); }
+        .status-badge.maintenance { background: var(--warning-light); color: var(--warning); }
+        .status-badge.out-of-service { background: var(--danger-light); color: var(--danger); }
 
         /* ─── Machine List ─── */
-        .machine-list {
-            display: grid;
-            gap: 8px;
-        }
+        .machine-list { display: grid; gap: 8px; }
         .machine-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             padding: 12px 16px;
             background: var(--white);
             border-radius: 12px;
             border: 2px solid var(--primary-light);
-            flex-wrap: wrap;
-            gap: 8px;
+            flex-wrap: wrap; gap: 8px;
         }
-        .machine-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .machine-id {
-            font-weight: 700;
-            color: var(--primary-dark);
-            background: var(--primary-bg);
-            padding: 3px 10px;
-            border-radius: var(--radius-full);
-            font-size: 12px;
-        }
-        .machine-name {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .machine-section {
-            font-size: 11px;
-            color: #666;
-            background: #f5f5f5;
-            padding: 2px 10px;
-            border-radius: var(--radius-full);
-        }
+        .machine-info { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .machine-id { font-weight: 700; color: var(--primary-dark); background: var(--primary-bg); padding: 3px 10px; border-radius: var(--radius-full); font-size: 12px; }
+        .machine-name { font-weight: 600; font-size: 14px; }
+        .machine-section { font-size: 11px; color: #666; background: #f5f5f5; padding: 2px 10px; border-radius: var(--radius-full); }
 
         /* ─── Info Box ─── */
         .info-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            display: flex; align-items: center; justify-content: space-between;
             padding: 12px 16px;
             border-radius: 12px;
             font-size: 13px;
-            flex-wrap: wrap;
-            gap: 8px;
+            flex-wrap: wrap; gap: 8px;
             background: var(--info-light);
             border: 2px solid var(--info);
             color: #0d47a1;
@@ -546,49 +296,22 @@
         }
 
         /* ─── QR ─── */
-        .qr-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        .qr-display {
-            text-align: center;
-            padding: 16px;
-            background: white;
-            border-radius: 14px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        }
-        .qr-display canvas {
-            border-radius: 10px;
-            max-width: 200px;
-        }
-        .qr-info-panel {
-            background: var(--primary-bg);
-            border-radius: 14px;
-            padding: 16px;
-            border: 2px solid var(--primary-light);
-        }
+        .qr-container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .qr-display { text-align: center; padding: 16px; background: white; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .qr-display canvas { border-radius: 10px; max-width: 200px; }
+        .qr-info-panel { background: var(--primary-bg); border-radius: 14px; padding: 16px; border: 2px solid var(--primary-light); }
 
         /* ─── Scanner ─── */
         #qrReaderContainer {
-            margin-top: 12px;
-            padding: 16px;
-            background: #000;
-            border-radius: 14px;
+            margin-top: 12px; padding: 16px;
+            background: #000; border-radius: 14px;
             text-align: center;
             min-height: 300px;
             display: none;
             position: relative;
         }
-        #qrReaderContainer video {
-            max-width: 100%;
-            border-radius: 10px;
-            max-height: 400px;
-            object-fit: cover;
-        }
-        #qrReaderContainer #qrReaderContainer__scan_region {
-            min-height: 300px;
-        }
+        #qrReaderContainer video { max-width: 100%; border-radius: 10px; max-height: 400px; object-fit: cover; }
+        #qrReaderContainer #qrReaderContainer__scan_region { min-height: 300px; }
 
         /* ─── Result Card ─── */
         .result-card {
@@ -599,268 +322,118 @@
             animation: fadeIn 0.3s;
             margin-top: 10px;
         }
-        .result-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 8px 14px;
-        }
-        .result-item {
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(46, 125, 50, 0.1);
-            font-size: 13px;
-        }
-        .result-item label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #3f6b3f;
-            display: block;
-        }
+        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 8px 14px; }
+        .result-item { padding: 6px 0; border-bottom: 1px solid rgba(46,125,50,0.1); font-size: 13px; }
+        .result-item label { font-size: 10px; text-transform: uppercase; color: #3f6b3f; display: block; }
 
         /* ─── Stats ─── */
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-        }
-        .stat-card {
-            background: var(--white);
-            border-radius: 14px;
-            padding: 16px;
-            text-align: center;
-            border: 2px solid var(--primary-light);
-        }
-        .stat-card .num {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--primary-dark);
-        }
-        .stat-card .label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #666;
-            margin-top: 4px;
-        }
-        .stat-card.green {
-            border-color: var(--primary);
-        }
-        .stat-card.orange {
-            border-color: var(--warning);
-        }
-        .stat-card.red {
-            border-color: var(--danger);
-        }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 12px; }
+        .stat-card { background: var(--white); border-radius: 14px; padding: 16px; text-align: center; border: 2px solid var(--primary-light); }
+        .stat-card .num { font-size: 28px; font-weight: 800; color: var(--primary-dark); }
+        .stat-card .label { font-size: 11px; text-transform: uppercase; color: #666; margin-top: 4px; }
+        .stat-card.green { border-color: var(--primary); }
+        .stat-card.orange { border-color: var(--warning); }
+        .stat-card.red { border-color: var(--danger); }
 
         /* ─── Toast ─── */
         .toast-container {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+            position: fixed; top: 15px; right: 15px; z-index: 9999;
+            display: flex; flex-direction: column; gap: 6px;
         }
         .toast {
-            background: var(--primary);
-            color: white;
+            background: var(--primary); color: white;
             padding: 12px 20px;
             border-radius: 30px;
-            font-weight: 600;
-            font-size: 13px;
+            font-weight: 600; font-size: 13px;
             animation: slideIn 0.3s;
             max-width: 300px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        .toast.error {
-            background: var(--danger);
-        }
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(60px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
+        .toast.error { background: var(--danger); }
+        @keyframes slideIn { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
 
         /* ─── Modal ─── */
         .modal {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
             z-index: 1000;
-            justify-content: center;
-            align-items: center;
+            justify-content: center; align-items: center;
             padding: 15px;
         }
-        .modal.active {
-            display: flex;
-        }
+        .modal.active { display: flex; }
         .modal-content {
             background: var(--white);
             border-radius: 20px;
             padding: 25px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
+            max-width: 600px; width: 100%;
+            max-height: 85vh; overflow-y: auto;
         }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #666; }
+
+        .footer { margin-top: 25px; padding-top: 15px; text-align: center; font-size: 12px; opacity: 0.6; border-top: 2px solid var(--accent-light); }
+
+        .scanner-loading { color: #aaa; font-size: 14px; padding: 20px; text-align: center; }
+        .scanner-upload-area {
+            margin-top: 12px; padding: 20px;
+            border: 2px dashed var(--primary-light);
+            border-radius: 12px;
+            text-align: center;
             cursor: pointer;
-            color: #666;
+            transition: background 0.2s;
+            background: #fafffe;
         }
+        .scanner-upload-area:hover { background: var(--primary-bg); }
+        .scanner-upload-area input[type="file"] { display: none; }
 
-        .footer {
-            margin-top: 25px;
-            padding-top: 15px;
-            text-align: center;
-            font-size: 12px;
-            opacity: 0.6;
-            border-top: 2px solid var(--accent-light);
+        .section-list-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 16px;
+            background: var(--white);
+            border-radius: 10px;
+            border: 1px solid var(--primary-light);
+            margin-bottom: 6px;
         }
-
-        .scanner-loading {
-            color: #aaa;
-            font-size: 14px;
-            padding: 20px;
-            text-align: center;
+        .section-color-dot {
+            width: 16px; height: 16px; border-radius: 50%;
+            display: inline-block; margin-right: 10px;
+            border: 1px solid rgba(0,0,0,0.1);
         }
 
         /* ─── Responsive ─── */
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .main-content {
-                margin: 10px 0;
-                padding: 15px 10px;
-                border-radius: var(--radius-md);
-                margin-left: 0 !important;
-                margin-right: 0;
-            }
-            .sidebar {
-                width: 280px;
-            }
-            .hamburger {
-                display: flex;
-            }
-            .bottom-nav {
-                display: flex;
-            }
-            .header {
-                flex-direction: column;
-                text-align: center;
-            }
-            .header-text h1 {
-                font-size: 20px;
-            }
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            input,
-            select,
-            textarea {
-                font-size: 16px;
-                padding: 12px 14px;
-            }
-            .btn {
-                padding: 12px 20px;
-                font-size: 14px;
-                min-height: 48px;
-            }
-            .btn-sm {
-                padding: 8px 14px;
-                font-size: 12px;
-                min-height: 40px;
-            }
-            .machine-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .machine-info {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-            .qr-container {
-                grid-template-columns: 1fr;
-            }
-            .info-box {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .modal-content {
-                padding: 15px;
-                margin: 10px;
-            }
-            .sub-tabs {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-            }
-            .sub-tabs::-webkit-scrollbar {
-                display: none;
-            }
-            .tabs {
-                gap: 2px;
-                padding: 4px;
-            }
-            .tab-btn {
-                padding: 12px 16px;
-                font-size: 13px;
-                min-height: 44px;
-            }
-            .sidebar-overlay.active {
-                display: block;
-            }
-            .main-content {
-                margin-bottom: 80px;
-            }
-            #qrReaderContainer {
-                min-height: 200px;
-                padding: 8px;
-            }
-            #qrReaderContainer video {
-                max-height: 300px;
-            }
+            body { padding: 10px; }
+            .main-content { margin: 10px 0; padding: 15px 10px; border-radius: var(--radius-md); margin-left: 0 !important; margin-right: 0; }
+            .sidebar { width: 280px; }
+            .hamburger { display: flex; }
+            .bottom-nav { display: flex; }
+            .header { flex-direction: column; text-align: center; }
+            .header-text h1 { font-size: 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+            input, select, textarea { font-size: 16px; padding: 12px 14px; }
+            .btn { padding: 12px 20px; font-size: 14px; min-height: 48px; }
+            .btn-sm { padding: 8px 14px; font-size: 12px; min-height: 40px; }
+            .machine-item { flex-direction: column; align-items: flex-start; }
+            .machine-info { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .qr-container { grid-template-columns: 1fr; }
+            .info-box { flex-direction: column; align-items: flex-start; }
+            .modal-content { padding: 15px; margin: 10px; }
+            .sub-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .sub-tabs::-webkit-scrollbar { display: none; }
+            .tabs { gap: 2px; padding: 4px; }
+            .tab-btn { padding: 12px 16px; font-size: 13px; min-height: 44px; }
+            .sidebar-overlay.active { display: block; }
+            .main-content { margin-bottom: 80px; }
+            #qrReaderContainer { min-height: 200px; padding: 8px; }
+            #qrReaderContainer video { max-height: 300px; }
         }
-
         @media (min-width: 769px) {
-            .hamburger {
-                display: none;
-            }
-            .bottom-nav {
-                display: none;
-            }
-            .sidebar {
-                transform: translateX(0);
-                position: fixed;
-                height: 100vh;
-                box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-            }
-            .sidebar-overlay {
-                display: none !important;
-            }
-            .main-content {
-                margin-left: calc(var(--sidebar-width) + 20px);
-                margin-top: 20px;
-                margin-bottom: 20px;
-            }
+            .hamburger { display: none; }
+            .bottom-nav { display: none; }
+            .sidebar { transform: translateX(0); position: fixed; height: 100vh; box-shadow: 2px 0 15px rgba(0,0,0,0.1); }
+            .sidebar-overlay { display: none !important; }
+            .main-content { margin-left: calc(var(--sidebar-width) + 20px); margin-top: 20px; margin-bottom: 20px; }
         }
     </style>
 </head>
@@ -889,6 +462,7 @@
                 <a href="#" class="active" data-sub="viewAssets"><i class="fas fa-eye"></i> View Assets</a>
                 <a href="#" data-sub="addAsset"><i class="fas fa-plus-circle"></i> Add Asset</a>
                 <a href="#" data-sub="addSection"><i class="fas fa-folder-plus"></i> Add Section</a>
+                <a href="#" data-sub="manageSections"><i class="fas fa-cog"></i> Manage Sections</a>
             </div>
             <a href="#" data-tab="list"><i class="fas fa-list"></i> All Machines</a>
             <a href="#" data-tab="lookup"><i class="fas fa-search"></i> Lookup</a>
@@ -925,6 +499,7 @@
                 <button class="sub-tab active" data-sub="viewAssets"><i class="fas fa-eye"></i> View Assets</button>
                 <button class="sub-tab" data-sub="addAsset"><i class="fas fa-plus-circle"></i> Add Asset</button>
                 <button class="sub-tab" data-sub="addSection"><i class="fas fa-folder-plus"></i> Add Section</button>
+                <button class="sub-tab" data-sub="manageSections"><i class="fas fa-cog"></i> Manage Sections</button>
             </div>
 
             <div id="sub-viewAssets" class="sub-content active">
@@ -1020,6 +595,17 @@
                     </form>
                 </div>
             </div>
+
+            <!-- ==================== MANAGE SECTIONS (NEW) ==================== -->
+            <div id="sub-manageSections" class="sub-content">
+                <div class="card">
+                    <h3 style="margin-bottom:14px;"><i class="fas fa-cog"></i> Manage Sections</h3>
+                    <p style="color:#666;font-size:13px;margin-bottom:12px;">Delete sections that are no longer needed. Machines assigned to a deleted section will be set to "Uncategorised".</p>
+                    <div id="sectionListContainer">
+                        <p style="text-align:center;padding:20px;color:#666;">Loading sections...</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ==================== ALL MACHINES ==================== -->
@@ -1079,7 +665,17 @@
                     <button onclick="stopQRScanner()" class="btn btn-danger" id="stopScanBtn"><i class="fas fa-stop"></i> Stop</button>
                 </div>
                 <div id="qrReaderContainer"></div>
+                <div style="margin-top:10px; text-align:center; color:#666; font-size:13px;">
+                    <i class="fas fa-arrow-down"></i> Or upload a QR code image:
+                </div>
+                <div class="scanner-upload-area" id="uploadArea" onclick="document.getElementById('qrFileInput').click()">
+                    <i class="fas fa-cloud-upload-alt" style="font-size:24px;color:var(--primary);"></i>
+                    <p style="margin-top:6px;font-size:13px;">Tap to select a QR code image from your device</p>
+                    <input type="file" id="qrFileInput" accept="image/*" capture="environment" />
+                </div>
                 <div id="scanResult" style="margin-top:12px;"></div>
+                <!-- Debug info -->
+                <div id="scanDebug" style="margin-top:8px; background:#f9f9f9; padding:8px 12px; border-radius:8px; font-size:12px; color:#888; display:none; word-break:break-all;"></div>
             </div>
         </div>
 
@@ -1351,6 +947,7 @@
             loadSectionsDropdown('assetSection');
             loadSectionsDropdown('editSection');
             populateQRSelect();
+            renderSectionList();
         }
 
         function filterAssets() { refreshAssetView(); }
@@ -1396,6 +993,71 @@
         }
 
         // ============================================================
+        // SECTION MANAGEMENT (NEW)
+        // ============================================================
+        function renderSectionList() {
+            const container = document.getElementById('sectionListContainer');
+            const sections = getSections();
+            const machines = getMachines();
+
+            if (sections.length === 0) {
+                container.innerHTML = '<p style="text-align:center;padding:20px;color:#666;">No sections created yet. Add one using the "Add Section" tab.</p>';
+                return;
+            }
+
+            let html = '';
+            sections.forEach(sec => {
+                const count = machines.filter(m => m.section === sec.id).length;
+                const color = sec.color || '#2e7d32';
+                html += `
+                    <div class="section-list-item">
+                        <div>
+                            <span class="section-color-dot" style="background:${color};"></span>
+                            <strong>${esc(sec.name)}</strong>
+                            <span style="color:#666;font-size:12px;margin-left:8px;">(${count} machine${count !== 1 ? 's' : ''})</span>
+                            ${sec.description ? `<span style="color:#888;font-size:12px;margin-left:8px;">— ${esc(sec.description)}</span>` : ''}
+                        </div>
+                        <button onclick="deleteSection('${sec.id}')" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function deleteSection(sectionId) {
+            const sections = getSections();
+            const section = sections.find(s => s.id === sectionId);
+            if (!section) { toast('Section not found.', true); return; }
+
+            const machineCount = getMachines().filter(m => m.section === sectionId).length;
+            const msg = `Delete section "${section.name}"?\n\n${machineCount} machine${machineCount !== 1 ? 's' : ''} will be set to "Uncategorised".`;
+            if (!confirm(msg)) return;
+
+            const db = getDB();
+            // Remove section
+            db.sections = db.sections.filter(s => s.id !== sectionId);
+            // Update machines that had this section
+            db.machines = db.machines.map(m => {
+                if (m.section === sectionId) {
+                    m.section = ''; // Uncategorised
+                }
+                return m;
+            });
+            saveDB(db);
+            toast('🗑️ Section "' + section.name + '" deleted. Machines updated.');
+            refreshAssetView();
+            refreshList();
+            refreshDashboard();
+            loadSectionsDropdown('assetSection');
+            loadSectionsDropdown('editSection');
+            loadSectionsDropdown('filterSection');
+            populateQRSelect();
+            renderSectionList();
+        }
+
+        // ============================================================
         // QR CODE
         // ============================================================
         let qrCodeInstance = null;
@@ -1433,7 +1095,20 @@
 
             const container = document.getElementById('qrCanvasContainer');
             container.innerHTML = '';
-            const data = JSON.stringify({ id: m.id, name: m.name, section: m.section });
+            // Store ALL machine data in QR for self-contained scanning
+            const qrData = {
+                id: m.id,
+                name: m.name,
+                section: m.section,
+                sectionName: getSectionName(m.section),
+                manufacturer: m.manufacturer || '',
+                model: m.model || '',
+                serialNumber: m.serialNumber || '',
+                installationDate: m.installationDate || '',
+                status: m.status || 'working',
+                notes: m.notes || ''
+            };
+            const data = JSON.stringify(qrData);
             try {
                 qrCodeInstance = new QRCode(container, {
                     text: data,
@@ -1480,156 +1155,213 @@
         }
 
         // ============================================================
-        // QR SCANNER - FIXED VERSION
+        // QR SCANNER - IMPROVED
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
-        let scannerInitialized = false;
+
+        function showDebug(msg) {
+            const el = document.getElementById('scanDebug');
+            el.style.display = 'block';
+            el.textContent = '🔍 ' + msg;
+            console.log('QR Debug:', msg);
+        }
 
         function startQRScanner() {
             const container = document.getElementById('qrReaderContainer');
             const result = document.getElementById('scanResult');
             result.innerHTML = '';
+            document.getElementById('scanDebug').style.display = 'none';
 
-            // Reset any previous state
             if (scannerRunning) {
                 toast('Scanner already running.');
                 return;
             }
 
             if (typeof Html5Qrcode === 'undefined') {
-                toast('QR Scanner library not loaded. Please refresh and try again.', true);
+                toast('QR Scanner library not loaded. Please refresh.', true);
+                showDebug('ERROR: Html5Qrcode not loaded');
                 return;
             }
 
-            // Check if browser supports camera
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                toast('Your browser does not support camera access. Please use a modern browser.', true);
+                toast('Camera not supported on this device.', true);
+                showDebug('ERROR: Camera not supported');
                 return;
             }
 
-            // Show container with loading state
             container.style.display = 'block';
-            container.innerHTML = '<div class="scanner-loading"><i class="fas fa-spinner fa-spin"></i> Initializing camera...</div>';
+            container.innerHTML = `
+                <div class="scanner-loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <div>Initializing camera...</div>
+                    <div style="font-size:12px;color:#666;margin-top:8px;">Please allow camera access.</div>
+                </div>
+            `;
+            showDebug('Initializing camera...');
 
-            // Clean up any existing scanner instance
             if (html5QrCode) {
-                try {
-                    html5QrCode.stop().catch(() => {});
-                } catch (e) {}
-                try {
-                    html5QrCode.clear().catch(() => {});
-                } catch (e) {}
+                try { html5QrCode.stop().catch(() => {}); } catch (e) {}
+                try { html5QrCode.clear().catch(() => {}); } catch (e) {}
                 html5QrCode = null;
-                scannerInitialized = false;
             }
 
-            // Small delay to ensure DOM is ready
             setTimeout(function() {
                 try {
-                    // Create new scanner instance
                     html5QrCode = new Html5Qrcode("qrReaderContainer");
 
                     const config = {
-                        fps: 15,
+                        fps: 20,
                         qrbox: { width: 280, height: 280 },
                         aspectRatio: 1.0
                     };
 
-                    // Start scanning
-                    html5QrCode.start({ facingMode: "environment" },
-                        config,
-                        onScanSuccess,
-                        onScanFailure
-                    ).then(() => {
-                        scannerRunning = true;
-                        scannerInitialized = true;
-                        toast('📷 Camera started. Point at a QR code.');
-                    }).catch(function(err) {
-                        console.error('Scanner start error:', err);
-                        // Try with rear camera fallback
-                        if (err.message && err.message.includes('NotAllowedError')) {
-                            toast('Camera access denied. Please allow camera permissions and try again.', true);
-                        } else if (err.message && err.message.includes('NotFoundError')) {
-                            toast('No camera found on this device.', true);
-                        } else {
-                            toast('Failed to start camera: ' + err.message, true);
-                        }
-                        container.style.display = 'none';
-                        scannerRunning = false;
-                        scannerInitialized = false;
-                        html5QrCode = null;
-                    });
+                    html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
+                        .then(() => {
+                            scannerRunning = true;
+                            toast('📷 Camera ready. Point at a QR code.');
+                            showDebug('Camera started (rear)');
+                            const loadEl = container.querySelector('.scanner-loading');
+                            if (loadEl) loadEl.remove();
+                        })
+                        .catch(function(err) {
+                            console.warn('Rear camera failed:', err);
+                            showDebug('Rear camera failed, trying front...');
+                            html5QrCode.start({ facingMode: "user" }, config, onScanSuccess, onScanFailure)
+                                .then(() => {
+                                    scannerRunning = true;
+                                    toast('📷 Camera ready (front).');
+                                    showDebug('Camera started (front)');
+                                    const loadEl = container.querySelector('.scanner-loading');
+                                    if (loadEl) loadEl.remove();
+                                })
+                                .catch(function(err2) {
+                                    console.error('All cameras failed:', err2);
+                                    showDebug('ERROR: ' + err2.message);
+                                    if (err2.message && err2.message.includes('NotAllowedError')) {
+                                        toast('Camera access denied. Please allow camera permissions.', true);
+                                    } else if (err2.message && err2.message.includes('NotFoundError')) {
+                                        toast('No camera found on this device.', true);
+                                    } else {
+                                        toast('Failed to start camera: ' + err2.message, true);
+                                    }
+                                    container.style.display = 'none';
+                                    scannerRunning = false;
+                                    html5QrCode = null;
+                                });
+                        });
 
                 } catch (err) {
-                    console.error('QR Scanner initialization error:', err);
-                    toast('Error starting camera: ' + err.message, true);
+                    console.error('Scanner init error:', err);
+                    showDebug('ERROR: ' + err.message);
+                    toast('Error: ' + err.message, true);
                     container.style.display = 'none';
                     scannerRunning = false;
-                    scannerInitialized = false;
                     html5QrCode = null;
                 }
-            }, 200);
+            }, 300);
         }
 
         function onScanSuccess(decodedText, decodedResult) {
             const result = document.getElementById('scanResult');
-            // Vibrate on success if supported
+            showDebug('Decoded: ' + decodedText.substring(0, 100) + (decodedText.length > 100 ? '...' : ''));
             if (navigator.vibrate) navigator.vibrate(100);
 
+            // Try to parse as JSON
+            let data = null;
+            let machineId = null;
+            let machineData = null;
+
             try {
-                const data = JSON.parse(decodedText);
-                if (data.id) {
-                    const machines = getMachines();
-                    const m = machines.find(x => x.id === data.id);
-                    if (m) {
-                        result.innerHTML = `
-                            <div class="result-card">
-                                <h4 style="margin-bottom:8px;">✅ Machine Found</h4>
-                                <div class="result-grid">
-                                    <div class="result-item"><label>ID</label>${esc(m.id)}</div>
-                                    <div class="result-item"><label>Name</label>${esc(m.name)}</div>
-                                    <div class="result-item"><label>Section</label>${esc(getSectionName(m.section))}</div>
-                                    <div class="result-item"><label>Manufacturer</label>${esc(m.manufacturer || '-')}</div>
-                                    <div class="result-item"><label>Model</label>${esc(m.model || '-')}</div>
-                                    <div class="result-item"><label>Serial</label>${esc(m.serialNumber || '-')}</div>
-                                    <div class="result-item"><label>Status</label>${statusLabel(m.status)}</div>
-                                    <div class="result-item"><label>Installed</label>${fmtDate(m.installationDate)}</div>
-                                </div>
-                                ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
-                                <div class="btn-group" style="margin-top:12px;">
-                                    <button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
-                                    <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
-                                    <button onclick="document.getElementById('lookupInput').value='${esc(m.id)}';switchToTab('lookup');lookupMachine();" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-right"></i> View Details</button>
-                                </div>
-                            </div>
-                        `;
-                        toast('✅ Found: ' + m.name);
-                        // Auto-stop after successful scan
-                        stopQRScanner();
-                        return;
-                    } else {
-                        result.innerHTML =
-                            `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Machine with ID "${esc(data.id)}" not found in database.</p></div>`;
-                        toast('Machine not found in database.', true);
-                        return;
-                    }
-                }
-                result.innerHTML =
-                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ QR code data does not contain a valid machine ID.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                data = JSON.parse(decodedText);
+                showDebug('Parsed as JSON');
             } catch (e) {
-                result.innerHTML =
-                    `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not valid JSON.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
-                toast('Invalid QR code format.', true);
+                // Not JSON – check if it's a plain ID
+                if (decodedText.trim().match(/^M\d{4}$/)) {
+                    machineId = decodedText.trim();
+                    showDebug('Plain ID detected: ' + machineId);
+                } else {
+                    result.innerHTML =
+                        `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ Scanned data is not a valid QR.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                    toast('Invalid QR format.', true);
+                    showDebug('ERROR: Not JSON and not valid ID format');
+                    return;
+                }
+            }
+
+            if (data) {
+                if (data.id) {
+                    machineId = data.id;
+                    if (data.name && data.section) {
+                        machineData = data;
+                        showDebug('Full machine data from QR: ' + data.name);
+                    } else {
+                        showDebug('QR contains ID: ' + machineId);
+                    }
+                } else {
+                    result.innerHTML =
+                        `<div class="result-card" style="border-color:var(--warning);"><p>⚠️ JSON does not contain 'id'.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;">${esc(decodedText)}</pre></div>`;
+                    toast('Missing ID in JSON.', true);
+                    showDebug('ERROR: No "id" field in JSON');
+                    return;
+                }
+            }
+
+            if (machineId) {
+                // First, try to find in database
+                const machines = getMachines();
+                const dbMachine = machines.find(x => x.id === machineId);
+                if (dbMachine) {
+                    showDebug('Found in DB: ' + dbMachine.name);
+                    displayMachineResult(dbMachine, result);
+                    toast('✅ Found: ' + dbMachine.name);
+                    setTimeout(() => stopQRScanner(), 1500);
+                    return;
+                } else if (machineData && machineData.id === machineId) {
+                    showDebug('Using data from QR (self-contained)');
+                    displayMachineResult(machineData, result);
+                    toast('✅ Found (from QR): ' + machineData.name);
+                    setTimeout(() => stopQRScanner(), 1500);
+                    return;
+                } else {
+                    result.innerHTML =
+                        `<div class="result-card" style="border-color:var(--danger);"><p>❌ Machine with ID "${esc(machineId)}" not found in database.</p><p style="font-size:12px;color:#666;margin-top:8px;">Try adding this machine first, or scan a QR code with full data.</p></div>`;
+                    toast('Machine not found in database.', true);
+                    showDebug('ERROR: Machine ID ' + machineId + ' not in DB');
+                    return;
+                }
             }
         }
 
+        function displayMachineResult(m, result) {
+            const sectionName = m.sectionName || getSectionName(m.section) || m.section || '-';
+            const inDB = getMachines().find(x => x.id === m.id) !== undefined;
+            result.innerHTML = `
+                <div class="result-card">
+                    <h4 style="margin-bottom:8px;">✅ Machine Found ${inDB ? '' : '(from QR)'}</h4>
+                    <div class="result-grid">
+                        <div class="result-item"><label>ID</label>${esc(m.id)}</div>
+                        <div class="result-item"><label>Name</label>${esc(m.name)}</div>
+                        <div class="result-item"><label>Section</label>${esc(sectionName)}</div>
+                        <div class="result-item"><label>Manufacturer</label>${esc(m.manufacturer || '-')}</div>
+                        <div class="result-item"><label>Model</label>${esc(m.model || '-')}</div>
+                        <div class="result-item"><label>Serial</label>${esc(m.serialNumber || '-')}</div>
+                        <div class="result-item"><label>Status</label>${statusLabel(m.status)}</div>
+                        <div class="result-item"><label>Installed</label>${fmtDate(m.installationDate)}</div>
+                    </div>
+                    ${m.notes ? `<p style="margin-top:8px;font-size:13px;"><strong>Notes:</strong> ${esc(m.notes)}</p>` : ''}
+                    <div class="btn-group" style="margin-top:12px;">
+                        ${inDB ? `<button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>` : ''}
+                        <button onclick="document.getElementById('lookupInput').value='${esc(m.id)}';switchToTab('lookup');lookupMachine();" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-right"></i> View Details</button>
+                        <button onclick="stopQRScanner()" class="btn btn-danger btn-sm"><i class="fas fa-stop"></i> Stop Scanner</button>
+                    </div>
+                </div>
+            `;
+            showDebug('Displayed: ' + m.name);
+        }
+
         function onScanFailure(err) {
-            // Silent - this fires continuously during scanning
-            // Only log if it's an actual error, not the normal "no code found" messages
-            if (err && err !== 'No QR code found' && !err.includes('No QR')) {
-                console.debug('Scan failure:', err);
-            }
+            // Silent - normal during scanning
         }
 
         function stopQRScanner() {
@@ -1639,19 +1371,17 @@
                 try {
                     html5QrCode.stop().then(() => {
                         scannerRunning = false;
-                        scannerInitialized = false;
                         container.style.display = 'none';
                         container.innerHTML = '';
                         toast('Scanner stopped.');
+                        showDebug('Scanner stopped');
                     }).catch(() => {
                         scannerRunning = false;
-                        scannerInitialized = false;
                         container.style.display = 'none';
                         container.innerHTML = '';
                     });
                 } catch (e) {
                     scannerRunning = false;
-                    scannerInitialized = false;
                     container.style.display = 'none';
                     container.innerHTML = '';
                 }
@@ -1659,9 +1389,43 @@
                 container.style.display = 'none';
                 container.innerHTML = '';
                 scannerRunning = false;
-                scannerInitialized = false;
             }
         }
+
+        // ─── QR Upload from Image ───
+        document.getElementById('qrFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const result = document.getElementById('scanResult');
+            result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;"><i class="fas fa-spinner fa-spin"></i> Decoding QR from image...</p>';
+            showDebug('Uploading image: ' + file.name);
+
+            if (typeof Html5Qrcode === 'undefined') {
+                toast('QR library not loaded.', true);
+                showDebug('ERROR: Html5Qrcode not loaded');
+                return;
+            }
+
+            const qrScanner = new Html5Qrcode("scanResult");
+            qrScanner.scanFile(file, true)
+                .then(decodedText => {
+                    showDebug('Image decoded: ' + decodedText.substring(0, 100) + (decodedText.length > 100 ? '...' :
+                    ''));
+                    onScanSuccess(decodedText, null);
+                    qrScanner.clear().catch(() => {});
+                })
+                .catch(err => {
+                    console.error('Image decode error:', err);
+                    showDebug('Image decode error: ' + err.message);
+                    result.innerHTML =
+                        `<div class="result-card" style="border-color:var(--danger);"><p>❌ Could not decode QR from image. Please try another image.</p></div>`;
+                    toast('Failed to decode QR from image.', true);
+                });
+
+            // Reset input so same file can be selected again
+            this.value = '';
+        });
 
         // ============================================================
         // LOOKUP
@@ -1744,6 +1508,8 @@
             refreshDashboard();
             loadSectionsDropdown('assetSection');
             loadSectionsDropdown('editSection');
+            loadSectionsDropdown('filterSection');
+            renderSectionList();
         });
 
         let editMachineId = null;
@@ -1763,7 +1529,6 @@
             document.getElementById('editNotes').value = m.notes || '';
             loadSectionsDropdown('editSection', m.section);
             document.getElementById('editModal').classList.add('active');
-            // Stop scanner if open
             stopQRScanner();
         }
 
@@ -1852,7 +1617,6 @@
         // NAVIGATION
         // ============================================================
         function switchToTab(name) {
-            // Top tabs
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             const topBtn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
             if (topBtn) topBtn.classList.add('active');
@@ -1867,12 +1631,10 @@
             if (name === 'qr') populateQRSelect();
             if (name !== 'scan') stopQRScanner();
 
-            // Sidebar
             document.querySelectorAll('.sidebar-nav > a').forEach(a => a.classList.remove('active'));
             const sidebarLink = document.querySelector(`.sidebar-nav > a[data-tab="${name}"]`);
             if (sidebarLink) sidebarLink.classList.add('active');
 
-            // Bottom nav
             document.querySelectorAll('#bottomNav a').forEach(a => {
                 a.classList.remove('active');
                 if (a.dataset.tab === name) a.classList.add('active');
@@ -1956,6 +1718,7 @@
                     document.getElementById('assetMachineId').value = generateMachineId();
                     loadSectionsDropdown('assetSection');
                 }
+                if (sub === 'manageSections') renderSectionList();
                 document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
                 const sidebarSub = document.querySelector(`#sidebarAssetSub a[data-sub="${sub}"]`);
                 if (sidebarSub) sidebarSub.classList.add('active');
@@ -2005,7 +1768,6 @@
             refreshList();
             refreshDashboard();
 
-            // Ensure first sub-tab is active
             const firstSub = document.querySelector('#assetSubTabs .sub-tab');
             if (firstSub) firstSub.click();
 
@@ -2014,7 +1776,6 @@
                 switchToTab(hash);
             }
 
-            // Stop scanner on page unload
             window.addEventListener('beforeunload', function() {
                 stopQRScanner();
             });
@@ -2045,4 +1806,4 @@
         console.log('📂 Sections:', getSections().length);
     </script>
 </body>
-</html> 
+</html>
