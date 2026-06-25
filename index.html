@@ -1475,13 +1475,14 @@
                 <span class="subtitle">Supplier directory and contact management</span>
             </div>
 
-            <!-- Search Bar -->
+            <!-- Search Bar & Export -->
             <div class="card" style="padding:12px 16px;">
                 <div class="search-bar">
                     <input type="text" id="supplierSearchInput" placeholder="Search by name, contact, address, or any detail..." oninput="filterSuppliers()" />
                     <button onclick="filterSuppliers()" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
                     <button onclick="clearSupplierSearch()" class="btn btn-secondary"><i class="fas fa-times"></i> Clear</button>
                     <button onclick="openAddSupplierForm()" class="btn btn-primary"><i class="fas fa-plus"></i> Add Supplier</button>
+                    <button onclick="exportSuppliersToCSV()" class="btn btn-primary"><i class="fas fa-file-excel"></i> Export Excel</button>
                 </div>
             </div>
 
@@ -2551,6 +2552,27 @@
         function clearSupplierSearch() {
             document.getElementById('supplierSearchInput').value = '';
             renderSuppliers(getSuppliers());
+        }
+
+        // Export suppliers to CSV
+        function exportSuppliersToCSV() {
+            const suppliers = getSuppliers();
+            if (suppliers.length === 0) { toast('No suppliers to export.', true); return; }
+            const headers = ['ID', 'Supplier Name', 'Contact Number', 'Additional Contact', 'Service Centre Contact',
+                'Address', 'Other Details'
+            ];
+            const rows = suppliers.map(s => [
+                s.id, s.name || '', s.contact || '', s.additionalContact || '', s.serviceCentre || '',
+                s.address || '', s.otherDetails || ''
+            ]);
+            let csv = headers.join(',') + '\n';
+            rows.forEach(row => { csv += row.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',') + '\n'; });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'panilkanda_suppliers.csv';
+            link.click();
+            toast('📥 Supplier CSV exported.');
         }
 
         function openAddSupplierForm() {
