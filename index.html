@@ -1382,7 +1382,10 @@
             </div>
             <div class="info-box">
                 <span><strong>Total Machines:</strong> <span id="listCount">0</span></span>
-                <button onclick="refreshList()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button>
+                <div class="btn-group">
+                    <button onclick="refreshList()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    <button onclick="exportToCSV()" class="btn btn-primary btn-sm"><i class="fas fa-file-excel"></i> Export Excel</button>
+                </div>
             </div>
             <div id="machineListView" class="machine-list"><p style="text-align:center;padding:30px;">Loading machines...</p></div>
         </div>
