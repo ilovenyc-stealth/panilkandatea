@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
+        /* ─── (all existing styles remain unchanged) ─── */
         * {
             margin: 0;
             padding: 0;
@@ -493,6 +494,16 @@
             background: #f5f5f5;
             padding: 2px 10px;
             border-radius: var(--radius-full);
+        }
+        .machine-supplier {
+            font-size: 11px;
+            color: #2e7d32;
+            background: #e8f5e9;
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         /* ─── Info Box ─── */
@@ -1322,6 +1333,7 @@
                             <div class="form-group"><label><i class="fas fa-hashtag"></i> Machine ID</label><input type="text" id="assetMachineId" readonly class="auto-id" /></div>
                             <div class="form-group"><label><i class="fas fa-tag"></i> Machine Name *</label><input type="text" id="assetName" placeholder="e.g. CTC Roller" required /></div>
                             <div class="form-group"><label><i class="fas fa-building"></i> Section *</label><select id="assetSection" required></select></div>
+                            <div class="form-group"><label><i class="fas fa-truck"></i> Supplier</label><select id="assetSupplier"><option value="">-- None --</option></select></div>
                             <div class="form-group"><label><i class="fas fa-industry"></i> Manufacturer</label><input type="text" id="assetManufacturer" placeholder="e.g. Marshall" /></div>
                             <div class="form-group"><label><i class="fas fa-cube"></i> Model</label><input type="text" id="assetModel" placeholder="e.g. CTC-2000" /></div>
                             <div class="form-group"><label><i class="fas fa-barcode"></i> Serial Number</label><input type="text" id="assetSerial" placeholder="e.g. SN-2024-001" /></div>
@@ -1545,6 +1557,7 @@
                     <div class="form-group"><label><i class="fas fa-hashtag"></i> Machine ID</label><input type="text" id="editMachineId" readonly class="auto-id" /></div>
                     <div class="form-group"><label><i class="fas fa-tag"></i> Machine Name *</label><input type="text" id="editName" required /></div>
                     <div class="form-group"><label><i class="fas fa-building"></i> Section *</label><select id="editSection" required></select></div>
+                    <div class="form-group"><label><i class="fas fa-truck"></i> Supplier</label><select id="editSupplier"><option value="">-- None --</option></select></div>
                     <div class="form-group"><label><i class="fas fa-industry"></i> Manufacturer</label><input type="text" id="editManufacturer" /></div>
                     <div class="form-group"><label><i class="fas fa-cube"></i> Model</label><input type="text" id="editModel" /></div>
                     <div class="form-group"><label><i class="fas fa-barcode"></i> Serial Number</label><input type="text" id="editSerial" /></div>
@@ -1680,17 +1693,42 @@
             return found && found.color ? found.color : '#2e7d32';
         }
 
+        // ─── Supplier helper ───
+        function getSupplierName(id) {
+            if (!id) return '';
+            const suppliers = getSuppliers();
+            const found = suppliers.find(s => s.id === id);
+            return found ? found.name : '';
+        }
+
+        // ─── Populate supplier dropdown ───
+        function loadSuppliersDropdown(selectId, selected) {
+            const sel = document.getElementById(selectId);
+            if (!sel) return;
+            const suppliers = getSuppliers();
+            sel.innerHTML = '<option value="">-- None --</option>';
+            suppliers.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.id;
+                opt.textContent = s.name;
+                if (selected && s.id === selected) opt.selected = true;
+                sel.appendChild(opt);
+            });
+        }
+
         // ============================================================
         // RENDER HELPERS
         // ============================================================
         function renderMachineItem(m) {
             const secName = getSectionName(m.section);
+            const supplierName = getSupplierName(m.supplier);
             return `
                         <div class="machine-item" style="border-left:5px solid ${getSectionColor(m.section)};">
                             <div class="machine-info">
                                 <span class="machine-id">${esc(m.id)}</span>
                                 <span class="machine-name">${esc(m.name)}</span>
                                 <span class="machine-section"><i class="fas fa-folder"></i> ${esc(secName)}</span>
+                                ${supplierName ? `<span class="machine-supplier"><i class="fas fa-truck"></i> ${esc(supplierName)}</span>` : ''}
                                 <span class="status-badge ${statusCls(m.status)}">${statusLabel(m.status)}</span>
                             </div>
                             <div class="btn-group">
@@ -1763,6 +1801,8 @@
             }
             loadSectionsDropdown('assetSection');
             loadSectionsDropdown('editSection');
+            loadSuppliersDropdown('assetSupplier');
+            loadSuppliersDropdown('editSupplier');
             populateQRSelect();
             renderSectionList();
             updateLandingCount();
@@ -1909,11 +1949,13 @@
             document.getElementById('qrLabel').textContent = m.id + ' - ' + m.name;
             document.getElementById('qrUrlDisplay').textContent = '🔗 ' + url;
             const info = document.getElementById('qrInfoDetails');
+            const supplierName = getSupplierName(m.supplier);
             info.innerHTML = `
                         <div class="result-grid">
                             <div class="result-item"><label>ID</label>${esc(m.id)}</div>
                             <div class="result-item"><label>Name</label>${esc(m.name)}</div>
                             <div class="result-item"><label>Section</label>${esc(getSectionName(m.section))}</div>
+                            ${supplierName ? `<div class="result-item"><label>Supplier</label>${esc(supplierName)}</div>` : ''}
                             <div class="result-item"><label>Manufacturer</label>${esc(m.manufacturer || '-')}</div>
                             <div class="result-item"><label>Model</label>${esc(m.model || '-')}</div>
                             <div class="result-item"><label>Serial</label>${esc(m.serialNumber || '-')}</div>
@@ -1966,6 +2008,7 @@
                 return;
             }
             const secName = getSectionName(machine.section);
+            const supplierName = getSupplierName(machine.supplier);
             content.innerHTML = `
                         <div class="header">
                             <h1>🍃 Machine Details</h1>
@@ -1974,6 +2017,7 @@
                         <div class="grid">
                             <div class="item"><label>Name</label><div class="value">${esc(machine.name)}</div></div>
                             <div class="item"><label>Section</label><div class="value">${esc(secName)}</div></div>
+                            ${supplierName ? `<div class="item"><label>Supplier</label><div class="value">${esc(supplierName)}</div></div>` : ''}
                             <div class="item"><label>Manufacturer</label><div class="value">${esc(machine.manufacturer || '-')}</div></div>
                             <div class="item"><label>Model</label><div class="value">${esc(machine.model || '-')}</div></div>
                             <div class="item"><label>Serial Number</label><div class="value">${esc(machine.serialNumber || '-')}</div></div>
@@ -1996,10 +2040,11 @@
             const machine = window._fullscreenMachine;
             if (!machine) { toast('No machine data to export.', true); return; }
             const secName = getSectionName(machine.section);
-            const headers = ['ID', 'Name', 'Section', 'Manufacturer', 'Model', 'Serial Number', 'Installation Date',
-                'Status', 'Notes'
+            const supplierName = getSupplierName(machine.supplier);
+            const headers = ['ID', 'Name', 'Section', 'Supplier', 'Manufacturer', 'Model', 'Serial Number',
+                'Installation Date', 'Status', 'Notes'
             ];
-            const row = [machine.id, machine.name, secName, machine.manufacturer || '', machine.model || '',
+            const row = [machine.id, machine.name, secName, supplierName, machine.manufacturer || '', machine.model || '',
                 machine.serialNumber || '', machine.installationDate || '', machine.status || '', machine.notes || ''
             ];
             let csv = headers.join(',') + '\n';
@@ -2043,6 +2088,7 @@
             const modal = document.getElementById('scanResultModal');
             const body = document.getElementById('scanResultModalBody');
             const secName = machine.sectionName || getSectionName(machine.section) || machine.section || '-';
+            const supplierName = getSupplierName(machine.supplier);
             lastScannedMachine = machine;
             body.innerHTML = `
                         <div style="margin-bottom:12px;">
@@ -2052,6 +2098,7 @@
                         <div class="machine-detail-grid">
                             <div class="detail-item"><label>Name</label><div class="value">${esc(machine.name)}</div></div>
                             <div class="detail-item"><label>Section</label><div class="value">${esc(secName)}</div></div>
+                            ${supplierName ? `<div class="detail-item"><label>Supplier</label><div class="value">${esc(supplierName)}</div></div>` : ''}
                             <div class="detail-item"><label>Manufacturer</label><div class="value">${esc(machine.manufacturer || '-')}</div></div>
                             <div class="detail-item"><label>Model</label><div class="value">${esc(machine.model || '-')}</div></div>
                             <div class="detail-item"><label>Serial Number</label><div class="value">${esc(machine.serialNumber || '-')}</div></div>
@@ -2100,6 +2147,7 @@
 
         function openBlankPageWithMachine(machine) {
             const secName = machine.sectionName || getSectionName(machine.section) || machine.section || '-';
+            const supplierName = getSupplierName(machine.supplier);
             const machineJson = JSON.stringify(machine).replace(/"/g, '&quot;');
             const htmlContent = `<!DOCTYPE html>
         <html>
@@ -2142,6 +2190,7 @@
         <div class="grid">
         <div class="item"><label>Name</label><div class="value">${esc(machine.name)}</div></div>
         <div class="item"><label>Section</label><div class="value">${esc(secName)}</div></div>
+        ${supplierName ? `<div class="item"><label>Supplier</label><div class="value">${esc(supplierName)}</div></div>` : ''}
         <div class="item"><label>Manufacturer</label><div class="value">${esc(machine.manufacturer || '-')}</div></div>
         <div class="item"><label>Model</label><div class="value">${esc(machine.model || '-')}</div></div>
         <div class="item"><label>Serial Number</label><div class="value">${esc(machine.serialNumber || '-')}</div></div>
@@ -2160,8 +2209,9 @@
         function exportMachine() {
         const machine = ${machineJson};
         const secName = machine.sectionName || '${esc(secName)}' || machine.section || '-';
-        const headers = ['ID','Name','Section','Manufacturer','Model','Serial Number','Installation Date','Status','Notes'];
-        const row = [machine.id, machine.name, secName, machine.manufacturer || '', machine.model || '', machine.serialNumber || '', machine.installationDate || '', machine.status || '', machine.notes || ''];
+        const supplierName = '${esc(supplierName)}';
+        const headers = ['ID','Name','Section','Supplier','Manufacturer','Model','Serial Number','Installation Date','Status','Notes'];
+        const row = [machine.id, machine.name, secName, supplierName, machine.manufacturer || '', machine.model || '', machine.serialNumber || '', machine.installationDate || '', machine.status || '', machine.notes || ''];
         let csv = headers.join(',') + '\\n';
         csv += row.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',');
         const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
@@ -2339,7 +2389,8 @@
                 m.id.toLowerCase().includes(query) ||
                 (m.name && m.name.toLowerCase().includes(query)) ||
                 (m.serialNumber && m.serialNumber.toLowerCase().includes(query)) ||
-                (m.section && getSectionName(m.section).toLowerCase().includes(query))
+                (m.section && getSectionName(m.section).toLowerCase().includes(query)) ||
+                (m.supplier && getSupplierName(m.supplier).toLowerCase().includes(query))
             );
             if (found.length === 0) { result.innerHTML =
                     '<p style="color:#666;font-size:13px;margin-top:10px;">No machines found matching "' + esc(query) +
@@ -2362,6 +2413,7 @@
                 id: document.getElementById('assetMachineId').value.trim(),
                 name: name,
                 section: section,
+                supplier: document.getElementById('assetSupplier').value || null,
                 manufacturer: document.getElementById('assetManufacturer').value.trim(),
                 model: document.getElementById('assetModel').value.trim(),
                 serialNumber: document.getElementById('assetSerial').value.trim(),
@@ -2417,6 +2469,7 @@
             document.getElementById('editStatus').value = m.status || 'working';
             document.getElementById('editNotes').value = m.notes || '';
             loadSectionsDropdown('editSection', m.section);
+            loadSuppliersDropdown('editSupplier', m.supplier);
             document.getElementById('editModal').classList.add('active');
             stopQRScanner();
         }
@@ -2436,6 +2489,7 @@
             if (idx === -1) { toast('Machine not found.', true); return; }
             db.machines[idx].name = name;
             db.machines[idx].section = section;
+            db.machines[idx].supplier = document.getElementById('editSupplier').value || null;
             db.machines[idx].manufacturer = document.getElementById('editManufacturer').value.trim();
             db.machines[idx].model = document.getElementById('editModel').value.trim();
             db.machines[idx].serialNumber = document.getElementById('editSerial').value.trim();
@@ -2478,11 +2532,13 @@
         function exportToCSV() {
             const machines = getMachines();
             if (machines.length === 0) { toast('No assets to export.', true); return; }
-            const headers = ['ID', 'Name', 'Section', 'Manufacturer', 'Model', 'Serial Number', 'Installation Date',
-                'Status', 'Notes'
+            const headers = ['ID', 'Name', 'Section', 'Supplier', 'Manufacturer', 'Model', 'Serial Number',
+                'Installation Date', 'Status', 'Notes'
             ];
-            const rows = machines.map(m => [m.id, m.name, getSectionName(m.section), m.manufacturer || '', m.model || '',
-                m.serialNumber || '', m.installationDate || '', m.status || '', m.notes || ''
+            const rows = machines.map(m => [
+                m.id, m.name, getSectionName(m.section), getSupplierName(m.supplier),
+                m.manufacturer || '', m.model || '', m.serialNumber || '',
+                m.installationDate || '', m.status || '', m.notes || ''
             ]);
             let csv = headers.join(',') + '\n';
             rows.forEach(row => { csv += row.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',') + '\n'; });
@@ -2557,7 +2613,6 @@
             renderSuppliers(getSuppliers());
         }
 
-        // Export suppliers to CSV
         function exportSuppliersToCSV() {
             const suppliers = getSuppliers();
             if (suppliers.length === 0) { toast('No suppliers to export.', true); return; }
@@ -2585,7 +2640,6 @@
             document.getElementById('supplierFormSubmitText').textContent = 'Save Supplier';
             document.getElementById('supplierForm').reset();
             document.getElementById('supplierEditId').value = '';
-            // Scroll to form
             document.getElementById('supplierFormContainer').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
@@ -2620,6 +2674,9 @@
             saveDB(db);
             toast('🗑️ Supplier deleted.');
             renderSuppliers(getSuppliers());
+            // Refresh supplier dropdowns in asset forms
+            loadSuppliersDropdown('assetSupplier');
+            loadSuppliersDropdown('editSupplier');
         }
 
         document.getElementById('supplierForm').addEventListener('submit', function(e) {
@@ -2629,7 +2686,6 @@
             const editId = document.getElementById('supplierEditId').value;
             const db = getDB();
             if (editId) {
-                // Edit existing
                 const idx = db.suppliers.findIndex(s => s.id === editId);
                 if (idx === -1) { toast('Supplier not found.', true); return; }
                 db.suppliers[idx].name = name;
@@ -2641,7 +2697,6 @@
                 saveDB(db);
                 toast('✅ Supplier updated: ' + name);
             } else {
-                // Add new
                 const newSupplier = {
                     id: generateSupplierId(),
                     name: name,
@@ -2659,6 +2714,9 @@
             closeSupplierForm();
             renderSuppliers(getSuppliers());
             document.getElementById('supplierSearchInput').value = '';
+            // Refresh dropdowns
+            loadSuppliersDropdown('assetSupplier');
+            loadSuppliersDropdown('editSupplier');
         });
 
         // ============================================================
@@ -2739,10 +2797,7 @@
                 return;
             }
             if (tab) {
-                if (tab === 'suppliers') {
-                    // Close any open supplier form when navigating
-                    closeSupplierForm();
-                }
+                if (tab === 'suppliers') closeSupplierForm();
                 switchToTab(tab);
                 if (window.innerWidth < 769) {
                     document.getElementById('sidebar').classList.remove('open');
@@ -2794,20 +2849,30 @@
             const machines = getMachines();
             if (machines.length === 0) {
                 const sample = [
-                    { id: 'M0001', name: 'CTC Roller 1', section: 'sec_2', manufacturer: 'Marshall',
+                    { id: 'M0001', name: 'CTC Roller 1', section: 'sec_2', supplier: null,
+                        manufacturer: 'Marshall',
                         model: 'CTC-2000', serialNumber: 'SN-001', installationDate: '2023-01-15',
                         status: 'working', notes: 'Primary roller' },
-                    { id: 'M0002', name: 'Withering Trough 1', section: 'sec_1', manufacturer: 'TeaTech',
+                    { id: 'M0002', name: 'Withering Trough 1', section: 'sec_1', supplier: null,
+                        manufacturer: 'TeaTech',
                         model: 'WT-500', serialNumber: 'SN-002', installationDate: '2023-02-10',
                         status: 'working', notes: 'Capacity 500kg' },
-                    { id: 'M0003', name: 'Fermentation Conveyor', section: 'sec_3', manufacturer: 'ConveyX',
+                    { id: 'M0003', name: 'Fermentation Conveyor', section: 'sec_3', supplier: null,
+                        manufacturer: 'ConveyX',
                         model: 'FC-100', serialNumber: 'SN-003', installationDate: '2023-03-01',
                         status: 'maintenance', notes: 'Belt needs replacement' },
                 ];
                 db.machines = sample;
                 saveDB(db);
             }
-            // Seed sample suppliers if none
+            // Ensure all machines have supplier field
+            let needUpdate = false;
+            db.machines.forEach(m => {
+                if (m.supplier === undefined) { m.supplier = null;
+                    needUpdate = true; }
+            });
+            if (needUpdate) saveDB(db);
+
             if (!db.suppliers || db.suppliers.length === 0) {
                 db.suppliers = [
                     { id: 'S0001', name: 'Tea Equipment Ltd', contact: '+94 77 123 4567',
@@ -2823,6 +2888,8 @@
             loadSectionsDropdown('assetSection');
             loadSectionsDropdown('editSection');
             loadSectionsDropdown('filterSection');
+            loadSuppliersDropdown('assetSupplier');
+            loadSuppliersDropdown('editSupplier');
             document.getElementById('assetMachineId').value = generateMachineId();
             populateQRSelect();
 
