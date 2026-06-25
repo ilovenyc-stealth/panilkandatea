@@ -8,12 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
-        /* ─── Reset & Base ─── */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
         :root {
             --primary: #2e7d32;
             --primary-dark: #1b5e20;
@@ -28,9 +23,9 @@
             --warning-light: #ffe0b2;
             --info: #1976d2;
             --info-light: #e3f2fd;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 8px 25px rgba(46, 125, 50, 0.15);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 15px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 25px rgba(46,125,50,0.15);
             --radius-sm: 12px;
             --radius-md: 16px;
             --radius-lg: 20px;
@@ -47,1068 +42,386 @@
             display: flex;
             flex-direction: column;
         }
-        .layout {
-            display: flex;
-            flex: 1;
-        }
+        .layout { display: flex; flex: 1; }
 
         /* ─── Sidebar ─── */
         .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: var(--sidebar-width);
-            height: 100%;
-            background: var(--white);
-            border-right: 2px solid var(--primary-light);
-            z-index: 200;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            overflow-y: auto;
-            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
+            position: fixed; top:0; left:0; width:var(--sidebar-width); height:100%;
+            background:var(--white); border-right:2px solid var(--primary-light);
+            z-index:200; transform:translateX(-100%); transition:transform 0.3s ease;
+            overflow-y:auto; box-shadow:2px 0 15px rgba(0,0,0,0.1);
+            display:flex; flex-direction:column;
         }
-        .sidebar.open {
-            transform: translateX(0);
-        }
+        .sidebar.open { transform:translateX(0); }
         .sidebar-header {
-            padding: 20px;
-            border-bottom: 2px solid var(--accent-light);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            padding:20px; border-bottom:2px solid var(--accent-light);
+            display:flex; align-items:center; gap:10px;
         }
-        .sidebar-header i {
-            font-size: 24px;
-            color: var(--primary);
-        }
-        .sidebar-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-dark);
-        }
-        .sidebar-nav {
-            padding: 10px 0;
-            flex: 1;
-        }
+        .sidebar-header i { font-size:24px; color:var(--primary); }
+        .sidebar-header h2 { font-size:18px; font-weight:700; color:var(--primary-dark); }
+        .sidebar-nav { padding:10px 0; flex:1; }
         .sidebar-nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background 0.2s;
-            border-left: 4px solid transparent;
-            cursor: pointer;
+            display:flex; align-items:center; gap:12px; padding:12px 20px;
+            color:var(--text-dark); text-decoration:none; font-size:14px; font-weight:500;
+            transition:background 0.2s; border-left:4px solid transparent; cursor:pointer;
         }
-        .sidebar-nav a:hover {
-            background: var(--primary-bg);
-        }
+        .sidebar-nav a:hover { background:var(--primary-bg); }
         .sidebar-nav a.active {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            border-left-color: var(--primary);
-            font-weight: 600;
+            background:var(--primary-light); color:var(--primary-dark);
+            border-left-color:var(--primary); font-weight:600;
         }
-        .sidebar-nav a i {
-            width: 20px;
-            text-align: center;
-        }
-        .sidebar-sub {
-            display: none;
-            padding-left: 20px;
-        }
-        .sidebar-sub.open {
-            display: block;
-        }
-        .sidebar-sub a {
-            padding: 8px 20px;
-            font-size: 13px;
-        }
+        .sidebar-nav a i { width:20px; text-align:center; }
+        .sidebar-sub { display:none; padding-left:20px; }
+        .sidebar-sub.open { display:block; }
+        .sidebar-sub a { padding:8px 20px; font-size:13px; }
         .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 150;
+            display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.4); z-index:150;
         }
-        .sidebar-overlay.active {
-            display: block;
-        }
+        .sidebar-overlay.active { display:block; }
 
         /* ─── Hamburger ─── */
         .hamburger {
-            display: none;
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 300;
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            align-items: center;
-            justify-content: center;
+            display:none; position:fixed; top:15px; left:15px; z-index:300;
+            background:var(--primary); color:white; border:none; width:44px; height:44px;
+            border-radius:50%; font-size:20px; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.2);
+            align-items:center; justify-content:center;
         }
 
         /* ─── Main Container ─── */
         .main-content {
-            flex: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: var(--radius-lg);
-            padding: 25px 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            transition: margin-left 0.3s ease;
-            margin: 20px;
-            margin-left: calc(var(--sidebar-width) + 20px);
+            flex:1; max-width:1200px; margin:0 auto;
+            background:rgba(255,255,255,0.95); border-radius:var(--radius-lg);
+            padding:25px 20px; box-shadow:0 10px 40px rgba(0,0,0,0.1);
+            transition:margin-left 0.3s ease; margin:20px;
+            margin-left:calc(var(--sidebar-width) + 20px);
         }
 
         /* ─── Bottom Nav (mobile) ─── */
         .bottom-nav {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--white);
-            border-top: 2px solid var(--primary-light);
-            height: var(--bottom-nav-height);
-            justify-content: space-around;
-            align-items: center;
-            z-index: 100;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            display:none; position:fixed; bottom:0; left:0; right:0;
+            background:var(--white); border-top:2px solid var(--primary-light);
+            height:var(--bottom-nav-height); justify-content:space-around; align-items:center;
+            z-index:100; box-shadow:0 -2px 10px rgba(0,0,0,0.05);
         }
         .bottom-nav a {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-size: 10px;
-            padding: 5px;
-            flex: 1;
-            font-weight: 500;
-            cursor: pointer;
+            display:flex; flex-direction:column; align-items:center;
+            color:var(--text-dark); text-decoration:none; font-size:10px;
+            padding:5px; flex:1; font-weight:500; cursor:pointer;
         }
-        .bottom-nav a i {
-            font-size: 20px;
-            margin-bottom: 2px;
-        }
-        .bottom-nav a.active {
-            color: var(--primary);
-            font-weight: 600;
-        }
+        .bottom-nav a i { font-size:20px; margin-bottom:2px; }
+        .bottom-nav a.active { color:var(--primary); font-weight:600; }
 
         /* ─── Header ─── */
         .header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--accent-light);
+            display:flex; align-items:center; gap:15px; margin-bottom:20px;
+            flex-wrap:wrap; padding-bottom:15px; border-bottom:2px solid var(--accent-light);
         }
         .logo-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.35);
-            flex-shrink: 0;
+            display:flex; align-items:center; justify-content:center;
+            background:linear-gradient(135deg, var(--primary), var(--primary-dark));
+            width:60px; height:60px; border-radius:50%;
+            box-shadow:0 8px 25px rgba(46,125,50,0.35); flex-shrink:0;
         }
-        .logo-wrapper i {
-            font-size: 26px;
-            color: white;
-        }
-        .header-text h1 {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--text-dark);
-            line-height: 1.2;
-        }
-        .header-text p {
-            color: #2e5e2e;
-            font-size: 13px;
-        }
+        .logo-wrapper i { font-size:26px; color:white; }
+        .header-text h1 { font-size:24px; font-weight:800; color:var(--text-dark); line-height:1.2; }
+        .header-text p { color:#2e5e2e; font-size:13px; }
 
-        /* ─── Tabs ─── */
-        .tabs {
-            display: flex;
-            gap: 5px;
-            background: var(--accent-light);
-            padding: 5px;
-            border-radius: var(--radius-full);
-            margin-bottom: 20px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+        /* ─── Hide top tabs ─── */
+        .tabs, .sub-tabs { display:none !important; }
+
+        /* ─── Landing View ─── */
+        #landingView {
+            display:block; text-align:center; padding:60px 20px;
         }
-        .tabs::-webkit-scrollbar {
-            display: none;
-        }
-        .tab-btn {
-            flex: 0 0 auto;
-            min-width: 60px;
-            border: none;
-            background: transparent;
-            padding: 10px 12px;
-            font-weight: 600;
-            font-size: 12px;
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .tab-btn.active {
-            background: var(--white);
-            box-shadow: var(--shadow-lg);
-            color: var(--primary-dark);
-        }
-        .tab-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.6);
-        }
+        #landingView .big-number { font-size:72px; font-weight:800; color:var(--primary-dark); line-height:1.2; }
+        #landingView .label { font-size:20px; color:#555; margin-top:8px; }
+        #landingView .sub { font-size:14px; color:#888; margin-top:4px; }
 
         /* ─── Tab Content ─── */
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px)
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
-
-        /* ─── Sub‑tabs ─── */
-        .sub-tabs {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 16px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-        .sub-tabs::-webkit-scrollbar {
-            display: none;
-        }
-        .sub-tab {
-            flex: 0 0 auto;
-            padding: 8px 16px;
-            border: 2px solid var(--primary-light);
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            background: white;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .sub-tab.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        .sub-content {
-            display: none;
-        }
-        .sub-content.active {
-            display: block;
-        }
+        .tab-content { display:none; animation:fadeIn 0.3s; }
+        .tab-content.active { display:block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
 
         /* ─── Cards & Forms ─── */
         .card {
-            background: var(--white);
-            border-radius: var(--radius-md);
-            padding: 18px;
-            margin-bottom: 12px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--primary-light);
+            background:var(--white); border-radius:var(--radius-md);
+            padding:18px; margin-bottom:12px; box-shadow:var(--shadow-sm);
+            border:1px solid var(--primary-light);
         }
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+        .form-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+        .form-group { display:flex; flex-direction:column; }
+        .form-group.full { grid-column:1/-1; }
+        label { font-weight:600; font-size:12px; margin-bottom:4px; color:var(--text-dark); }
+        label i { color:var(--primary); width:14px; }
+        input, select, textarea {
+            padding:10px 14px; border:2px solid var(--primary-light);
+            border-radius:10px; font-size:14px; font-family:inherit;
+            background:white; width:100%;
         }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .form-group.full {
-            grid-column: 1/-1;
-        }
-        label {
-            font-weight: 600;
-            font-size: 12px;
-            margin-bottom: 4px;
-            color: var(--text-dark);
-        }
-        label i {
-            color: var(--primary);
-            width: 14px;
-        }
-        input,
-        select,
-        textarea {
-            padding: 10px 14px;
-            border: 2px solid var(--primary-light);
-            border-radius: 10px;
-            font-size: 14px;
-            font-family: inherit;
-            background: white;
-            width: 100%;
-        }
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        textarea {
-            resize: vertical;
-            min-height: 50px;
-        }
+        input:focus, select:focus, textarea:focus { outline:none; border-color:var(--primary); }
+        textarea { resize:vertical; min-height:50px; }
 
         .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.2s;
-            white-space: nowrap;
-            min-height: 44px;
+            padding:10px 20px; border:none; border-radius:var(--radius-full);
+            font-weight:600; font-size:13px; cursor:pointer;
+            display:inline-flex; align-items:center; justify-content:center;
+            gap:6px; transition:all 0.2s; white-space:nowrap; min-height:44px;
         }
-        .btn:active {
-            transform: scale(0.97);
-        }
-        .btn-sm {
-            padding: 6px 14px;
-            font-size: 11px;
-            min-height: 36px;
-        }
-        .btn-lg {
-            padding: 14px 24px;
-            font-size: 15px;
-        }
-        .btn-block {
-            width: 100%;
-        }
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        .btn-secondary {
-            background: var(--accent-light);
-            color: var(--text-dark);
-        }
-        .btn-info {
-            background: var(--info);
-            color: white;
-        }
-        .btn-warning {
-            background: var(--warning);
-            color: white;
-        }
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-        .btn-scan {
-            background: #6a1b9a;
-            color: white;
-        }
-        .btn-success {
-            background: #2e7d32;
-            color: white;
-        }
+        .btn:active { transform:scale(0.97); }
+        .btn-sm { padding:6px 14px; font-size:11px; min-height:36px; }
+        .btn-group { display:flex; gap:8px; flex-wrap:wrap; }
+        .btn-primary { background:var(--primary); color:white; }
+        .btn-secondary { background:var(--accent-light); color:var(--text-dark); }
+        .btn-info { background:var(--info); color:white; }
+        .btn-danger { background:var(--danger); color:white; }
+        .btn-scan { background:#6a1b9a; color:white; }
 
         /* ─── Status Badge ─── */
         .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 12px;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 11px;
+            display:inline-flex; align-items:center; gap:4px;
+            padding:4px 12px; border-radius:var(--radius-full);
+            font-weight:600; font-size:11px;
         }
-        .status-badge.working {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-        }
-        .status-badge.maintenance {
-            background: var(--warning-light);
-            color: var(--warning);
-        }
-        .status-badge.out-of-service {
-            background: var(--danger-light);
-            color: var(--danger);
-        }
+        .status-badge.working { background:var(--primary-light); color:var(--primary-dark); }
+        .status-badge.maintenance { background:var(--warning-light); color:var(--warning); }
+        .status-badge.out-of-service { background:var(--danger-light); color:var(--danger); }
 
         /* ─── Machine List ─── */
-        .machine-list {
-            display: grid;
-            gap: 8px;
-        }
+        .machine-list { display:grid; gap:8px; }
         .machine-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: var(--white);
-            border-radius: 12px;
-            border: 2px solid var(--primary-light);
-            flex-wrap: wrap;
-            gap: 8px;
+            display:flex; justify-content:space-between; align-items:center;
+            padding:12px 16px; background:var(--white); border-radius:12px;
+            border:2px solid var(--primary-light); flex-wrap:wrap; gap:8px;
         }
-        .machine-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+        .machine-info { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
         .machine-id {
-            font-weight: 700;
-            color: var(--primary-dark);
-            background: var(--primary-bg);
-            padding: 3px 10px;
-            border-radius: var(--radius-full);
-            font-size: 12px;
+            font-weight:700; color:var(--primary-dark); background:var(--primary-bg);
+            padding:3px 10px; border-radius:var(--radius-full); font-size:12px;
         }
-        .machine-name {
-            font-weight: 600;
-            font-size: 14px;
-        }
+        .machine-name { font-weight:600; font-size:14px; }
         .machine-section {
-            font-size: 11px;
-            color: #666;
-            background: #f5f5f5;
-            padding: 2px 10px;
-            border-radius: var(--radius-full);
+            font-size:11px; color:#666; background:#f5f5f5;
+            padding:2px 10px; border-radius:var(--radius-full);
         }
 
         /* ─── Info Box ─── */
         .info-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 13px;
-            flex-wrap: wrap;
-            gap: 8px;
-            background: var(--info-light);
-            border: 2px solid var(--info);
-            color: #0d47a1;
-            margin-bottom: 15px;
+            display:flex; align-items:center; justify-content:space-between;
+            padding:12px 16px; border-radius:12px; font-size:13px;
+            flex-wrap:wrap; gap:8px; background:var(--info-light);
+            border:2px solid var(--info); color:#0d47a1; margin-bottom:15px;
         }
+        .info-box .btn-group { display:flex !important; }
 
         /* ─── QR ─── */
-        .qr-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
+        .qr-container { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
         .qr-display {
-            text-align: center;
-            padding: 16px;
-            background: white;
-            border-radius: 14px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            text-align:center; padding:16px; background:white;
+            border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,0.04);
         }
-        .qr-display canvas {
-            border-radius: 10px;
-            max-width: 200px;
-        }
+        .qr-display canvas { border-radius:10px; max-width:200px; }
         .qr-info-panel {
-            background: var(--primary-bg);
-            border-radius: 14px;
-            padding: 16px;
-            border: 2px solid var(--primary-light);
+            background:var(--primary-bg); border-radius:14px;
+            padding:16px; border:2px solid var(--primary-light);
         }
 
         /* ─── Scanner ─── */
         #qrReaderContainer {
-            margin-top: 12px;
-            padding: 16px;
-            background: #000;
-            border-radius: 14px;
-            text-align: center;
-            min-height: 300px;
-            display: none;
-            position: relative;
+            margin-top:12px; padding:16px; background:#000;
+            border-radius:14px; text-align:center; min-height:300px;
+            display:none; position:relative;
         }
-        #qrReaderContainer video {
-            max-width: 100%;
-            border-radius: 10px;
-            max-height: 400px;
-            object-fit: cover;
-        }
-        #qrReaderContainer #qrReaderContainer__scan_region {
-            min-height: 300px;
-        }
+        #qrReaderContainer video { max-width:100%; border-radius:10px; max-height:400px; object-fit:cover; }
 
         /* ─── Result Card ─── */
         .result-card {
-            background: var(--primary-bg);
-            border-radius: var(--radius-md);
-            padding: 18px;
-            border-left: 5px solid var(--primary);
-            animation: fadeIn 0.3s;
-            margin-top: 10px;
+            background:var(--primary-bg); border-radius:var(--radius-md);
+            padding:18px; border-left:5px solid var(--primary);
+            animation:fadeIn 0.3s; margin-top:10px;
         }
-        .result-card.success {
-            border-left-color: var(--primary);
-            background: var(--primary-bg);
-        }
-        .result-card.error {
-            border-left-color: var(--danger);
-            background: var(--danger-light);
-        }
+        .result-card.success { border-left-color:var(--primary); background:var(--primary-bg); }
+        .result-card.error { border-left-color:var(--danger); background:var(--danger-light); }
         .result-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 8px 14px;
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+            gap:8px 14px;
         }
-        .result-item {
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(46, 125, 50, 0.1);
-            font-size: 13px;
-        }
-        .result-item label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #3f6b3f;
-            display: block;
-        }
+        .result-item { padding:6px 0; border-bottom:1px solid rgba(46,125,50,0.1); font-size:13px; }
+        .result-item label { font-size:10px; text-transform:uppercase; color:#3f6b3f; display:block; }
 
         /* ─── Stats ─── */
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-        }
+        .stat-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr)); gap:12px; }
         .stat-card {
-            background: var(--white);
-            border-radius: 14px;
-            padding: 16px;
-            text-align: center;
-            border: 2px solid var(--primary-light);
+            background:var(--white); border-radius:14px; padding:16px;
+            text-align:center; border:2px solid var(--primary-light);
         }
-        .stat-card .num {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--primary-dark);
-        }
-        .stat-card .label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #666;
-            margin-top: 4px;
-        }
-        .stat-card.green {
-            border-color: var(--primary);
-        }
-        .stat-card.orange {
-            border-color: var(--warning);
-        }
-        .stat-card.red {
-            border-color: var(--danger);
-        }
+        .stat-card .num { font-size:28px; font-weight:800; color:var(--primary-dark); }
+        .stat-card .label { font-size:11px; text-transform:uppercase; color:#666; margin-top:4px; }
+        .stat-card.green { border-color:var(--primary); }
+        .stat-card.orange { border-color:var(--warning); }
+        .stat-card.red { border-color:var(--danger); }
 
         /* ─── Toast ─── */
         .toast-container {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+            position:fixed; top:15px; right:15px; z-index:9999;
+            display:flex; flex-direction:column; gap:6px;
         }
         .toast {
-            background: var(--primary);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 13px;
-            animation: slideIn 0.3s;
-            max-width: 300px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background:var(--primary); color:white; padding:12px 20px;
+            border-radius:30px; font-weight:600; font-size:13px;
+            animation:slideIn 0.3s; max-width:300px; box-shadow:0 4px 12px rgba(0,0,0,0.15);
         }
-        .toast.error {
-            background: var(--danger);
-        }
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(60px)
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0)
-            }
-        }
+        .toast.error { background:var(--danger); }
+        @keyframes slideIn { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
 
         /* ─── Modal ─── */
         .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
+            display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center; padding:15px;
         }
-        .modal.active {
-            display: flex;
-        }
+        .modal.active { display:flex; }
         .modal-content {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
+            background:var(--white); border-radius:20px; padding:25px;
+            max-width:600px; width:100%; max-height:85vh; overflow-y:auto;
         }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-        }
+        .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+        .modal-close { background:none; border:none; font-size:24px; cursor:pointer; color:#666; }
 
         .footer {
-            margin-top: 25px;
-            padding-top: 15px;
-            text-align: center;
-            font-size: 12px;
-            opacity: 0.6;
-            border-top: 2px solid var(--accent-light);
+            margin-top:25px; padding-top:15px; text-align:center;
+            font-size:12px; opacity:0.6; border-top:2px solid var(--accent-light);
         }
 
-        .scanner-loading {
-            color: #aaa;
-            font-size: 14px;
-            padding: 20px;
-            text-align: center;
-        }
+        .scanner-loading { color:#aaa; font-size:14px; padding:20px; text-align:center; }
         .scanner-upload-area {
-            margin-top: 12px;
-            padding: 20px;
-            border: 2px dashed var(--primary-light);
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: background 0.2s;
-            background: #fafffe;
+            margin-top:12px; padding:20px; border:2px dashed var(--primary-light);
+            border-radius:12px; text-align:center; cursor:pointer;
+            transition:background 0.2s; background:#fafffe;
         }
-        .scanner-upload-area:hover {
-            background: var(--primary-bg);
-        }
-        .scanner-upload-area input[type="file"] {
-            display: none;
-        }
+        .scanner-upload-area:hover { background:var(--primary-bg); }
+        .scanner-upload-area input[type="file"] { display:none; }
 
         .section-list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 16px;
-            background: var(--white);
-            border-radius: 10px;
-            border: 1px solid var(--primary-light);
-            margin-bottom: 6px;
+            display:flex; justify-content:space-between; align-items:center;
+            padding:10px 16px; background:var(--white); border-radius:10px;
+            border:1px solid var(--primary-light); margin-bottom:6px;
         }
         .section-color-dot {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 10px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            width:16px; height:16px; border-radius:50%; display:inline-block;
+            margin-right:10px; border:1px solid rgba(0,0,0,0.1);
         }
 
         /* ─── Scan Result Detail Modal ─── */
-        .scan-result-modal .modal-content {
-            max-width: 700px;
-        }
-        .scan-result-modal .machine-detail-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-        .scan-result-modal .machine-detail-grid .full {
-            grid-column: 1/-1;
-        }
+        .scan-result-modal .modal-content { max-width:700px; }
+        .scan-result-modal .machine-detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        .scan-result-modal .machine-detail-grid .full { grid-column:1/-1; }
         .scan-result-modal .detail-item {
-            background: #f9fafb;
-            border-radius: 10px;
-            padding: 10px 14px;
-            border: 1px solid #e5e7eb;
+            background:#f9fafb; border-radius:10px; padding:10px 14px;
+            border:1px solid #e5e7eb;
         }
         .scan-result-modal .detail-item label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #6b7280;
-            display: block;
-            margin-bottom: 2px;
-            font-weight: 600;
+            font-size:10px; text-transform:uppercase; color:#6b7280;
+            display:block; margin-bottom:2px; font-weight:600;
         }
-        .scan-result-modal .detail-item .value {
-            font-size: 14px;
-            font-weight: 500;
-            color: #1b3b1b;
-            word-break: break-word;
-        }
+        .scan-result-modal .detail-item .value { font-size:14px; font-weight:500; color:#1b3b1b; word-break:break-word; }
 
-        /* ─── Full‑screen details overlay (acts like a blank page) ─── */
+        /* ─── Full‑screen details overlay ─── */
         #fullscreenDetails {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            z-index: 9999;
-            overflow-y: auto;
-            padding: 20px;
-            font-family: 'Inter', sans-serif;
+            display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:white; z-index:9999; overflow-y:auto; padding:20px;
+            font-family:'Inter', sans-serif;
         }
-        #fullscreenDetails.active {
-            display: block;
-        }
+        #fullscreenDetails.active { display:block; }
         #fullscreenDetails .close-btn {
-            position: sticky;
-            top: 0;
-            float: right;
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 10;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position:sticky; top:0; float:right; background:var(--danger);
+            color:white; border:none; border-radius:50%; width:44px; height:44px;
+            font-size:24px; cursor:pointer; z-index:10; box-shadow:0 2px 10px rgba(0,0,0,0.2);
         }
         #fullscreenDetails .card {
-            max-width: 800px;
-            margin: 20px auto;
-            background: #f9fafb;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            border: 1px solid #e5e7eb;
+            max-width:800px; margin:20px auto; background:#f9fafb;
+            border-radius:20px; padding:30px; box-shadow:0 10px 40px rgba(0,0,0,0.08);
+            border:1px solid #e5e7eb;
         }
         #fullscreenDetails .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 8px;
+            display:flex; justify-content:space-between; align-items:center;
+            margin-bottom:24px; border-bottom:2px solid #e5e7eb;
+            padding-bottom:16px; flex-wrap:wrap; gap:8px;
         }
-        #fullscreenDetails .header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1b3b1b;
-        }
+        #fullscreenDetails .header h1 { font-size:24px; font-weight:700; color:#1b3b1b; }
         #fullscreenDetails .header .id {
-            font-size: 14px;
-            color: #6b7280;
-            background: #e5e7eb;
-            padding: 4px 12px;
-            border-radius: 20px;
+            font-size:14px; color:#6b7280; background:#e5e7eb;
+            padding:4px 12px; border-radius:20px;
         }
-        #fullscreenDetails .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
+        #fullscreenDetails .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
         #fullscreenDetails .item {
-            background: white;
-            border-radius: 12px;
-            padding: 14px 16px;
-            border: 1px solid #e5e7eb;
+            background:white; border-radius:12px; padding:14px 16px;
+            border:1px solid #e5e7eb;
         }
         #fullscreenDetails .item label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #6b7280;
-            display: block;
-            margin-bottom: 4px;
-            font-weight: 600;
+            font-size:11px; text-transform:uppercase; color:#6b7280;
+            display:block; margin-bottom:4px; font-weight:600;
         }
-        #fullscreenDetails .item .value {
-            font-size: 15px;
-            font-weight: 500;
-            color: #1b3b1b;
-            word-break: break-word;
-        }
-        #fullscreenDetails .full {
-            grid-column: 1/-1;
-        }
+        #fullscreenDetails .item .value { font-size:15px; font-weight:500; color:#1b3b1b; word-break:break-word; }
+        #fullscreenDetails .full { grid-column:1/-1; }
         #fullscreenDetails .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 12px;
+            display:inline-block; padding:4px 12px; border-radius:50px;
+            font-weight:600; font-size:12px;
         }
-        #fullscreenDetails .status-badge.working {
-            background: #c8e6c9;
-            color: #1b5e20;
-        }
-        #fullscreenDetails .status-badge.maintenance {
-            background: #ffe0b2;
-            color: #e65100;
-        }
-        #fullscreenDetails .status-badge.out-of-service {
-            background: #ffcdd2;
-            color: #c62828;
-        }
-        #fullscreenDetails .btn-group {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+        #fullscreenDetails .status-badge.working { background:#c8e6c9; color:#1b5e20; }
+        #fullscreenDetails .status-badge.maintenance { background:#ffe0b2; color:#e65100; }
+        #fullscreenDetails .status-badge.out-of-service { background:#ffcdd2; color:#c62828; }
+        #fullscreenDetails .btn-group { margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
         #fullscreenDetails .btn {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.2s;
+            padding:10px 24px; border:none; border-radius:50px;
+            font-weight:600; font-size:13px; cursor:pointer; text-decoration:none;
+            display:inline-flex; align-items:center; gap:8px; transition:background 0.2s;
         }
-        #fullscreenDetails .btn.primary {
-            background: #2e7d32;
-            color: white;
-        }
-        #fullscreenDetails .btn.primary:hover {
-            background: #1b5e20;
-        }
-        #fullscreenDetails .btn.secondary {
-            background: #e5e7eb;
-            color: #1b3b1b;
-        }
-        #fullscreenDetails .btn.secondary:hover {
-            background: #d1d5db;
-        }
-        #fullscreenDetails .btn.info {
-            background: #1976d2;
-            color: white;
-        }
-        #fullscreenDetails .btn.info:hover {
-            background: #1565c0;
-        }
+        #fullscreenDetails .btn.primary { background:#2e7d32; color:white; }
+        #fullscreenDetails .btn.primary:hover { background:#1b5e20; }
+        #fullscreenDetails .btn.secondary { background:#e5e7eb; color:#1b3b1b; }
+        #fullscreenDetails .btn.secondary:hover { background:#d1d5db; }
+        #fullscreenDetails .btn.info { background:#1976d2; color:white; }
+        #fullscreenDetails .btn.info:hover { background:#1565c0; }
         #fullscreenDetails .footer {
-            margin-top: 24px;
-            text-align: center;
-            font-size: 13px;
-            color: #6b7280;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 16px;
+            margin-top:24px; text-align:center; font-size:13px;
+            color:#6b7280; border-top:1px solid #e5e7eb; padding-top:16px;
         }
         @media (max-width:600px) {
-            #fullscreenDetails .grid {
-                grid-template-columns: 1fr;
-            }
-            #fullscreenDetails .header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+            #fullscreenDetails .grid { grid-template-columns:1fr; }
+            #fullscreenDetails .header { flex-direction:column; align-items:flex-start; }
+            #landingView .big-number { font-size:48px; }
+            #landingView { padding:40px 20px; }
         }
 
         /* ─── Responsive ─── */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .main-content {
-                margin: 10px 0;
-                padding: 15px 10px;
-                border-radius: var(--radius-md);
-                margin-left: 0 !important;
-                margin-right: 0;
-            }
-            .sidebar {
-                width: 280px;
-            }
-            .hamburger {
-                display: flex;
-            }
-            .bottom-nav {
-                display: flex;
-            }
-            .header {
-                flex-direction: column;
-                text-align: center;
-            }
-            .header-text h1 {
-                font-size: 20px;
-            }
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            input,
-            select,
-            textarea {
-                font-size: 16px;
-                padding: 12px 14px;
-            }
-            .btn {
-                padding: 12px 20px;
-                font-size: 14px;
-                min-height: 48px;
-            }
-            .btn-sm {
-                padding: 8px 14px;
-                font-size: 12px;
-                min-height: 40px;
-            }
-            .machine-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .machine-info {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-            .qr-container {
-                grid-template-columns: 1fr;
-            }
-            .info-box {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .modal-content {
-                padding: 15px;
-                margin: 10px;
-            }
-            .sub-tabs {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-            }
-            .sub-tabs::-webkit-scrollbar {
-                display: none;
-            }
-            .tabs {
-                gap: 2px;
-                padding: 4px;
-            }
-            .tab-btn {
-                padding: 12px 16px;
-                font-size: 13px;
-                min-height: 44px;
-            }
-            .sidebar-overlay.active {
-                display: block;
-            }
-            .main-content {
-                margin-bottom: 80px;
-            }
-            #qrReaderContainer {
-                min-height: 200px;
-                padding: 8px;
-            }
-            #qrReaderContainer video {
-                max-height: 300px;
-            }
-            .scan-result-modal .machine-detail-grid {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width:768px) {
+            body { padding:10px; }
+            .main-content { margin:10px 0; padding:15px 10px; border-radius:var(--radius-md); margin-left:0 !important; margin-right:0; }
+            .sidebar { width:280px; }
+            .hamburger { display:flex; }
+            .bottom-nav { display:flex; }
+            .header { flex-direction:column; text-align:center; }
+            .header-text h1 { font-size:20px; }
+            .form-grid { grid-template-columns:1fr; }
+            input, select, textarea { font-size:16px; padding:12px 14px; }
+            .btn { padding:12px 20px; font-size:14px; min-height:48px; }
+            .btn-sm { padding:8px 14px; font-size:12px; min-height:40px; }
+            .machine-item { flex-direction:column; align-items:flex-start; }
+            .machine-info { flex-direction:column; align-items:flex-start; gap:5px; }
+            .qr-container { grid-template-columns:1fr; }
+            .modal-content { padding:15px; margin:10px; }
+            .sidebar-overlay.active { display:block; }
+            .main-content { margin-bottom:80px; }
+            #qrReaderContainer { min-height:200px; padding:8px; }
+            #qrReaderContainer video { max-height:300px; }
+            .scan-result-modal .machine-detail-grid { grid-template-columns:1fr; }
         }
-        @media (min-width: 769px) {
-            .hamburger {
-                display: none;
-            }
-            .bottom-nav {
-                display: none;
-            }
-            .sidebar {
-                transform: translateX(0);
-                position: fixed;
-                height: 100vh;
-                box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-            }
-            .sidebar-overlay {
-                display: none !important;
-            }
-            .main-content {
-                margin-left: calc(var(--sidebar-width) + 20px);
-                margin-top: 20px;
-                margin-bottom: 20px;
-            }
+        @media (min-width:769px) {
+            .hamburger { display:none; }
+            .bottom-nav { display:none; }
+            .sidebar { transform:translateX(0); position:fixed; height:100vh; box-shadow:2px 0 15px rgba(0,0,0,0.1); }
+            .sidebar-overlay { display:none !important; }
+            .main-content { margin-left:calc(var(--sidebar-width) + 20px); margin-top:20px; margin-bottom:20px; }
         }
     </style>
 </head>
@@ -1130,11 +443,11 @@
             <h2>Panilkanda Tea</h2>
         </div>
         <nav class="sidebar-nav">
-            <a href="#" class="active" data-tab="assets" id="sidebar-assets">
+            <a href="#" id="sidebar-assets" data-tab="assets" class="active">
                 <i class="fas fa-boxes"></i> Asset Management
             </a>
             <div class="sidebar-sub open" id="sidebarAssetSub">
-                <a href="#" class="active" data-sub="viewAssets"><i class="fas fa-eye"></i> View Assets</a>
+                <a href="#" data-sub="viewAssets" class="active"><i class="fas fa-eye"></i> View Assets</a>
                 <a href="#" data-sub="addAsset"><i class="fas fa-plus-circle"></i> Add Asset</a>
                 <a href="#" data-sub="addSection"><i class="fas fa-folder-plus"></i> Add Section</a>
                 <a href="#" data-sub="manageSections"><i class="fas fa-cog"></i> Manage Sections</a>
@@ -1158,25 +471,15 @@
             </div>
         </div>
 
-        <!-- Top Tabs -->
-        <div class="tabs" id="mainTabs">
-            <button class="tab-btn active" data-tab="assets"><i class="fas fa-boxes"></i>Asset Mgmt</button>
-            <button class="tab-btn" data-tab="list"><i class="fas fa-list"></i>All Machines</button>
-            <button class="tab-btn" data-tab="lookup"><i class="fas fa-search"></i>Lookup</button>
-            <button class="tab-btn" data-tab="qr"><i class="fas fa-qrcode"></i>QR</button>
-            <button class="tab-btn" data-tab="scan"><i class="fas fa-camera"></i>Scan</button>
-            <button class="tab-btn" data-tab="status"><i class="fas fa-chart-bar"></i>Stats</button>
+        <!-- ==================== LANDING VIEW (only total assets) ==================== -->
+        <div id="landingView">
+            <div class="big-number" id="landingAssetCount">0</div>
+            <div class="label">Total Assets</div>
+            <div class="sub">🍃 Panilkanda Tea Factory</div>
         </div>
 
-        <!-- ==================== ASSET MANAGEMENT ==================== -->
-        <div id="tab-assets" class="tab-content active">
-            <div class="sub-tabs" id="assetSubTabs">
-                <button class="sub-tab active" data-sub="viewAssets"><i class="fas fa-eye"></i> View Assets</button>
-                <button class="sub-tab" data-sub="addAsset"><i class="fas fa-plus-circle"></i> Add Asset</button>
-                <button class="sub-tab" data-sub="addSection"><i class="fas fa-folder-plus"></i> Add Section</button>
-                <button class="sub-tab" data-sub="manageSections"><i class="fas fa-cog"></i> Manage Sections</button>
-            </div>
-
+        <!-- ==================== ASSET MANAGEMENT (View Assets) ==================== -->
+        <div id="tab-assets" class="tab-content">
             <div id="sub-viewAssets" class="sub-content active">
                 <div class="info-box">
                     <span><strong>Total Assets:</strong> <span id="assetCount">0</span></span>
@@ -1190,52 +493,20 @@
                 </div>
                 <div id="assetListView" class="machine-list"><p style="text-align:center;padding:30px;">Loading assets...</p></div>
             </div>
-
             <div id="sub-addAsset" class="sub-content">
                 <div class="card">
                     <h3 style="margin-bottom:14px;"><i class="fas fa-plus-circle"></i> Add New Asset</h3>
                     <form id="assetForm" autocomplete="off">
                         <div class="form-grid">
-                            <div class="form-group">
-                                <label><i class="fas fa-hashtag"></i> Machine ID</label>
-                                <input type="text" id="assetMachineId" readonly class="auto-id" />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-tag"></i> Machine Name *</label>
-                                <input type="text" id="assetName" placeholder="e.g. CTC Roller" required />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-building"></i> Section *</label>
-                                <select id="assetSection" required></select>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-industry"></i> Manufacturer</label>
-                                <input type="text" id="assetManufacturer" placeholder="e.g. Marshall" />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-cube"></i> Model</label>
-                                <input type="text" id="assetModel" placeholder="e.g. CTC-2000" />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-barcode"></i> Serial Number</label>
-                                <input type="text" id="assetSerial" placeholder="e.g. SN-2024-001" />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-calendar-alt"></i> Installation Date</label>
-                                <input type="date" id="assetDate" />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-info-circle"></i> Status</label>
-                                <select id="assetStatus">
-                                    <option value="working">Working</option>
-                                    <option value="maintenance">Maintenance</option>
-                                    <option value="out-of-service">Out of Service</option>
-                                </select>
-                            </div>
-                            <div class="form-group full">
-                                <label><i class="fas fa-sticky-note"></i> Notes</label>
-                                <textarea id="assetNotes" rows="2" placeholder="Additional details..."></textarea>
-                            </div>
+                            <div class="form-group"><label><i class="fas fa-hashtag"></i> Machine ID</label><input type="text" id="assetMachineId" readonly class="auto-id" /></div>
+                            <div class="form-group"><label><i class="fas fa-tag"></i> Machine Name *</label><input type="text" id="assetName" placeholder="e.g. CTC Roller" required /></div>
+                            <div class="form-group"><label><i class="fas fa-building"></i> Section *</label><select id="assetSection" required></select></div>
+                            <div class="form-group"><label><i class="fas fa-industry"></i> Manufacturer</label><input type="text" id="assetManufacturer" placeholder="e.g. Marshall" /></div>
+                            <div class="form-group"><label><i class="fas fa-cube"></i> Model</label><input type="text" id="assetModel" placeholder="e.g. CTC-2000" /></div>
+                            <div class="form-group"><label><i class="fas fa-barcode"></i> Serial Number</label><input type="text" id="assetSerial" placeholder="e.g. SN-2024-001" /></div>
+                            <div class="form-group"><label><i class="fas fa-calendar-alt"></i> Installation Date</label><input type="date" id="assetDate" /></div>
+                            <div class="form-group"><label><i class="fas fa-info-circle"></i> Status</label><select id="assetStatus"><option value="working">Working</option><option value="maintenance">Maintenance</option><option value="out-of-service">Out of Service</option></select></div>
+                            <div class="form-group full"><label><i class="fas fa-sticky-note"></i> Notes</label><textarea id="assetNotes" rows="2" placeholder="Additional details..."></textarea></div>
                         </div>
                         <div class="btn-group" style="margin-top:12px;">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Asset</button>
@@ -1244,24 +515,14 @@
                     </form>
                 </div>
             </div>
-
             <div id="sub-addSection" class="sub-content">
                 <div class="card">
                     <h3 style="margin-bottom:14px;"><i class="fas fa-folder-plus"></i> Add New Section</h3>
                     <form id="sectionForm" autocomplete="off">
                         <div class="form-grid">
-                            <div class="form-group">
-                                <label><i class="fas fa-tag"></i> Section Name *</label>
-                                <input type="text" id="sectionName" placeholder="e.g. Fermentation" required />
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-palette"></i> Color (optional)</label>
-                                <input type="color" id="sectionColor" value="#2e7d32" />
-                            </div>
-                            <div class="form-group full">
-                                <label><i class="fas fa-sticky-note"></i> Description</label>
-                                <textarea id="sectionDesc" rows="2" placeholder="Section details..."></textarea>
-                            </div>
+                            <div class="form-group"><label><i class="fas fa-tag"></i> Section Name *</label><input type="text" id="sectionName" placeholder="e.g. Fermentation" required /></div>
+                            <div class="form-group"><label><i class="fas fa-palette"></i> Color (optional)</label><input type="color" id="sectionColor" value="#2e7d32" /></div>
+                            <div class="form-group full"><label><i class="fas fa-sticky-note"></i> Description</label><textarea id="sectionDesc" rows="2" placeholder="Section details..."></textarea></div>
                         </div>
                         <div class="btn-group" style="margin-top:12px;">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Section</button>
@@ -1270,15 +531,11 @@
                     </form>
                 </div>
             </div>
-
-            <!-- ==================== MANAGE SECTIONS ==================== -->
             <div id="sub-manageSections" class="sub-content">
                 <div class="card">
                     <h3 style="margin-bottom:14px;"><i class="fas fa-cog"></i> Manage Sections</h3>
                     <p style="color:#666;font-size:13px;margin-bottom:12px;">Delete sections that are no longer needed. Machines assigned to a deleted section will be set to "Uncategorised".</p>
-                    <div id="sectionListContainer">
-                        <p style="text-align:center;padding:20px;color:#666;">Loading sections...</p>
-                    </div>
+                    <div id="sectionListContainer"><p style="text-align:center;padding:20px;color:#666;">Loading sections...</p></div>
                 </div>
             </div>
         </div>
@@ -1310,25 +567,15 @@
                 <h3><i class="fas fa-qrcode"></i> Generate QR Code (GitHub Pages Link)</h3>
                 <p style="font-size:13px;color:#666;margin-bottom:12px;">Each machine gets a unique QR code that links directly to its details page.</p>
                 <div class="form-grid" style="margin-top:10px;">
-                    <div class="form-group">
-                        <label>Select Machine</label>
-                        <select id="qrMachineSelect" onchange="generateQR()"></select>
-                    </div>
+                    <div class="form-group"><label>Select Machine</label><select id="qrMachineSelect" onchange="generateQR()"></select></div>
                     <div class="form-group" style="justify-content:flex-end; flex-direction:row; gap:8px;">
                         <button onclick="generateQR()" class="btn btn-primary"><i class="fas fa-qrcode"></i> Generate</button>
                         <button onclick="downloadQR()" class="btn btn-secondary"><i class="fas fa-download"></i> Download</button>
                     </div>
                 </div>
                 <div id="qrOutput" style="display:none; margin-top:15px;" class="qr-container">
-                    <div class="qr-display">
-                        <div id="qrCanvasContainer"></div>
-                        <p id="qrLabel" style="font-weight:600;margin-top:6px;font-size:13px;"></p>
-                        <p id="qrUrlDisplay" style="font-size:11px;color:#888;word-break:break-all;margin-top:4px;"></p>
-                    </div>
-                    <div class="qr-info-panel">
-                        <h4>Machine Details</h4>
-                        <div id="qrInfoDetails"><p style="color:#666;font-size:13px;">Select a machine to see details.</p></div>
-                    </div>
+                    <div class="qr-display"><div id="qrCanvasContainer"></div><p id="qrLabel" style="font-weight:600;margin-top:6px;font-size:13px;"></p><p id="qrUrlDisplay" style="font-size:11px;color:#888;word-break:break-all;margin-top:4px;"></p></div>
+                    <div class="qr-info-panel"><h4>Machine Details</h4><div id="qrInfoDetails"><p style="color:#666;font-size:13px;">Select a machine to see details.</p></div></div>
                 </div>
             </div>
         </div>
@@ -1343,9 +590,7 @@
                     <button onclick="stopQRScanner()" class="btn btn-danger" id="stopScanBtn"><i class="fas fa-stop"></i> Stop</button>
                 </div>
                 <div id="qrReaderContainer"></div>
-                <div style="margin-top:10px; text-align:center; color:#666; font-size:13px;">
-                    <i class="fas fa-arrow-down"></i> Or upload a QR code image:
-                </div>
+                <div style="margin-top:10px; text-align:center; color:#666; font-size:13px;"><i class="fas fa-arrow-down"></i> Or upload a QR code image:</div>
                 <div class="scanner-upload-area" id="uploadArea" onclick="document.getElementById('qrFileInput').click()">
                     <i class="fas fa-cloud-upload-alt" style="font-size:24px;color:var(--primary);"></i>
                     <p style="margin-top:6px;font-size:13px;">Tap to select a QR code image from your device</p>
@@ -1362,13 +607,8 @@
                 <h3><i class="fas fa-chart-bar"></i> Statistics Dashboard</h3>
                 <div id="statsContainer" style="margin-top:14px;">
                     <div class="stat-grid" id="statGrid"></div>
-                    <div style="margin-top:20px;">
-                        <h4 style="margin-bottom:8px;">Machines by Section</h4>
-                        <div id="sectionStats"></div>
-                    </div>
-                    <div style="margin-top:16px;">
-                        <button onclick="refreshDashboard()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button>
-                    </div>
+                    <div style="margin-top:20px;"><h4 style="margin-bottom:8px;">Machines by Section</h4><div id="sectionStats"></div></div>
+                    <div style="margin-top:16px;"><button onclick="refreshDashboard()" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button></div>
                 </div>
             </div>
         </div>
@@ -1388,52 +628,18 @@
     <!-- Edit Modal -->
     <div class="modal" id="editModal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-edit"></i> Edit Machine</h3>
-                <button class="modal-close" onclick="closeEditModal()">&times;</button>
-            </div>
+            <div class="modal-header"><h3><i class="fas fa-edit"></i> Edit Machine</h3><button class="modal-close" onclick="closeEditModal()">&times;</button></div>
             <form id="editForm" autocomplete="off">
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label><i class="fas fa-hashtag"></i> Machine ID</label>
-                        <input type="text" id="editMachineId" readonly class="auto-id" />
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-tag"></i> Machine Name *</label>
-                        <input type="text" id="editName" required />
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-building"></i> Section *</label>
-                        <select id="editSection" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-industry"></i> Manufacturer</label>
-                        <input type="text" id="editManufacturer" />
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-cube"></i> Model</label>
-                        <input type="text" id="editModel" />
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-barcode"></i> Serial Number</label>
-                        <input type="text" id="editSerial" />
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-calendar-alt"></i> Installation Date</label>
-                        <input type="date" id="editDate" />
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-info-circle"></i> Status</label>
-                        <select id="editStatus">
-                            <option value="working">Working</option>
-                            <option value="maintenance">Maintenance</option>
-                            <option value="out-of-service">Out of Service</option>
-                        </select>
-                    </div>
-                    <div class="form-group full">
-                        <label><i class="fas fa-sticky-note"></i> Notes</label>
-                        <textarea id="editNotes" rows="2"></textarea>
-                    </div>
+                    <div class="form-group"><label><i class="fas fa-hashtag"></i> Machine ID</label><input type="text" id="editMachineId" readonly class="auto-id" /></div>
+                    <div class="form-group"><label><i class="fas fa-tag"></i> Machine Name *</label><input type="text" id="editName" required /></div>
+                    <div class="form-group"><label><i class="fas fa-building"></i> Section *</label><select id="editSection" required></select></div>
+                    <div class="form-group"><label><i class="fas fa-industry"></i> Manufacturer</label><input type="text" id="editManufacturer" /></div>
+                    <div class="form-group"><label><i class="fas fa-cube"></i> Model</label><input type="text" id="editModel" /></div>
+                    <div class="form-group"><label><i class="fas fa-barcode"></i> Serial Number</label><input type="text" id="editSerial" /></div>
+                    <div class="form-group"><label><i class="fas fa-calendar-alt"></i> Installation Date</label><input type="date" id="editDate" /></div>
+                    <div class="form-group"><label><i class="fas fa-info-circle"></i> Status</label><select id="editStatus"><option value="working">Working</option><option value="maintenance">Maintenance</option><option value="out-of-service">Out of Service</option></select></div>
+                    <div class="form-group full"><label><i class="fas fa-sticky-note"></i> Notes</label><textarea id="editNotes" rows="2"></textarea></div>
                 </div>
                 <div class="btn-group" style="margin-top:12px;">
                     <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
@@ -1447,17 +653,12 @@
     <!-- ==================== SCAN RESULT DETAIL MODAL ==================== -->
     <div class="modal scan-result-modal" id="scanResultModal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-qrcode"></i> Machine Details</h3>
-                <button class="modal-close" onclick="closeScanResultModal()">&times;</button>
-            </div>
-            <div id="scanResultModalBody">
-                <!-- dynamically filled -->
-            </div>
+            <div class="modal-header"><h3><i class="fas fa-qrcode"></i> Machine Details</h3><button class="modal-close" onclick="closeScanResultModal()">&times;</button></div>
+            <div id="scanResultModalBody"><!-- dynamically filled --></div>
             <div class="btn-group" style="margin-top:16px;justify-content:center;">
                 <button onclick="closeScanResultModal()" class="btn btn-secondary"><i class="fas fa-times"></i> Close</button>
                 <button onclick="printScanResult()" class="btn btn-primary"><i class="fas fa-print"></i> Print</button>
-                <button id="scanResultOpenNewTabBtn" onclick="openScanResultInNewTab()" class="btn btn-info"><i class="fas fa-external-link-alt"></i> Open in New Tab</button>
+                <button onclick="openScanResultInNewTab()" class="btn btn-info"><i class="fas fa-external-link-alt"></i> Open in New Tab</button>
             </div>
         </div>
     </div>
@@ -1465,57 +666,39 @@
     <!-- ==================== FULLSCREEN DETAILS OVERLAY ==================== -->
     <div id="fullscreenDetails">
         <button class="close-btn" onclick="closeFullscreenDetails()">✕</button>
-        <div class="card" id="fullscreenContent">
-            <!-- filled dynamically -->
-        </div>
+        <div class="card" id="fullscreenContent"><!-- filled dynamically --></div>
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js">
-    </script>
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
     <script>
         // ============================================================
-        // CONFIGURATION – CHANGE THIS TO YOUR GITHUB PAGES URL
+        // CONFIGURATION – automatically uses your GitHub Pages URL
         // ============================================================
         const BASE_URL = window.location.origin + window.location.pathname;
 
         // ============================================================
-        // DATABASE
+        // DATABASE (localStorage)
         // ============================================================
         function getDB() {
             try {
                 const data = localStorage.getItem('panilkanda_db');
                 if (data) return JSON.parse(data);
-            } catch (e) { /* ignore */ }
+            } catch(e) { /* ignore */ }
             return { machines: [], sections: [] };
         }
-
-        function saveDB(db) {
-            localStorage.setItem('panilkanda_db', JSON.stringify(db));
-        }
-
-        function getSections() {
-            return getDB().sections || [];
-        }
-
-        function getMachines() {
-            return getDB().machines || [];
-        }
-
+        function saveDB(db) { localStorage.setItem('panilkanda_db', JSON.stringify(db)); }
+        function getSections() { return getDB().sections || []; }
+        function getMachines() { return getDB().machines || []; }
         function generateMachineId() {
             const db = getDB();
             const existing = db.machines || [];
-            const nums = existing.map(m => {
-                const n = parseInt(m.id.replace(/\D/g, ''));
-                return isNaN(n) ? 0 : n;
-            });
+            const nums = existing.map(m => { const n = parseInt(m.id.replace(/\D/g,'')); return isNaN(n) ? 0 : n; });
             const max = nums.length ? Math.max(...nums) : 0;
             return 'M' + String(max + 1).padStart(4, '0');
         }
-
         function esc(str) {
             if (!str) return '';
             return String(str).replace(/[&<>"']/g, function(m) {
@@ -1527,27 +710,21 @@
                 return m;
             });
         }
-
         function fmtDate(d) {
             if (!d) return '-';
-            try {
-                const dt = new Date(d);
-                return dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-            } catch (e) { return d; }
+            try { const dt = new Date(d); return dt.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }); }
+            catch(e) { return d; }
         }
-
         function statusCls(s) {
             if (s === 'working') return 'working';
             if (s === 'maintenance') return 'maintenance';
             if (s === 'out-of-service') return 'out-of-service';
             return '';
         }
-
         function statusLabel(s) {
-            const map = { working: '✅ Working', maintenance: '🔧 Maintenance', 'out-of-service': '⛔ Out of Service' };
+            const map = { working:'✅ Working', maintenance:'🔧 Maintenance', 'out-of-service':'⛔ Out of Service' };
             return map[s] || s;
         }
-
         function toast(msg, isError) {
             const c = document.getElementById('toastContainer');
             const el = document.createElement('div');
@@ -1556,14 +733,12 @@
             c.appendChild(el);
             setTimeout(() => { if (el.parentNode) el.remove(); }, 3500);
         }
-
         function getSectionName(id) {
             if (!id) return 'Uncategorised';
             const sections = getSections();
             const found = sections.find(s => s.id === id);
             return found ? found.name : id;
         }
-
         function getSectionColor(id) {
             if (!id) return '#2e7d32';
             const sections = getSections();
@@ -1592,7 +767,6 @@
                 </div>
             `;
         }
-
         function renderAssetList(machines) {
             const container = document.getElementById('assetListView');
             if (!machines || machines.length === 0) {
@@ -1603,7 +777,6 @@
             document.getElementById('assetCount').textContent = machines.length;
             container.innerHTML = machines.map(renderMachineItem).join('');
         }
-
         function renderMachineList(machines) {
             const container = document.getElementById('machineListView');
             if (!machines || machines.length === 0) {
@@ -1614,7 +787,6 @@
             document.getElementById('listCount').textContent = machines.length;
             container.innerHTML = machines.map(renderMachineItem).join('');
         }
-
         function loadSectionsDropdown(selectId, selected) {
             const sel = document.getElementById(selectId);
             if (!sel) return;
@@ -1656,14 +828,10 @@
             loadSectionsDropdown('editSection');
             populateQRSelect();
             renderSectionList();
+            updateLandingCount();
         }
-
         function filterAssets() { refreshAssetView(); }
-
-        function refreshList() {
-            renderMachineList(getMachines());
-        }
-
+        function refreshList() { renderMachineList(getMachines()); updateLandingCount(); }
         function refreshDashboard() {
             const machines = getMachines();
             const sections = getSections();
@@ -1671,7 +839,6 @@
             const working = machines.filter(m => m.status === 'working').length;
             const maintenance = machines.filter(m => m.status === 'maintenance').length;
             const out = machines.filter(m => m.status === 'out-of-service').length;
-
             const grid = document.getElementById('statGrid');
             grid.innerHTML = `
                 <div class="stat-card green"><div class="num">${total}</div><div class="label">Total Machines</div></div>
@@ -1679,7 +846,6 @@
                 <div class="stat-card orange"><div class="num">${maintenance}</div><div class="label">🔧 Maintenance</div></div>
                 <div class="stat-card red"><div class="num">${out}</div><div class="label">⛔ Out of Service</div></div>
             `;
-
             const secStats = document.getElementById('sectionStats');
             if (sections.length === 0) {
                 secStats.innerHTML = '<p style="color:#666;font-size:13px;">No sections defined.</p>';
@@ -1698,6 +864,11 @@
             });
             html += '</div>';
             secStats.innerHTML = html;
+            updateLandingCount();
+        }
+        function updateLandingCount() {
+            const count = getMachines().length;
+            document.getElementById('landingAssetCount').textContent = count;
         }
 
         // ============================================================
@@ -1707,12 +878,10 @@
             const container = document.getElementById('sectionListContainer');
             const sections = getSections();
             const machines = getMachines();
-
             if (sections.length === 0) {
                 container.innerHTML = '<p style="text-align:center;padding:20px;color:#666;">No sections created yet. Add one using the "Add Section" tab.</p>';
                 return;
             }
-
             let html = '';
             sections.forEach(sec => {
                 const count = machines.filter(m => m.section === sec.id).length;
@@ -1725,49 +894,33 @@
                             <span style="color:#666;font-size:12px;margin-left:8px;">(${count} machine${count !== 1 ? 's' : ''})</span>
                             ${sec.description ? `<span style="color:#888;font-size:12px;margin-left:8px;">— ${esc(sec.description)}</span>` : ''}
                         </div>
-                        <button onclick="deleteSection('${sec.id}')" class="btn btn-danger btn-sm">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
+                        <button onclick="deleteSection('${sec.id}')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</button>
                     </div>
                 `;
             });
             container.innerHTML = html;
         }
-
         function deleteSection(sectionId) {
             const sections = getSections();
             const section = sections.find(s => s.id === sectionId);
             if (!section) { toast('Section not found.', true); return; }
-
             const machineCount = getMachines().filter(m => m.section === sectionId).length;
             const msg = `Delete section "${section.name}"?\n\n${machineCount} machine${machineCount !== 1 ? 's' : ''} will be set to "Uncategorised".`;
             if (!confirm(msg)) return;
-
             const db = getDB();
             db.sections = db.sections.filter(s => s.id !== sectionId);
-            db.machines = db.machines.map(m => {
-                if (m.section === sectionId) {
-                    m.section = '';
-                }
-                return m;
-            });
+            db.machines = db.machines.map(m => { if (m.section === sectionId) m.section = ''; return m; });
             saveDB(db);
             toast('🗑️ Section "' + section.name + '" deleted. Machines updated.');
-            refreshAssetView();
-            refreshList();
-            refreshDashboard();
-            loadSectionsDropdown('assetSection');
-            loadSectionsDropdown('editSection');
-            loadSectionsDropdown('filterSection');
-            populateQRSelect();
-            renderSectionList();
+            refreshAssetView(); refreshList(); refreshDashboard();
+            loadSectionsDropdown('assetSection'); loadSectionsDropdown('editSection'); loadSectionsDropdown('filterSection');
+            populateQRSelect(); renderSectionList();
         }
 
         // ============================================================
-        // QR CODE – ENCODES A URL WITH MACHINE ID
+        // QR CODE
         // ============================================================
         let qrCodeInstance = null;
-
         function populateQRSelect() {
             const sel = document.getElementById('qrMachineSelect');
             if (!sel) return;
@@ -1780,47 +933,27 @@
                 sel.appendChild(opt);
             });
         }
-
         function generateQR() {
             const sel = document.getElementById('qrMachineSelect');
             const id = sel.value;
             const output = document.getElementById('qrOutput');
-            if (!id) {
-                output.style.display = 'none';
-                toast('Please select a machine.');
-                return;
-            }
+            if (!id) { output.style.display = 'none'; toast('Please select a machine.'); return; }
             const machines = getMachines();
             const m = machines.find(x => x.id === id);
-            if (!m) {
-                toast('Machine not found.', true);
-                return;
-            }
-
+            if (!m) { toast('Machine not found.', true); return; }
             output.style.display = 'grid';
-
-            // Build the URL with machine ID parameter
             const url = BASE_URL + '?id=' + encodeURIComponent(id);
-
             const container = document.getElementById('qrCanvasContainer');
             container.innerHTML = '';
             try {
                 qrCodeInstance = new QRCode(container, {
-                    text: url,
-                    width: 200,
-                    height: 200,
-                    colorDark: '#1b5e20',
-                    colorLight: '#ffffff',
+                    text: url, width: 200, height: 200,
+                    colorDark: '#1b5e20', colorLight: '#ffffff',
                     correctLevel: QRCode.CorrectLevel.H
                 });
-            } catch (e) {
-                container.innerHTML = '<p style="color:red;">Error generating QR code.</p>';
-                return;
-            }
-
+            } catch(e) { container.innerHTML = '<p style="color:red;">Error generating QR code.</p>'; return; }
             document.getElementById('qrLabel').textContent = m.id + ' - ' + m.name;
             document.getElementById('qrUrlDisplay').textContent = '🔗 ' + url;
-
             const info = document.getElementById('qrInfoDetails');
             info.innerHTML = `
                 <div class="result-grid">
@@ -1839,14 +972,10 @@
                 </p>
             `;
         }
-
         function downloadQR() {
             const container = document.getElementById('qrCanvasContainer');
             const canvas = container.querySelector('canvas');
-            if (!canvas) {
-                toast('No QR code to download. Generate one first.', true);
-                return;
-            }
+            if (!canvas) { toast('No QR code to download. Generate one first.', true); return; }
             const link = document.createElement('a');
             link.download = 'qr_' + (document.getElementById('qrMachineSelect').value || 'machine') + '.png';
             link.href = canvas.toDataURL('image/png');
@@ -1855,41 +984,32 @@
         }
 
         // ============================================================
-        // URL PARAMETER HANDLER – SHOW MACHINE DETAILS FROM URL
+        // URL PARAMETER HANDLER (for QR code links)
         // ============================================================
         function showMachineFromURL() {
             const params = new URLSearchParams(window.location.search);
             const id = params.get('id');
             if (!id) return;
-
-            // Hide the main UI and show fullscreen details
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('bottomNav').style.display = 'none';
             document.getElementById('sidebar').style.display = 'none';
             document.querySelector('.hamburger').style.display = 'none';
-
             const machines = getMachines();
             const machine = machines.find(m => m.id === id);
-
             const overlay = document.getElementById('fullscreenDetails');
             const content = document.getElementById('fullscreenContent');
-
             if (!machine) {
                 content.innerHTML = `
                     <div style="text-align:center;padding:40px;">
                         <i class="fas fa-exclamation-triangle" style="font-size:48px;color:var(--danger);"></i>
                         <h2 style="margin:20px 0;color:var(--danger);">Machine Not Found</h2>
                         <p style="color:#666;">Machine with ID "${esc(id)}" does not exist in the database.</p>
-                        <p style="margin-top:12px;font-size:13px;color:#888;">Please check the QR code or add this machine in the asset management system.</p>
-                        <button onclick="goBackToApp()" class="btn btn-primary" style="margin-top:20px;">
-                            <i class="fas fa-arrow-left"></i> Back to App
-                        </button>
+                        <button onclick="goBackToApp()" class="btn btn-primary" style="margin-top:20px;"><i class="fas fa-arrow-left"></i> Back to App</button>
                     </div>
                 `;
                 overlay.classList.add('active');
                 return;
             }
-
             const secName = getSectionName(machine.section);
             content.innerHTML = `
                 <div class="header">
@@ -1913,51 +1033,35 @@
                 </div>
                 <div class="footer">Panilkanda Tea Factory · Machine Tracker</div>
             `;
-
             overlay.classList.add('active');
-
-            // Store machine for export
             window._fullscreenMachine = machine;
         }
-
         function exportMachineFromFullscreen() {
             const machine = window._fullscreenMachine;
             if (!machine) { toast('No machine data to export.', true); return; }
             const secName = getSectionName(machine.section);
-            const headers = ['ID', 'Name', 'Section', 'Manufacturer', 'Model', 'Serial Number', 'Installation Date',
-                'Status', 'Notes'
-            ];
-            const row = [
-                machine.id, machine.name, secName,
-                machine.manufacturer || '', machine.model || '',
-                machine.serialNumber || '', machine.installationDate || '',
-                machine.status || '', machine.notes || ''
-            ];
+            const headers = ['ID','Name','Section','Manufacturer','Model','Serial Number','Installation Date','Status','Notes'];
+            const row = [machine.id, machine.name, secName, machine.manufacturer || '', machine.model || '', machine.serialNumber || '', machine.installationDate || '', machine.status || '', machine.notes || ''];
             let csv = headers.join(',') + '\n';
-            csv += row.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',');
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            csv += row.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',');
+            const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = 'machine_' + machine.id + '.csv';
             link.click();
             toast('📥 CSV exported.');
         }
-
         function closeFullscreenDetails() {
             document.getElementById('fullscreenDetails').classList.remove('active');
             document.getElementById('mainContainer').style.display = 'block';
             document.getElementById('bottomNav').style.display = 'flex';
             document.getElementById('sidebar').style.display = 'flex';
             document.querySelector('.hamburger').style.display = 'flex';
-            // Remove the id param from URL
             const url = new URL(window.location);
             url.searchParams.delete('id');
             window.history.replaceState({}, document.title, url);
         }
-
-        function goBackToApp() {
-            closeFullscreenDetails();
-        }
+        function goBackToApp() { closeFullscreenDetails(); }
 
         // ============================================================
         // QR SCANNER
@@ -1965,21 +1069,17 @@
         let html5QrCode = null;
         let scannerRunning = false;
         let lastScannedMachine = null;
-
         function showDebug(msg) {
             const el = document.getElementById('scanDebug');
             el.style.display = 'block';
             el.textContent = '🔍 ' + msg;
             console.log('QR Debug:', msg);
         }
-
         function showMachineDetailsModal(machine, fromQR) {
             const modal = document.getElementById('scanResultModal');
             const body = document.getElementById('scanResultModalBody');
             const secName = machine.sectionName || getSectionName(machine.section) || machine.section || '-';
-
             lastScannedMachine = machine;
-
             body.innerHTML = `
                 <div style="margin-bottom:12px;">
                     <span class="machine-id" style="font-size:16px;padding:4px 14px;">${esc(machine.id)}</span>
@@ -1996,9 +1096,7 @@
                 </div>
                 ${fromQR ? `<p style="margin-top:12px;font-size:12px;color:#666;"><i class="fas fa-check-circle" style="color:var(--primary);"></i> Scanned from QR code</p>` : ''}
             `;
-
             modal.classList.add('active');
-
             const result = document.getElementById('scanResult');
             result.innerHTML = `
                 <div class="result-card success">
@@ -2011,11 +1109,7 @@
                 </div>
             `;
         }
-
-        function closeScanResultModal() {
-            document.getElementById('scanResultModal').classList.remove('active');
-        }
-
+        function closeScanResultModal() { document.getElementById('scanResultModal').classList.remove('active'); }
         function printScanResult() {
             const body = document.getElementById('scanResultModalBody');
             const printWin = window.open('', '_blank', 'width=600,height=400');
@@ -2029,117 +1123,91 @@
 `);
 printWin.document.close();
 printWin.print();
-} else {
-toast('Please allow popups to print.', true);
+} else { toast('Please allow popups to print.', true); }
 }
-}
-
 function openScanResultInNewTab() {
 const machine = lastScannedMachine;
 if (!machine) { toast('No machine data to open.', true); return; }
 openBlankPageWithMachine(machine);
 }
-
 function openBlankPageWithMachine(machine) {
 const secName = machine.sectionName || getSectionName(machine.section) || machine.section || '-';
 const machineJson = JSON.stringify(machine).replace(/"/g, '&quot;');
-
-const htmlContent = `
-<!DOCTYPE html>
+const htmlContent = `<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Machine Details - ${esc(machine.id)}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: 'Inter', sans-serif; background:#ffffff; min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px; }
-        .card { max-width:800px; width:100%; background:#f9fafb; border-radius:20px; padding:30px; box-shadow:0 10px 40px rgba(0,0,0,0.08); border:1px solid #e5e7eb; }
-        .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; border-bottom:2px solid #e5e7eb; padding-bottom:16px; flex-wrap:wrap; gap:8px; }
-        .header h1 { font-size:24px; font-weight:700; color:#1b3b1b; }
-        .header .id { font-size:14px; color:#6b7280; background:#e5e7eb; padding:4px 12px; border-radius:20px; }
-        .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-        .item { background:white; border-radius:12px; padding:14px 16px; border:1px solid #e5e7eb; }
-        .item label { font-size:11px; text-transform:uppercase; color:#6b7280; display:block; margin-bottom:4px; font-weight:600; }
-        .item .value { font-size:15px; font-weight:500; color:#1b3b1b; word-break:break-word; }
-        .full { grid-column:1/-1; }
-        .status-badge { display:inline-block; padding:4px 12px; border-radius:50px; font-weight:600; font-size:12px; }
-        .status-badge.working { background:#c8e6c9; color:#1b5e20; }
-        .status-badge.maintenance { background:#ffe0b2; color:#e65100; }
-        .status-badge.out-of-service { background:#ffcdd2; color:#c62828; }
-        .btn-group { margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
-        .btn { padding:10px 24px; border:none; border-radius:50px; font-weight:600; font-size:13px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:background 0.2s; }
-        .btn.primary { background:#2e7d32; color:white; }
-        .btn.primary:hover { background:#1b5e20; }
-        .btn.secondary { background:#e5e7eb; color:#1b3b1b; }
-        .btn.secondary:hover { background:#d1d5db; }
-        .btn.danger { background:#c62828; color:white; }
-        .btn.danger:hover { background:#b71c1c; }
-        .btn.info { background:#1976d2; color:white; }
-        .btn.info:hover { background:#1565c0; }
-        .footer { margin-top:24px; text-align:center; font-size:13px; color:#6b7280; border-top:1px solid #e5e7eb; padding-top:16px; }
-        @media (max-width:600px) { .grid { grid-template-columns:1fr; } .header { flex-direction:column; align-items:flex-start; } }
-    </style>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Machine Details - ${esc(machine.id)}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Inter', sans-serif; background:#ffffff; min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px; }
+.card { max-width:800px; width:100%; background:#f9fafb; border-radius:20px; padding:30px; box-shadow:0 10px 40px rgba(0,0,0,0.08); border:1px solid #e5e7eb; }
+.header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; border-bottom:2px solid #e5e7eb; padding-bottom:16px; flex-wrap:wrap; gap:8px; }
+.header h1 { font-size:24px; font-weight:700; color:#1b3b1b; }
+.header .id { font-size:14px; color:#6b7280; background:#e5e7eb; padding:4px 12px; border-radius:20px; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.item { background:white; border-radius:12px; padding:14px 16px; border:1px solid #e5e7eb; }
+.item label { font-size:11px; text-transform:uppercase; color:#6b7280; display:block; margin-bottom:4px; font-weight:600; }
+.item .value { font-size:15px; font-weight:500; color:#1b3b1b; word-break:break-word; }
+.full { grid-column:1/-1; }
+.status-badge { display:inline-block; padding:4px 12px; border-radius:50px; font-weight:600; font-size:12px; }
+.status-badge.working { background:#c8e6c9; color:#1b5e20; }
+.status-badge.maintenance { background:#ffe0b2; color:#e65100; }
+.status-badge.out-of-service { background:#ffcdd2; color:#c62828; }
+.btn-group { margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.btn { padding:10px 24px; border:none; border-radius:50px; font-weight:600; font-size:13px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:background 0.2s; }
+.btn.primary { background:#2e7d32; color:white; }
+.btn.primary:hover { background:#1b5e20; }
+.btn.secondary { background:#e5e7eb; color:#1b3b1b; }
+.btn.secondary:hover { background:#d1d5db; }
+.btn.danger { background:#c62828; color:white; }
+.btn.danger:hover { background:#b71c1c; }
+.btn.info { background:#1976d2; color:white; }
+.btn.info:hover { background:#1565c0; }
+.footer { margin-top:24px; text-align:center; font-size:13px; color:#6b7280; border-top:1px solid #e5e7eb; padding-top:16px; }
+@media (max-width:600px) { .grid { grid-template-columns:1fr; } .header { flex-direction:column; align-items:flex-start; } }
+</style>
 </head>
 <body>
-    <div class="card">
-        <div class="header">
-            <h1>🍃 Machine Details</h1>
-            <span class="id">${esc(machine.id)}</span>
-        </div>
-        <div class="grid">
-            <div class="item"><label>Name</label><div class="value">${esc(machine.name)}</div></div>
-            <div class="item"><label>Section</label><div class="value">${esc(secName)}</div></div>
-            <div class="item"><label>Manufacturer</label><div class="value">${esc(machine.manufacturer || '-')}</div></div>
-            <div class="item"><label>Model</label><div class="value">${esc(machine.model || '-')}</div></div>
-            <div class="item"><label>Serial Number</label><div class="value">${esc(machine.serialNumber || '-')}</div></div>
-            <div class="item"><label>Installation Date</label><div class="value">${fmtDate(machine.installationDate)}</div></div>
-            <div class="item full"><label>Status</label><div class="value"><span class="status-badge ${statusCls(machine.status)}">${statusLabel(machine.status)}</span></div></div>
-            ${machine.notes ? `<div class="item full"><label>Notes</label><div class="value">${esc(machine.notes)}</div></div>` : ''}
-        </div>
-        <div class="btn-group">
-            <button onclick="window.print()" class="btn secondary"><i class="fas fa-print"></i> Print</button>
-            <button onclick="exportMachine()" class="btn primary"><i class="fas fa-file-excel"></i> Export to Excel</button>
-            <button onclick="window.close()" class="btn secondary"><i class="fas fa-times"></i> Close</button>
-        </div>
-        <div class="footer">Panilkanda Tea Factory · Machine Tracker</div>
-    </div>
-    <script>
-        function exportMachine() {
-            const machine = ${machineJson};
-            const secName = machine.sectionName || '${esc(secName)}' || machine.section || '-';
-            const headers = ['ID','Name','Section','Manufacturer','Model','Serial Number','Installation Date','Status','Notes'];
-            const row = [
-                machine.id, machine.name, secName,
-                machine.manufacturer || '', machine.model || '',
-                machine.serialNumber || '', machine.installationDate || '',
-                machine.status || '', machine.notes || ''
-            ];
-            let csv = headers.join(',') + '\\n';
-            csv += row.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',');
-            const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'machine_' + machine.id + '.csv';
-            link.click();
-        }
-    <\/script>
-</body>
-</html>
-`;
-
-const win = window.open('', '_blank');
-if (win) {
-win.document.write(htmlContent);
-win.document.close();
-win.focus();
-toast('📄 Machine details opened in new tab.');
-} else {
-toast('⚠️ Popup blocked. Please allow popups or use the modal view.', true);
-showMachineDetailsModal(machine, true);
+<div class="card">
+<div class="header"><h1>🍃 Machine Details</h1><span class="id">${esc(machine.id)}</span></div>
+<div class="grid">
+<div class="item"><label>Name</label><div class="value">${esc(machine.name)}</div></div>
+<div class="item"><label>Section</label><div class="value">${esc(secName)}</div></div>
+<div class="item"><label>Manufacturer</label><div class="value">${esc(machine.manufacturer || '-')}</div></div>
+<div class="item"><label>Model</label><div class="value">${esc(machine.model || '-')}</div></div>
+<div class="item"><label>Serial Number</label><div class="value">${esc(machine.serialNumber || '-')}</div></div>
+<div class="item"><label>Installation Date</label><div class="value">${fmtDate(machine.installationDate)}</div></div>
+<div class="item full"><label>Status</label><div class="value"><span class="status-badge ${statusCls(machine.status)}">${statusLabel(machine.status)}</span></div></div>
+${machine.notes ? `<div class="item full"><label>Notes</label><div class="value">${esc(machine.notes)}</div></div>` : ''}
+</div>
+<div class="btn-group">
+<button onclick="window.print()" class="btn secondary"><i class="fas fa-print"></i> Print</button>
+<button onclick="exportMachine()" class="btn primary"><i class="fas fa-file-excel"></i> Export to Excel</button>
+<button onclick="window.close()" class="btn secondary"><i class="fas fa-times"></i> Close</button>
+</div>
+<div class="footer">Panilkanda Tea Factory · Machine Tracker</div>
+</div>
+<script>
+function exportMachine() {
+const machine = ${machineJson};
+const secName = machine.sectionName || '${esc(secName)}' || machine.section || '-';
+const headers = ['ID','Name','Section','Manufacturer','Model','Serial Number','Installation Date','Status','Notes'];
+const row = [machine.id, machine.name, secName, machine.manufacturer || '', machine.model || '', machine.serialNumber || '', machine.installationDate || '', machine.status || '', machine.notes || ''];
+let csv = headers.join(',') + '\\n';
+csv += row.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',');
+const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+const link = document.createElement('a');
+link.href = URL.createObjectURL(blob);
+link.download = 'machine_' + machine.id + '.csv';
+link.click();
 }
+<\/script>
+</body>
+</html>`;
+const win = window.open('', '_blank');
+if (win) { win.document.write(htmlContent); win.document.close(); win.focus(); toast('📄 Machine details opened in new tab.'); }
+else { toast('⚠️ Popup blocked. Please allow popups or use the modal view.', true); showMachineDetailsModal(machine, true); }
 }
 
 // ─── QR Scanner ───
@@ -2148,220 +1216,86 @@ const container = document.getElementById('qrReaderContainer');
 const result = document.getElementById('scanResult');
 result.innerHTML = '';
 document.getElementById('scanDebug').style.display = 'none';
-
-if (scannerRunning) {
-toast('Scanner already running.');
-return;
-}
-
-if (typeof Html5Qrcode === 'undefined') {
-toast('QR Scanner library not loaded. Please refresh.', true);
-showDebug('ERROR: Html5Qrcode not loaded');
-return;
-}
-
-if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-toast('Camera not supported on this device.', true);
-showDebug('ERROR: Camera not supported');
-return;
-}
-
+if (scannerRunning) { toast('Scanner already running.'); return; }
+if (typeof Html5Qrcode === 'undefined') { toast('QR Scanner library not loaded. Please refresh.', true); showDebug('ERROR: Html5Qrcode not loaded'); return; }
+if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { toast('Camera not supported on this device.', true); showDebug('ERROR: Camera not supported'); return; }
 container.style.display = 'block';
-container.innerHTML = `
-    <div class="scanner-loading">
-        <i class="fas fa-spinner fa-spin"></i>
-        <div>Initializing camera...</div>
-        <div style="font-size:12px;color:#666;margin-top:8px;">Please allow camera access.</div>
-    </div>
-`;
+container.innerHTML = `<div class="scanner-loading"><i class="fas fa-spinner fa-spin"></i><div>Initializing camera...</div><div style="font-size:12px;color:#666;margin-top:8px;">Please allow camera access.</div></div>`;
 showDebug('Initializing camera...');
-
-if (html5QrCode) {
-try { html5QrCode.stop().catch(() => {}); } catch(e) {}
-try { html5QrCode.clear().catch(() => {}); } catch(e) {}
-html5QrCode = null;
-}
-
+if (html5QrCode) { try { html5QrCode.stop().catch(()=>{}); } catch(e){} try { html5QrCode.clear().catch(()=>{}); } catch(e){} html5QrCode = null; }
 setTimeout(function() {
 try {
 html5QrCode = new Html5Qrcode("qrReaderContainer");
-const config = { fps: 20, qrbox: { width: 280, height: 280 }, aspectRatio: 1.0 };
-
-html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
-.then(() => {
-scannerRunning = true;
-toast('📷 Camera ready. Point at a QR code.');
-showDebug('Camera started (rear)');
-const loadEl = container.querySelector('.scanner-loading');
-if (loadEl) loadEl.remove();
-})
+const config = { fps:20, qrbox:{width:280,height:280}, aspectRatio:1.0 };
+html5QrCode.start({ facingMode:"environment" }, config, onScanSuccess, onScanFailure)
+.then(() => { scannerRunning = true; toast('📷 Camera ready. Point at a QR code.'); showDebug('Camera started (rear)'); const loadEl = container.querySelector('.scanner-loading'); if (loadEl) loadEl.remove(); })
 .catch(function(err) {
-console.warn('Rear camera failed:', err);
-showDebug('Rear camera failed, trying front...');
-html5QrCode.start({ facingMode: "user" }, config, onScanSuccess, onScanFailure)
-.then(() => {
-scannerRunning = true;
-toast('📷 Camera ready (front).');
-showDebug('Camera started (front)');
-const loadEl = container.querySelector('.scanner-loading');
-if (loadEl) loadEl.remove();
-})
+console.warn('Rear camera failed:', err); showDebug('Rear camera failed, trying front...');
+html5QrCode.start({ facingMode:"user" }, config, onScanSuccess, onScanFailure)
+.then(() => { scannerRunning = true; toast('📷 Camera ready (front).'); showDebug('Camera started (front)'); const loadEl = container.querySelector('.scanner-loading'); if (loadEl) loadEl.remove(); })
 .catch(function(err2) {
-console.error('All cameras failed:', err2);
-showDebug('ERROR: ' + err2.message);
-if (err2.message && err2.message.includes('NotAllowedError')) {
-toast('Camera access denied. Please allow camera permissions.', true);
-} else if (err2.message && err2.message.includes('NotFoundError')) {
-toast('No camera found on this device.', true);
-} else {
-toast('Failed to start camera: ' + err2.message, true);
-}
-container.style.display = 'none';
-scannerRunning = false;
-html5QrCode = null;
+console.error('All cameras failed:', err2); showDebug('ERROR: ' + err2.message);
+if (err2.message && err2.message.includes('NotAllowedError')) { toast('Camera access denied. Please allow camera permissions.', true); }
+else if (err2.message && err2.message.includes('NotFoundError')) { toast('No camera found on this device.', true); }
+else { toast('Failed to start camera: ' + err2.message, true); }
+container.style.display = 'none'; scannerRunning = false; html5QrCode = null;
 });
 });
-} catch (err) {
-console.error('Scanner init error:', err);
-showDebug('ERROR: ' + err.message);
-toast('Error: ' + err.message, true);
-container.style.display = 'none';
-scannerRunning = false;
-html5QrCode = null;
+} catch(err) {
+console.error('Scanner init error:', err); showDebug('ERROR: ' + err.message); toast('Error: ' + err.message, true);
+container.style.display = 'none'; scannerRunning = false; html5QrCode = null;
 }
 }, 300);
 }
-
-// ─── Extract JSON or URL ───
 function extractMachineIdFromText(text) {
-    // 1. Try to find a URL with ?id= parameter
-    const urlMatch = text.match(/[?&]id=([^&\s]+)/);
-    if (urlMatch) {
-        return decodeURIComponent(urlMatch[1]);
-    }
-
-    // 2. Try to extract JSON
-    const jsonMatch = text.match(/\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/);
-    if (jsonMatch) {
-        try {
-            const parsed = JSON.parse(jsonMatch[0]);
-            if (parsed && parsed.id) return parsed.id;
-        } catch (e) {}
-    }
-
-    // 3. Try plain ID (MXXXX)
-    const idMatch = text.match(/M\d{4}/);
-    if (idMatch) return idMatch[0];
-
-    return null;
+const urlMatch = text.match(/[?&]id=([^&\s]+)/);
+if (urlMatch) return decodeURIComponent(urlMatch[1]);
+const jsonMatch = text.match(/\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/);
+if (jsonMatch) { try { const parsed = JSON.parse(jsonMatch[0]); if (parsed && parsed.id) return parsed.id; } catch(e) {} }
+const idMatch = text.match(/M\d{4}/);
+if (idMatch) return idMatch[0];
+return null;
 }
-
-// ─── Scan Success ───
 function onScanSuccess(decodedText, decodedResult) {
-    const result = document.getElementById('scanResult');
-    showDebug('Decoded: ' + decodedText.substring(0, 200) + (decodedText.length > 200 ? '...' : ''));
-    if (navigator.vibrate) navigator.vibrate(100);
-
-    const machineId = extractMachineIdFromText(decodedText);
-
-    if (!machineId) {
-        result.innerHTML = `
-            <div class="result-card error">
-                <p>⚠️ Could not find a machine ID in the QR.</p>
-                <p style="font-size:12px;color:#666;margin-top:6px;">Make sure the QR contains a URL with ?id= or a machine ID like M0001.</p>
-                <pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;margin-top:6px;">${esc(decodedText)}</pre>
-            </div>`;
-        toast('Invalid QR format.', true);
-        showDebug('ERROR: No ID found in decoded text.');
-        return;
-    }
-
-    const machines = getMachines();
-    const dbMachine = machines.find(x => x.id === machineId);
-
-    if (dbMachine) {
-        showDebug('Found in DB: ' + dbMachine.name);
-        lastScannedMachine = dbMachine;
-        showMachineDetailsModal(dbMachine, true);
-        toast('✅ Machine found: ' + dbMachine.name);
-    } else {
-        result.innerHTML = `
-            <div class="result-card error">
-                <p>❌ Machine with ID "${esc(machineId)}" not found in database.</p>
-                <p style="font-size:12px;color:#666;margin-top:8px;">Try adding this machine first, or scan a QR code with full data.</p>
-            </div>`;
-        toast('Machine not found in database.', true);
-        showDebug('ERROR: Machine ID ' + machineId + ' not in DB');
-        return;
-    }
-
-    // Auto-stop scanner after successful scan
-    setTimeout(() => stopQRScanner(), 2000);
+const result = document.getElementById('scanResult');
+showDebug('Decoded: ' + decodedText.substring(0,200) + (decodedText.length > 200 ? '...' : ''));
+if (navigator.vibrate) navigator.vibrate(100);
+const machineId = extractMachineIdFromText(decodedText);
+if (!machineId) {
+result.innerHTML = `<div class="result-card error"><p>⚠️ Could not find a machine ID in the QR.</p><p style="font-size:12px;color:#666;margin-top:6px;">Make sure the QR contains a URL with ?id= or a machine ID like M0001.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;margin-top:6px;">${esc(decodedText)}</pre></div>`;
+toast('Invalid QR format.', true); showDebug('ERROR: No ID found in decoded text.'); return;
 }
-
+const machines = getMachines();
+const dbMachine = machines.find(x => x.id === machineId);
+if (dbMachine) {
+showDebug('Found in DB: ' + dbMachine.name);
+lastScannedMachine = dbMachine;
+showMachineDetailsModal(dbMachine, true);
+toast('✅ Machine found: ' + dbMachine.name);
+} else {
+result.innerHTML = `<div class="result-card error"><p>❌ Machine with ID "${esc(machineId)}" not found in database.</p><p style="font-size:12px;color:#666;margin-top:8px;">Try adding this machine first, or scan a QR code with full data.</p></div>`;
+toast('Machine not found in database.', true); showDebug('ERROR: Machine ID ' + machineId + ' not in DB'); return;
+}
+setTimeout(() => stopQRScanner(), 2000);
+}
 function onScanFailure(err) { /* silent */ }
-
 function stopQRScanner() {
 const container = document.getElementById('qrReaderContainer');
-
 if (html5QrCode && scannerRunning) {
-try {
-html5QrCode.stop().then(() => {
-scannerRunning = false;
-container.style.display = 'none';
-container.innerHTML = '';
-toast('Scanner stopped.');
-showDebug('Scanner stopped');
-}).catch(() => {
-scannerRunning = false;
-container.style.display = 'none';
-container.innerHTML = '';
-});
-} catch (e) {
-scannerRunning = false;
-container.style.display = 'none';
-container.innerHTML = '';
+try { html5QrCode.stop().then(() => { scannerRunning = false; container.style.display = 'none'; container.innerHTML = ''; toast('Scanner stopped.'); showDebug('Scanner stopped'); }).catch(() => { scannerRunning = false; container.style.display = 'none'; container.innerHTML = ''; }); } catch(e) { scannerRunning = false; container.style.display = 'none'; container.innerHTML = ''; }
+} else { container.style.display = 'none'; container.innerHTML = ''; scannerRunning = false; }
 }
-} else {
-container.style.display = 'none';
-container.innerHTML = '';
-scannerRunning = false;
-}
-}
-
-// ─── QR Upload from Image ───
 document.getElementById('qrFileInput').addEventListener('change', function(e) {
 const file = e.target.files[0];
 if (!file) return;
-
 const result = document.getElementById('scanResult');
 result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;"><i class="fas fa-spinner fa-spin"></i> Decoding QR from image...</p>';
 showDebug('Uploading image: ' + file.name);
-
-if (typeof Html5Qrcode === 'undefined') {
-toast('QR library not loaded.', true);
-showDebug('ERROR: Html5Qrcode not loaded');
-return;
-}
-
+if (typeof Html5Qrcode === 'undefined') { toast('QR library not loaded.', true); showDebug('ERROR: Html5Qrcode not loaded'); return; }
 const qrScanner = new Html5Qrcode("scanResult");
 qrScanner.scanFile(file, true)
-.then(decodedText => {
-showDebug('Image decoded: ' + decodedText.substring(0, 100) + (decodedText.length > 100 ? '...' : ''));
-onScanSuccess(decodedText, null);
-qrScanner.clear().catch(() => {});
-})
-.catch(err => {
-console.error('Image decode error:', err);
-showDebug('Image decode error: ' + err.message);
-result.innerHTML = `
-    <div class="result-card error">
-        <p>❌ Could not decode QR from image. Please try another image.</p>
-        <p style="font-size:12px;color:#666;margin-top:4px;">${esc(err.message)}</p>
-    </div>`;
-toast('Failed to decode QR from image.', true);
-});
-
+.then(decodedText => { showDebug('Image decoded: ' + decodedText.substring(0,100) + (decodedText.length > 100 ? '...' : '')); onScanSuccess(decodedText, null); qrScanner.clear().catch(()=>{}); })
+.catch(err => { console.error('Image decode error:', err); showDebug('Image decode error: ' + err.message); result.innerHTML = `<div class="result-card error"><p>❌ Could not decode QR from image. Please try another image.</p><p style="font-size:12px;color:#666;margin-top:4px;">${esc(err.message)}</p></div>`; toast('Failed to decode QR from image.', true); });
 this.value = '';
 });
 
@@ -2372,10 +1306,7 @@ function lookupMachine() {
 const input = document.getElementById('lookupInput');
 const query = input.value.trim().toLowerCase();
 const result = document.getElementById('lookupResult');
-if (!query) {
-result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;">Type an ID, name, serial or section to search.</p>';
-return;
-}
+if (!query) { result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;">Type an ID, name, serial or section to search.</p>'; return; }
 const machines = getMachines();
 const found = machines.filter(m =>
 m.id.toLowerCase().includes(query) ||
@@ -2383,13 +1314,8 @@ m.id.toLowerCase().includes(query) ||
 (m.serialNumber && m.serialNumber.toLowerCase().includes(query)) ||
 (m.section && getSectionName(m.section).toLowerCase().includes(query))
 );
-if (found.length === 0) {
-result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;">No machines found matching "' + esc(
-query) + '"</p>';
-return;
-}
-result.innerHTML = '<div class="machine-list" style="margin-top:10px;">' + found.map(renderMachineItem).join('') +
-'</div>';
+if (found.length === 0) { result.innerHTML = '<p style="color:#666;font-size:13px;margin-top:10px;">No machines found matching "' + esc(query) + '"</p>'; return; }
+result.innerHTML = '<div class="machine-list" style="margin-top:10px;">' + found.map(renderMachineItem).join('') + '</div>';
 }
 
 // ============================================================
@@ -2401,12 +1327,10 @@ const name = document.getElementById('assetName').value.trim();
 const section = document.getElementById('assetSection').value;
 if (!name) { toast('Please enter a machine name.', true); return; }
 if (!section) { toast('Please select a section.', true); return; }
-
 const db = getDB();
 const newMachine = {
 id: document.getElementById('assetMachineId').value.trim(),
-name: name,
-section: section,
+name: name, section: section,
 manufacturer: document.getElementById('assetManufacturer').value.trim(),
 model: document.getElementById('assetModel').value.trim(),
 serialNumber: document.getElementById('assetSerial').value.trim(),
@@ -2420,10 +1344,7 @@ saveDB(db);
 toast('✅ Asset added: ' + newMachine.name);
 this.reset();
 document.getElementById('assetMachineId').value = generateMachineId();
-refreshAssetView();
-refreshList();
-refreshDashboard();
-populateQRSelect();
+refreshAssetView(); refreshList(); refreshDashboard(); populateQRSelect();
 });
 
 document.getElementById('sectionForm').addEventListener('submit', function(e) {
@@ -2432,26 +1353,17 @@ const name = document.getElementById('sectionName').value.trim();
 if (!name) { toast('Please enter a section name.', true); return; }
 const db = getDB();
 const id = 'sec_' + Date.now();
-db.sections.push({
-id: id,
-name: name,
-color: document.getElementById('sectionColor').value,
-description: document.getElementById('sectionDesc').value.trim()
-});
+db.sections.push({ id, name, color: document.getElementById('sectionColor').value, description: document.getElementById('sectionDesc').value.trim() });
 saveDB(db);
 toast('✅ Section added: ' + name);
 this.reset();
 document.getElementById('sectionColor').value = '#2e7d32';
-refreshAssetView();
-refreshDashboard();
-loadSectionsDropdown('assetSection');
-loadSectionsDropdown('editSection');
-loadSectionsDropdown('filterSection');
+refreshAssetView(); refreshDashboard();
+loadSectionsDropdown('assetSection'); loadSectionsDropdown('editSection'); loadSectionsDropdown('filterSection');
 renderSectionList();
 });
 
 let editMachineId = null;
-
 function editMachine(id) {
 const machines = getMachines();
 const m = machines.find(x => x.id === id);
@@ -2469,12 +1381,7 @@ loadSectionsDropdown('editSection', m.section);
 document.getElementById('editModal').classList.add('active');
 stopQRScanner();
 }
-
-function closeEditModal() {
-document.getElementById('editModal').classList.remove('active');
-editMachineId = null;
-}
-
+function closeEditModal() { document.getElementById('editModal').classList.remove('active'); editMachineId = null; }
 document.getElementById('editForm').addEventListener('submit', function(e) {
 e.preventDefault();
 if (!editMachineId) { toast('No machine selected.', true); return; }
@@ -2482,7 +1389,6 @@ const name = document.getElementById('editName').value.trim();
 const section = document.getElementById('editSection').value;
 if (!name) { toast('Please enter a machine name.', true); return; }
 if (!section) { toast('Please select a section.', true); return; }
-
 const db = getDB();
 const idx = db.machines.findIndex(m => m.id === editMachineId);
 if (idx === -1) { toast('Machine not found.', true); return; }
@@ -2497,53 +1403,33 @@ db.machines[idx].notes = document.getElementById('editNotes').value.trim();
 saveDB(db);
 toast('✅ Machine updated: ' + name);
 closeEditModal();
-refreshAssetView();
-refreshList();
-refreshDashboard();
-populateQRSelect();
+refreshAssetView(); refreshList(); refreshDashboard(); populateQRSelect();
 });
-
 function deleteMachineFromEdit() {
 if (!editMachineId) return;
-if (confirm('Are you sure you want to delete this machine?')) {
-deleteMachine(editMachineId);
-closeEditModal();
+if (confirm('Are you sure you want to delete this machine?')) { deleteMachine(editMachineId); closeEditModal(); }
 }
-}
-
 function deleteMachine(id) {
 if (!confirm('Delete machine ' + id + '?')) return;
 const db = getDB();
 db.machines = db.machines.filter(m => m.id !== id);
 saveDB(db);
 toast('🗑️ Machine deleted.');
-refreshAssetView();
-refreshList();
-refreshDashboard();
-populateQRSelect();
+refreshAssetView(); refreshList(); refreshDashboard(); populateQRSelect();
 }
-
 function viewMachine(id) {
 switchToTab('lookup');
 document.getElementById('lookupInput').value = id;
 lookupMachine();
 }
-
 function exportToCSV() {
 const machines = getMachines();
 if (machines.length === 0) { toast('No assets to export.', true); return; }
-const headers = ['ID', 'Name', 'Section', 'Manufacturer', 'Model', 'Serial Number', 'Installation Date',
-'Status', 'Notes'
-];
-const rows = machines.map(m => [
-m.id, m.name, getSectionName(m.section), m.manufacturer || '', m.model || '',
-m.serialNumber || '', m.installationDate || '', m.status || '', m.notes || ''
-]);
+const headers = ['ID','Name','Section','Manufacturer','Model','Serial Number','Installation Date','Status','Notes'];
+const rows = machines.map(m => [m.id, m.name, getSectionName(m.section), m.manufacturer || '', m.model || '', m.serialNumber || '', m.installationDate || '', m.status || '', m.notes || '']);
 let csv = headers.join(',') + '\n';
-rows.forEach(row => {
-csv += row.map(cell => '"' + String(cell).replace(/"/g, '""') + '"').join(',') + '\n';
-});
-const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+rows.forEach(row => { csv += row.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',') + '\n'; });
+const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
 const link = document.createElement('a');
 link.href = URL.createObjectURL(blob);
 link.download = 'panilkanda_assets.csv';
@@ -2552,195 +1438,209 @@ toast('📥 CSV exported.');
 }
 
 // ============================================================
-// NAVIGATION
+// NAVIGATION – Landing page by default, with working sub-items
 // ============================================================
+let currentTab = null;
+let currentSub = 'viewAssets';
+
 function switchToTab(name) {
-document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-const topBtn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
-if (topBtn) topBtn.classList.add('active');
-
-document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-const tab = document.getElementById('tab-' + name);
-if (tab) tab.classList.add('active');
-
-if (name === 'list') refreshList();
-if (name === 'status') refreshDashboard();
-if (name === 'assets') refreshAssetView();
-if (name === 'qr') populateQRSelect();
-if (name !== 'scan') stopQRScanner();
-
-document.querySelectorAll('.sidebar-nav > a').forEach(a => a.classList.remove('active'));
-const sidebarLink = document.querySelector(`.sidebar-nav > a[data-tab="${name}"]`);
-if (sidebarLink) sidebarLink.classList.add('active');
-
-document.querySelectorAll('#bottomNav a').forEach(a => {
-a.classList.remove('active');
-if (a.dataset.tab === name) a.classList.add('active');
-});
+    // Hide landing view
+    document.getElementById('landingView').style.display = 'none';
+    
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    const tab = document.getElementById('tab-' + name);
+    if (tab) {
+        tab.classList.add('active');
+    } else {
+        document.getElementById('landingView').style.display = 'block';
+        return;
+    }
+    
+    // Update sidebar main link active state
+    document.querySelectorAll('.sidebar-nav > a').forEach(a => a.classList.remove('active'));
+    const sidebarLink = document.querySelector(`.sidebar-nav > a[data-tab="${name}"]`);
+    if (sidebarLink) sidebarLink.classList.add('active');
+    
+    // Update bottom nav active state
+    document.querySelectorAll('#bottomNav a').forEach(a => a.classList.remove('active'));
+    const bottomLink = document.querySelector(`#bottomNav a[data-tab="${name}"]`);
+    if (bottomLink) bottomLink.classList.add('active');
+    
+    // If assets tab, show the active sub-content
+    if (name === 'assets') {
+        document.querySelectorAll('#tab-assets .sub-content').forEach(c => c.classList.remove('active'));
+        const subTarget = document.getElementById('sub-' + currentSub);
+        if (subTarget) subTarget.classList.add('active');
+        // Update sidebar sub active state
+        document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
+        const subLink = document.querySelector(`#sidebarAssetSub a[data-sub="${currentSub}"]`);
+        if (subLink) subLink.classList.add('active');
+        // Make sure the sub-menu is open
+        document.getElementById('sidebarAssetSub').classList.add('open');
+    }
+    
+    // Refresh content if needed
+    if (name === 'list') refreshList();
+    if (name === 'status') refreshDashboard();
+    if (name === 'assets') refreshAssetView();
+    if (name === 'qr') populateQRSelect();
+    if (name !== 'scan') stopQRScanner();
+    
+    currentTab = name;
 }
 
-// Sidebar clicks
+// ─── Sidebar click handler (FIXED: handles sub-items properly) ───
 document.querySelector('.sidebar-nav').addEventListener('click', function(e) {
-const link = e.target.closest('a');
-if (!link) return;
-e.preventDefault();
-
-const tab = link.dataset.tab;
-const sub = link.dataset.sub;
-
-if (tab === 'assets' && !sub) {
-const subMenu = document.getElementById('sidebarAssetSub');
-subMenu.classList.toggle('open');
-if (subMenu.classList.contains('open')) {
-switchToTab('assets');
-const firstSub = document.querySelector('#assetSubTabs .sub-tab');
-if (firstSub) firstSub.click();
-}
-return;
-}
-
-if (sub) {
-switchToTab('assets');
-document.getElementById('sidebarAssetSub').classList.add('open');
-const subTab = document.querySelector(`#assetSubTabs .sub-tab[data-sub="${sub}"]`);
-if (subTab) subTab.click();
-document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
-link.classList.add('active');
-return;
-}
-
-if (tab) switchToTab(tab);
-
-if (window.innerWidth < 769) {
-document.getElementById('sidebar').classList.remove('open');
-document.getElementById('sidebarOverlay').classList.remove('active');
-}
+    const link = e.target.closest('a');
+    if (!link) return;
+    e.preventDefault();
+    
+    const tab = link.dataset.tab;
+    const sub = link.dataset.sub;
+    
+    // Case 1: Sub-item under Asset Management (has data-sub)
+    if (sub) {
+        currentSub = sub;
+        switchToTab('assets');
+        document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
+        link.classList.add('active');
+        if (window.innerWidth < 769) {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+        return;
+    }
+    
+    // Case 2: Main Asset Management link (toggles sub-menu)
+    if (tab === 'assets') {
+        const subMenu = document.getElementById('sidebarAssetSub');
+        subMenu.classList.toggle('open');
+        if (subMenu.classList.contains('open')) {
+            currentSub = 'viewAssets';
+            switchToTab('assets');
+            document.querySelector('#sidebarAssetSub a[data-sub="viewAssets"]')?.classList.add('active');
+        } else {
+            // If closing sub-menu, go back to landing
+            document.getElementById('landingView').style.display = 'block';
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.sidebar-nav > a').forEach(a => a.classList.remove('active'));
+            document.querySelectorAll('#bottomNav a').forEach(a => a.classList.remove('active'));
+            document.getElementById('sidebar-assets').classList.add('active');
+            // Keep the sub-menu closed
+        }
+        if (window.innerWidth < 769) {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+        return;
+    }
+    
+    // Case 3: Other tabs (All Machines, Lookup, QR, Scan, Stats)
+    if (tab) {
+        switchToTab(tab);
+        if (window.innerWidth < 769) {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+    }
 });
 
-// Top tabs
-document.getElementById('mainTabs').addEventListener('click', function(e) {
-const btn = e.target.closest('.tab-btn');
-if (!btn) return;
-switchToTab(btn.dataset.tab);
-});
-
-// Bottom nav
+// ─── Bottom nav clicks ───
 document.getElementById('bottomNav').addEventListener('click', function(e) {
-e.preventDefault();
-const link = e.target.closest('a');
-if (!link) return;
-switchToTab(link.dataset.tab);
+    e.preventDefault();
+    const link = e.target.closest('a');
+    if (!link) return;
+    const tab = link.dataset.tab;
+    if (tab) {
+        if (tab === 'assets') {
+            currentSub = 'viewAssets';
+            switchToTab('assets');
+        } else {
+            switchToTab(tab);
+        }
+    }
 });
 
-// Hamburger
+// ─── Hamburger ───
 document.getElementById('hamburgerBtn').addEventListener('click', function() {
-document.getElementById('sidebar').classList.toggle('open');
-document.getElementById('sidebarOverlay').classList.toggle('active');
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('active');
 });
 document.getElementById('sidebarOverlay').addEventListener('click', function() {
-document.getElementById('sidebar').classList.remove('open');
-this.classList.remove('active');
-});
-
-// Asset sub-tabs
-document.getElementById('assetSubTabs').addEventListener('click', function(e) {
-if (e.target.classList.contains('sub-tab')) {
-document.querySelectorAll('#assetSubTabs .sub-tab').forEach(b => b.classList.remove('active'));
-e.target.classList.add('active');
-const sub = e.target.dataset.sub;
-document.querySelectorAll('#tab-assets .sub-content').forEach(c => c.classList.remove('active'));
-const target = document.getElementById('sub-' + sub);
-if (target) target.classList.add('active');
-if (sub === 'viewAssets') refreshAssetView();
-if (sub === 'addAsset') {
-document.getElementById('assetMachineId').value = generateMachineId();
-loadSectionsDropdown('assetSection');
-}
-if (sub === 'manageSections') renderSectionList();
-document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
-const sidebarSub = document.querySelector(`#sidebarAssetSub a[data-sub="${sub}"]`);
-if (sidebarSub) sidebarSub.classList.add('active');
-}
+    document.getElementById('sidebar').classList.remove('open');
+    this.classList.remove('active');
 });
 
 // ============================================================
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-const db = getDB();
-if (!db.sections || db.sections.length === 0) {
-db.sections = [
-{ id: 'sec_1', name: 'Withering', color: '#2e7d32', description: 'Withering process' },
-{ id: 'sec_2', name: 'Rolling', color: '#1976d2', description: 'CTC Rolling' },
-{ id: 'sec_3', name: 'Fermentation', color: '#e65100', description: 'Fermentation area' },
-{ id: 'sec_4', name: 'Drying', color: '#c62828', description: 'Drying / Firing' },
-{ id: 'sec_5', name: 'Grading', color: '#6a1b9a', description: 'Sorting & Grading' },
-];
-saveDB(db);
-}
-const machines = getMachines();
-if (machines.length === 0) {
-const sample = [
-{ id: 'M0001', name: 'CTC Roller 1', section: 'sec_2', manufacturer: 'Marshall',
-model: 'CTC-2000', serialNumber: 'SN-001', installationDate: '2023-01-15',
-status: 'working', notes: 'Primary roller' },
-{ id: 'M0002', name: 'Withering Trough 1', section: 'sec_1', manufacturer: 'TeaTech',
-model: 'WT-500', serialNumber: 'SN-002', installationDate: '2023-02-10',
-status: 'working', notes: 'Capacity 500kg' },
-{ id: 'M0003', name: 'Fermentation Conveyor', section: 'sec_3', manufacturer: 'ConveyX',
-model: 'FC-100', serialNumber: 'SN-003', installationDate: '2023-03-01',
-status: 'maintenance', notes: 'Belt needs replacement' },
-];
-db.machines = sample;
-saveDB(db);
-}
-
-loadSectionsDropdown('assetSection');
-loadSectionsDropdown('editSection');
-loadSectionsDropdown('filterSection');
-document.getElementById('assetMachineId').value = generateMachineId();
-populateQRSelect();
-
-refreshAssetView();
-refreshList();
-refreshDashboard();
-
-const firstSub = document.querySelector('#assetSubTabs .sub-tab');
-if (firstSub) firstSub.click();
-
-// Check if URL has ?id= parameter
-showMachineFromURL();
-
-const hash = window.location.hash.replace('#', '');
-if (hash && ['assets', 'list', 'lookup', 'qr', 'scan', 'status'].includes(hash)) {
-switchToTab(hash);
-}
-
-window.addEventListener('beforeunload', function() {
-stopQRScanner();
-});
+    const db = getDB();
+    if (!db.sections || db.sections.length === 0) {
+        db.sections = [
+            { id: 'sec_1', name: 'Withering', color: '#2e7d32', description: 'Withering process' },
+            { id: 'sec_2', name: 'Rolling', color: '#1976d2', description: 'CTC Rolling' },
+            { id: 'sec_3', name: 'Fermentation', color: '#e65100', description: 'Fermentation area' },
+            { id: 'sec_4', name: 'Drying', color: '#c62828', description: 'Drying / Firing' },
+            { id: 'sec_5', name: 'Grading', color: '#6a1b9a', description: 'Sorting & Grading' },
+        ];
+        saveDB(db);
+    }
+    const machines = getMachines();
+    if (machines.length === 0) {
+        const sample = [
+            { id: 'M0001', name: 'CTC Roller 1', section: 'sec_2', manufacturer: 'Marshall', model: 'CTC-2000', serialNumber: 'SN-001', installationDate: '2023-01-15', status: 'working', notes: 'Primary roller' },
+            { id: 'M0002', name: 'Withering Trough 1', section: 'sec_1', manufacturer: 'TeaTech', model: 'WT-500', serialNumber: 'SN-002', installationDate: '2023-02-10', status: 'working', notes: 'Capacity 500kg' },
+            { id: 'M0003', name: 'Fermentation Conveyor', section: 'sec_3', manufacturer: 'ConveyX', model: 'FC-100', serialNumber: 'SN-003', installationDate: '2023-03-01', status: 'maintenance', notes: 'Belt needs replacement' },
+        ];
+        db.machines = sample;
+        saveDB(db);
+    }
+    
+    loadSectionsDropdown('assetSection');
+    loadSectionsDropdown('editSection');
+    loadSectionsDropdown('filterSection');
+    document.getElementById('assetMachineId').value = generateMachineId();
+    populateQRSelect();
+    
+    // Show landing page by default
+    document.getElementById('landingView').style.display = 'block';
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.sidebar-nav > a').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('#bottomNav a').forEach(a => a.classList.remove('active'));
+    // Keep Asset Management active but not the sub-items
+    document.getElementById('sidebar-assets').classList.add('active');
+    document.getElementById('sidebarAssetSub').classList.add('open');
+    document.querySelector('#sidebarAssetSub a[data-sub="viewAssets"]').classList.add('active');
+    
+    updateLandingCount();
+    refreshAssetView();
+    refreshList();
+    refreshDashboard();
+    
+    // Check if URL has ?id= parameter (for QR code links)
+    showMachineFromURL();
+    
+    window.addEventListener('beforeunload', function() { stopQRScanner(); });
 });
 
 window.addEventListener('resize', function() {
-if (window.innerWidth >= 769) {
-document.getElementById('sidebar').classList.remove('open');
-document.getElementById('sidebarOverlay').classList.remove('active');
-}
+    if (window.innerWidth >= 769) {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('active');
+    }
 });
 
 document.querySelectorAll('.modal').forEach(modal => {
-modal.addEventListener('click', function(e) {
-if (e.target === this) this.classList.remove('active');
-});
+    modal.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
 });
 
 document.addEventListener('keydown', function(e) {
-if (e.key === 'Escape') {
-closeEditModal();
-closeScanResultModal();
-closeFullscreenDetails();
-stopQRScanner();
-}
+    if (e.key === 'Escape') {
+        closeEditModal(); closeScanResultModal(); closeFullscreenDetails(); stopQRScanner();
+    }
 });
 
 console.log('🍃 Panilkanda Tea Factory Machine Tracker loaded.');
