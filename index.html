@@ -1272,7 +1272,6 @@
             <a href="#" data-tab="qr"><i class="fas fa-qrcode"></i> QR Codes</a>
             <a href="#" data-tab="scan"><i class="fas fa-camera"></i> Scan QR</a>
             <a href="#" data-tab="status"><i class="fas fa-chart-bar"></i> Statistics</a>
-            <!-- NEW: Manage Suppliers -->
             <a href="#" data-tab="suppliers" id="sidebar-suppliers">
                 <i class="fas fa-truck"></i> Manage Suppliers
             </a>
@@ -1754,7 +1753,7 @@
         function renderMachineList(machines) {
             const container = document.getElementById('machineListView');
             if (!machines || machines.length === 0) {
-                container.innerHTML = '<p style="text-align:center;padding:30px;color:#666;">No machines found.</p>';
+                container.innerHTML = '<p style="text-align:center;padding:30px;color:#666;">No machines found. Add your first machine in the Asset Management section.</p>';
                 document.getElementById('listCount').textContent = '0';
                 return;
             }
@@ -1810,8 +1809,11 @@
 
         function filterAssets() { refreshAssetView(); }
 
-        function refreshList() { renderMachineList(getMachines());
-            updateLandingCount(); }
+        function refreshList() { 
+            const allMachines = getMachines();
+            renderMachineList(allMachines); 
+            updateLandingCount(); 
+        }
 
         function refreshDashboard() {
             const machines = getMachines();
@@ -2674,7 +2676,6 @@
             saveDB(db);
             toast('🗑️ Supplier deleted.');
             renderSuppliers(getSuppliers());
-            // Refresh supplier dropdowns in asset forms
             loadSuppliersDropdown('assetSupplier');
             loadSuppliersDropdown('editSupplier');
         }
@@ -2714,7 +2715,6 @@
             closeSupplierForm();
             renderSuppliers(getSuppliers());
             document.getElementById('supplierSearchInput').value = '';
-            // Refresh dropdowns
             loadSuppliersDropdown('assetSupplier');
             loadSuppliersDropdown('editSupplier');
         });
@@ -2750,7 +2750,11 @@
                 if (subLink) subLink.classList.add('active');
                 document.getElementById('sidebarAssetSub').classList.add('open');
             }
-            if (name === 'list') refreshList();
+            if (name === 'list') {
+                // Force refresh the machine list with all machines
+                const allMachines = getMachines();
+                renderMachineList(allMachines);
+            }
             if (name === 'status') refreshDashboard();
             if (name === 'assets') refreshAssetView();
             if (name === 'qr') populateQRSelect();
@@ -2798,6 +2802,11 @@
             }
             if (tab) {
                 if (tab === 'suppliers') closeSupplierForm();
+                if (tab === 'list') {
+                    // Force refresh with all machines
+                    const allMachines = getMachines();
+                    renderMachineList(allMachines);
+                }
                 switchToTab(tab);
                 if (window.innerWidth < 769) {
                     document.getElementById('sidebar').classList.remove('open');
@@ -2817,6 +2826,10 @@
                     switchToTab('assets');
                 } else {
                     if (tab === 'suppliers') closeSupplierForm();
+                    if (tab === 'list') {
+                        const allMachines = getMachines();
+                        renderMachineList(allMachines);
+                    }
                     switchToTab(tab);
                 }
             }
@@ -2904,7 +2917,7 @@
 
             updateLandingCount();
             refreshAssetView();
-            refreshList();
+            refreshList(); // Load all machines into the "All Machines" tab
             refreshDashboard();
             renderSuppliers(getSuppliers());
 
@@ -2940,5 +2953,5 @@
         console.log('🚚 Suppliers:', getSuppliers().length);
         console.log('🔗 Base URL:', BASE_URL);
     </script>
-</body>
+</body> 
 </html>
