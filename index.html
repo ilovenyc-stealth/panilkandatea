@@ -430,6 +430,14 @@
             background: #6a1b9a;
             color: white;
         }
+        .btn-success {
+            background: #2e7d32;
+            color: white;
+        }
+        .btn-warning {
+            background: #f57c00;
+            color: white;
+        }
 
         /* ─── Status Badge ─── */
         .status-badge {
@@ -752,6 +760,14 @@
             border: 1px solid var(--primary-light);
             margin-bottom: 6px;
         }
+        .section-list-item .section-info {
+            flex: 1;
+        }
+        .section-list-item .section-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
         .section-color-dot {
             width: 16px;
             height: 16px;
@@ -759,6 +775,17 @@
             display: inline-block;
             margin-right: 10px;
             border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .section-stats {
+            font-size: 12px;
+            color: #666;
+            margin-left: 8px;
+        }
+        .section-description {
+            font-size: 12px;
+            color: #888;
+            margin-left: 8px;
+            font-style: italic;
         }
 
         /* ─── Scan Result Detail Modal ─── */
@@ -1056,6 +1083,14 @@
             .scan-result-modal .machine-detail-grid {
                 grid-template-columns: 1fr;
             }
+            .section-list-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .section-list-item .section-actions {
+                width: 100%;
+            }
         }
         @media (min-width:769px) {
             .hamburger {
@@ -1237,6 +1272,171 @@
             color: #666;
             margin-bottom: 12px;
         }
+
+        /* ─── Full Machine View Card ─── */
+        .machine-full-view {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 2px solid var(--primary);
+            box-shadow: var(--shadow-lg);
+            margin-top: 16px;
+        }
+        .machine-full-view .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+        .machine-full-view .header-row h3 {
+            font-size: 20px;
+            color: var(--primary-dark);
+        }
+        .machine-full-view .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .machine-full-view .detail-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .machine-full-view .detail-item label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #888;
+            display: block;
+            font-weight: 600;
+        }
+        .machine-full-view .detail-item .value {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-top: 2px;
+        }
+        .machine-full-view .btn-group {
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 2px solid var(--accent-light);
+        }
+
+        /* ─── Section Stats Card ─── */
+        .section-stats-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .section-stat-item {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 2px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-stat-item .color-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .section-stat-item .stat-info {
+            flex: 1;
+        }
+        .section-stat-item .stat-info .name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .section-stat-item .stat-info .count {
+            font-size: 12px;
+            color: #666;
+        }
+        .section-stat-item .stat-info .percentage {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ─── Section Edit Modal ─── */
+        .section-edit-modal .modal-content {
+            max-width: 500px;
+        }
+
+        /* ─── Search Bar for Sections ─── */
+        .section-search-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .section-search-bar input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 16px;
+            border: 2px solid var(--primary-light);
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        .section-search-bar input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        /* ─── Empty State ─── */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        .empty-state i {
+            font-size: 48px;
+            color: var(--primary-light);
+            margin-bottom: 16px;
+        }
+        .empty-state h3 {
+            font-size: 18px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        .empty-state p {
+            font-size: 14px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* ─── Add Section Form Inline ─── */
+        .add-section-inline {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 2px solid var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+        .add-section-inline .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .add-section-inline .form-group.full {
+            grid-column: 1/-1;
+        }
+        .add-section-inline .btn-group {
+            margin-top: 12px;
+        }
+        @media (max-width:600px) {
+            .add-section-inline .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1261,10 +1461,9 @@
             <a href="#" id="sidebar-assets" data-tab="assets" class="active">
                 <i class="fas fa-boxes"></i> Asset Management
             </a>
-            <div class="sidebar-sub open" id="sidebarAssetSub">
-                <a href="#" data-sub="viewAssets" class="active"><i class="fas fa-eye"></i> View Assets</a>
+            <div class="sidebar-sub" id="sidebarAssetSub">
+                <a href="#" data-sub="viewAssets"><i class="fas fa-eye"></i> View Assets</a>
                 <a href="#" data-sub="addAsset"><i class="fas fa-plus-circle"></i> Add Asset</a>
-                <a href="#" data-sub="addSection"><i class="fas fa-folder-plus"></i> Add Section</a>
                 <a href="#" data-sub="manageSections"><i class="fas fa-cog"></i> Manage Sections</a>
             </div>
             <a href="#" data-tab="list"><i class="fas fa-list"></i> All Machines</a>
@@ -1300,7 +1499,7 @@
         <div id="tab-assets" class="tab-content">
 
             <!-- ─── PAGE 1: View Assets ─── -->
-            <div id="sub-viewAssets" class="sub-content active">
+            <div id="sub-viewAssets" class="sub-content">
                 <div class="sub-page-header">
                     <div class="icon-wrapper"><i class="fas fa-eye"></i></div>
                     <h2>View Assets</h2>
@@ -1348,14 +1547,22 @@
                 </div>
             </div>
 
-            <!-- ─── PAGE 3: Add Section ─── -->
-            <div id="sub-addSection" class="sub-content">
+            <!-- ─── PAGE 3: Manage Sections (ENHANCED with Add Section) ─── -->
+            <div id="sub-manageSections" class="sub-content">
                 <div class="sub-page-header">
-                    <div class="icon-wrapper"><i class="fas fa-folder-plus"></i></div>
-                    <h2>Add Section</h2>
-                    <span class="subtitle">Create a new department or area</span>
+                    <div class="icon-wrapper"><i class="fas fa-cog"></i></div>
+                    <h2>Manage Sections</h2>
+                    <span class="subtitle">View, add, edit, and organize your factory sections</span>
                 </div>
-                <div class="card">
+
+                <!-- ─── ADD SECTION FORM (INLINE) ─── -->
+                <div class="add-section-inline" id="addSectionInline">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                        <h3 style="color:var(--primary-dark);"><i class="fas fa-plus-circle" style="color:var(--primary);"></i> Add New Section</h3>
+                        <button onclick="toggleAddSectionForm()" class="btn btn-secondary btn-sm" id="toggleSectionFormBtn">
+                            <i class="fas fa-chevron-up"></i> Collapse
+                        </button>
+                    </div>
                     <form id="sectionForm" autocomplete="off">
                         <div class="form-grid">
                             <div class="form-group"><label><i class="fas fa-tag"></i> Section Name *</label><input type="text" id="sectionName" placeholder="e.g. Fermentation" required /></div>
@@ -1368,17 +1575,23 @@
                         </div>
                     </form>
                 </div>
-            </div>
 
-            <!-- ─── PAGE 4: Manage Sections ─── -->
-            <div id="sub-manageSections" class="sub-content">
-                <div class="sub-page-header">
-                    <div class="icon-wrapper"><i class="fas fa-cog"></i></div>
-                    <h2>Manage Sections</h2>
-                    <span class="subtitle">View and delete existing sections</span>
+                <!-- Stats Overview -->
+                <div class="section-stats-card" id="sectionStatsCard"></div>
+
+                <!-- Search & Actions -->
+                <div class="card" style="padding:12px 16px;">
+                    <div class="section-search-bar">
+                        <input type="text" id="sectionSearchInput" placeholder="Search sections by name or description..." oninput="filterSections()" />
+                        <button onclick="filterSections()" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+                        <button onclick="clearSectionSearch()" class="btn btn-secondary"><i class="fas fa-times"></i> Clear</button>
+                        <button onclick="exportSectionsToCSV()" class="btn btn-primary"><i class="fas fa-file-excel"></i> Export</button>
+                        <button onclick="toggleAddSectionForm()" class="btn btn-success"><i class="fas fa-plus"></i> Add New</button>
+                    </div>
                 </div>
+
+                <!-- Section List -->
                 <div class="card">
-                    <p style="color:#666;font-size:13px;margin-bottom:12px;">Delete sections that are no longer needed. Machines assigned to a deleted section will be set to "Uncategorised".</p>
                     <div id="sectionListContainer"><p style="text-align:center;padding:20px;color:#666;">Loading sections...</p></div>
                 </div>
             </div>
@@ -1573,6 +1786,25 @@
         </div>
     </div>
 
+    <!-- ==================== SECTION EDIT MODAL ==================== -->
+    <div class="modal section-edit-modal" id="sectionEditModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3><i class="fas fa-edit"></i> Edit Section</h3><button class="modal-close" onclick="closeSectionEditModal()">&times;</button></div>
+            <form id="sectionEditForm" autocomplete="off">
+                <div class="form-grid">
+                    <div class="form-group"><label><i class="fas fa-tag"></i> Section Name *</label><input type="text" id="editSectionName" required /></div>
+                    <div class="form-group"><label><i class="fas fa-palette"></i> Color</label><input type="color" id="editSectionColor" value="#2e7d32" /></div>
+                    <div class="form-group full"><label><i class="fas fa-sticky-note"></i> Description</label><textarea id="editSectionDesc" rows="2"></textarea></div>
+                </div>
+                <input type="hidden" id="editSectionId" value="" />
+                <div class="btn-group" style="margin-top:12px;">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update Section</button>
+                    <button type="button" onclick="closeSectionEditModal()" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- ==================== SCAN RESULT DETAIL MODAL ==================== -->
     <div class="modal scan-result-modal" id="scanResultModal">
         <div class="modal-content">
@@ -1732,7 +1964,7 @@
                             </div>
                             <div class="btn-group">
                                 <button onclick="editMachine('${esc(m.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
-                                <button onclick="viewMachine('${esc(m.id)}')" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i> View</button>
+                                <button onclick="viewMachine('${esc(m.id)}')" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> View</button>
                                 <button onclick="deleteMachine('${esc(m.id)}')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
@@ -1779,6 +2011,217 @@
         }
 
         // ============================================================
+        // SECTION MANAGEMENT - ENHANCED
+        // ============================================================
+        let sectionSearchQuery = '';
+        let addSectionVisible = true;
+
+        function toggleAddSectionForm() {
+            const form = document.getElementById('addSectionInline');
+            const btn = document.getElementById('toggleSectionFormBtn');
+            if (addSectionVisible) {
+                form.style.display = 'none';
+                btn.innerHTML = '<i class="fas fa-chevron-down"></i> Expand';
+                addSectionVisible = false;
+            } else {
+                form.style.display = 'block';
+                btn.innerHTML = '<i class="fas fa-chevron-up"></i> Collapse';
+                addSectionVisible = true;
+            }
+        }
+
+        function renderSectionStats() {
+            const sections = getSections();
+            const machines = getMachines();
+            const totalMachines = machines.length;
+            const container = document.getElementById('sectionStatsCard');
+            
+            if (sections.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <h3>No Sections Yet</h3>
+                        <p>Use the "Add New" button above to create your first section.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            sections.forEach(sec => {
+                const count = machines.filter(m => m.section === sec.id).length;
+                const percentage = totalMachines > 0 ? Math.round((count / totalMachines) * 100) : 0;
+                const color = sec.color || '#2e7d32';
+                html += `
+                    <div class="section-stat-item">
+                        <div class="color-dot" style="background:${color};"></div>
+                        <div class="stat-info">
+                            <div class="name">${esc(sec.name)}</div>
+                            <div class="count">${count} machine${count !== 1 ? 's' : ''}</div>
+                            <div class="percentage">${percentage}% of total</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderSectionList() {
+            const container = document.getElementById('sectionListContainer');
+            const sections = getSections();
+            const machines = getMachines();
+            
+            // Apply search filter
+            let filteredSections = sections;
+            if (sectionSearchQuery.trim()) {
+                const query = sectionSearchQuery.trim().toLowerCase();
+                filteredSections = sections.filter(s => 
+                    s.name.toLowerCase().includes(query) || 
+                    (s.description && s.description.toLowerCase().includes(query))
+                );
+            }
+            
+            if (sections.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-plus"></i>
+                        <h3>No Sections Created</h3>
+                        <p>Use the "Add New" button above to create your first department or area.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (filteredSections.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>No Matching Sections</h3>
+                        <p>Try adjusting your search terms.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            filteredSections.forEach(sec => {
+                const count = machines.filter(m => m.section === sec.id).length;
+                const color = sec.color || '#2e7d32';
+                html += `
+                    <div class="section-list-item">
+                        <div class="section-info">
+                            <span class="section-color-dot" style="background:${color};"></span>
+                            <strong>${esc(sec.name)}</strong>
+                            <span class="section-stats">📊 ${count} machine${count !== 1 ? 's' : ''}</span>
+                            ${sec.description ? `<span class="section-description">— ${esc(sec.description)}</span>` : ''}
+                        </div>
+                        <div class="section-actions">
+                            <button onclick="editSection('${sec.id}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
+                            <button onclick="viewSectionMachines('${sec.id}')" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i> View Machines</button>
+                            <button onclick="deleteSection('${sec.id}')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function filterSections() {
+            const input = document.getElementById('sectionSearchInput');
+            sectionSearchQuery = input ? input.value : '';
+            renderSectionList();
+        }
+
+        function clearSectionSearch() {
+            const input = document.getElementById('sectionSearchInput');
+            if (input) input.value = '';
+            sectionSearchQuery = '';
+            renderSectionList();
+        }
+
+        function editSection(sectionId) {
+            const sections = getSections();
+            const section = sections.find(s => s.id === sectionId);
+            if (!section) { toast('Section not found.', true); return; }
+            
+            document.getElementById('editSectionId').value = section.id;
+            document.getElementById('editSectionName').value = section.name || '';
+            document.getElementById('editSectionColor').value = section.color || '#2e7d32';
+            document.getElementById('editSectionDesc').value = section.description || '';
+            document.getElementById('sectionEditModal').classList.add('active');
+        }
+
+        function closeSectionEditModal() {
+            document.getElementById('sectionEditModal').classList.remove('active');
+        }
+
+        document.getElementById('sectionEditForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('editSectionId').value;
+            const name = document.getElementById('editSectionName').value.trim();
+            const color = document.getElementById('editSectionColor').value;
+            const description = document.getElementById('editSectionDesc').value.trim();
+            
+            if (!name) { toast('Please enter a section name.', true); return; }
+            
+            const db = getDB();
+            const idx = db.sections.findIndex(s => s.id === id);
+            if (idx === -1) { toast('Section not found.', true); return; }
+            
+            db.sections[idx].name = name;
+            db.sections[idx].color = color;
+            db.sections[idx].description = description;
+            saveDB(db);
+            
+            toast('✅ Section updated: ' + name);
+            closeSectionEditModal();
+            refreshSectionManagement();
+            refreshAssetView();
+            refreshDashboard();
+            loadSectionsDropdown('assetSection');
+            loadSectionsDropdown('editSection');
+            loadSectionsDropdown('filterSection');
+        });
+
+        function viewSectionMachines(sectionId) {
+            // Switch to View Assets and filter by this section
+            currentSub = 'viewAssets';
+            switchToTab('assets');
+            const filterSelect = document.getElementById('filterSection');
+            if (filterSelect) {
+                filterSelect.value = sectionId;
+                filterAssets();
+            }
+            toast('📋 Showing machines in selected section');
+        }
+
+        function exportSectionsToCSV() {
+            const sections = getSections();
+            if (sections.length === 0) { toast('No sections to export.', true); return; }
+            
+            const headers = ['ID', 'Section Name', 'Color', 'Description', 'Machine Count'];
+            const rows = sections.map(s => {
+                const count = getMachines().filter(m => m.section === s.id).length;
+                return [s.id, s.name || '', s.color || '#2e7d32', s.description || '', count];
+            });
+            
+            let csv = headers.join(',') + '\n';
+            rows.forEach(row => { csv += row.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',') + '\n'; });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'panilkanda_sections.csv';
+            link.click();
+            toast('📥 Sections CSV exported.');
+        }
+
+        function refreshSectionManagement() {
+            renderSectionStats();
+            renderSectionList();
+        }
+
+        // ============================================================
         // REFRESH FUNCTIONS
         // ============================================================
         function refreshAssetView() {
@@ -1803,7 +2246,7 @@
             loadSuppliersDropdown('assetSupplier');
             loadSuppliersDropdown('editSupplier');
             populateQRSelect();
-            renderSectionList();
+            refreshSectionManagement();
             updateLandingCount();
         }
 
@@ -1856,35 +2299,8 @@
         }
 
         // ============================================================
-        // SECTION MANAGEMENT
+        // SECTION MANAGEMENT - DELETE
         // ============================================================
-        function renderSectionList() {
-            const container = document.getElementById('sectionListContainer');
-            const sections = getSections();
-            const machines = getMachines();
-            if (sections.length === 0) {
-                container.innerHTML = '<p style="text-align:center;padding:20px;color:#666;">No sections created yet. Use the "Add Section" page to create one.</p>';
-                return;
-            }
-            let html = '';
-            sections.forEach(sec => {
-                const count = machines.filter(m => m.section === sec.id).length;
-                const color = sec.color || '#2e7d32';
-                html += `
-                            <div class="section-list-item">
-                                <div>
-                                    <span class="section-color-dot" style="background:${color};"></span>
-                                    <strong>${esc(sec.name)}</strong>
-                                    <span style="color:#666;font-size:12px;margin-left:8px;">(${count} machine${count !== 1 ? 's' : ''})</span>
-                                    ${sec.description ? `<span style="color:#888;font-size:12px;margin-left:8px;">— ${esc(sec.description)}</span>` : ''}
-                                </div>
-                                <button onclick="deleteSection('${sec.id}')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</button>
-                            </div>
-                        `;
-            });
-            container.innerHTML = html;
-        }
-
         function deleteSection(sectionId) {
             const sections = getSections();
             const section = sections.find(s => s.id === sectionId);
@@ -1904,7 +2320,7 @@
             loadSectionsDropdown('editSection');
             loadSectionsDropdown('filterSection');
             populateQRSelect();
-            renderSectionList();
+            refreshSectionManagement();
         }
 
         // ============================================================
@@ -2402,6 +2818,99 @@
         }
 
         // ============================================================
+        // VIEW MACHINE - DISPLAY FULL DETAILS
+        // ============================================================
+        function viewMachine(id) {
+            const machines = getMachines();
+            const machine = machines.find(m => m.id === id);
+            if (!machine) {
+                toast('Machine not found.', true);
+                return;
+            }
+            
+            // Switch to lookup tab
+            switchToTab('lookup');
+            
+            // Clear the input and show the machine details
+            document.getElementById('lookupInput').value = id;
+            
+            const secName = getSectionName(machine.section);
+            const supplierName = getSupplierName(machine.supplier);
+            const result = document.getElementById('lookupResult');
+            
+            result.innerHTML = `
+                <div class="machine-full-view">
+                    <div class="header-row">
+                        <h3><i class="fas fa-cog" style="color:var(--primary);"></i> ${esc(machine.name)}</h3>
+                        <span class="machine-id" style="font-size:14px;padding:4px 14px;">${esc(machine.id)}</span>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <label><i class="fas fa-tag"></i> Name</label>
+                            <div class="value">${esc(machine.name)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label><i class="fas fa-folder"></i> Section</label>
+                            <div class="value">${esc(secName)}</div>
+                        </div>
+                        ${supplierName ? `
+                        <div class="detail-item">
+                            <label><i class="fas fa-truck"></i> Supplier</label>
+                            <div class="value">${esc(supplierName)}</div>
+                        </div>` : ''}
+                        <div class="detail-item">
+                            <label><i class="fas fa-industry"></i> Manufacturer</label>
+                            <div class="value">${esc(machine.manufacturer || '-')}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label><i class="fas fa-cube"></i> Model</label>
+                            <div class="value">${esc(machine.model || '-')}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label><i class="fas fa-barcode"></i> Serial Number</label>
+                            <div class="value">${esc(machine.serialNumber || '-')}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label><i class="fas fa-calendar-alt"></i> Installation Date</label>
+                            <div class="value">${fmtDate(machine.installationDate)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label><i class="fas fa-info-circle"></i> Status</label>
+                            <div class="value"><span class="status-badge ${statusCls(machine.status)}">${statusLabel(machine.status)}</span></div>
+                        </div>
+                        ${machine.notes ? `
+                        <div class="detail-item" style="grid-column:1/-1;">
+                            <label><i class="fas fa-sticky-note"></i> Notes</label>
+                            <div class="value">${esc(machine.notes)}</div>
+                        </div>` : ''}
+                    </div>
+                    <div class="btn-group">
+                        <button onclick="editMachine('${esc(machine.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
+                        <button onclick="deleteMachine('${esc(machine.id)}')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</button>
+                        <button onclick="generateQRForMachine('${esc(machine.id)}')" class="btn btn-primary btn-sm"><i class="fas fa-qrcode"></i> Generate QR</button>
+                        <button onclick="openBlankPageWithMachine(window._viewMachine)" class="btn btn-info btn-sm"><i class="fas fa-external-link-alt"></i> Open in New Tab</button>
+                        <button onclick="window.print()" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i> Print</button>
+                    </div>
+                </div>
+            `;
+            
+            // Store the machine for the new tab function
+            window._viewMachine = machine;
+            
+            // Scroll to the result
+            result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            toast('📋 Showing details for: ' + machine.name);
+        }
+
+        function generateQRForMachine(id) {
+            switchToTab('qr');
+            const sel = document.getElementById('qrMachineSelect');
+            sel.value = id;
+            generateQR();
+            toast('📱 QR code generated for machine ' + id);
+        }
+
+        // ============================================================
         // CRUD – MACHINES
         // ============================================================
         document.getElementById('assetForm').addEventListener('submit', function(e) {
@@ -2435,24 +2944,35 @@
             populateQRSelect();
         });
 
+        // ============================================================
+        // SECTION FORM (INLINE in Manage Sections)
+        // ============================================================
         document.getElementById('sectionForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('sectionName').value.trim();
             if (!name) { toast('Please enter a section name.', true); return; }
             const db = getDB();
             const id = 'sec_' + Date.now();
-            db.sections.push({ id, name, color: document.getElementById('sectionColor').value, description: document
-                    .getElementById('sectionDesc').value.trim() });
+            db.sections.push({ 
+                id, 
+                name, 
+                color: document.getElementById('sectionColor').value, 
+                description: document.getElementById('sectionDesc').value.trim() 
+            });
             saveDB(db);
             toast('✅ Section added: ' + name);
             this.reset();
             document.getElementById('sectionColor').value = '#2e7d32';
+            refreshSectionManagement();
             refreshAssetView();
             refreshDashboard();
             loadSectionsDropdown('assetSection');
             loadSectionsDropdown('editSection');
             loadSectionsDropdown('filterSection');
-            renderSectionList();
+            // Keep the form visible
+            document.getElementById('addSectionInline').style.display = 'block';
+            document.getElementById('toggleSectionFormBtn').innerHTML = '<i class="fas fa-chevron-up"></i> Collapse';
+            addSectionVisible = true;
         });
 
         let editMachineId = null;
@@ -2523,12 +3043,9 @@
             refreshList();
             refreshDashboard();
             populateQRSelect();
-        }
-
-        function viewMachine(id) {
-            switchToTab('lookup');
-            document.getElementById('lookupInput').value = id;
-            lookupMachine();
+            // Clear the lookup result if it's showing this machine
+            const result = document.getElementById('lookupResult');
+            if (result) result.innerHTML = '';
         }
 
         function exportToCSV() {
@@ -2748,10 +3265,14 @@
                 document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
                 const subLink = document.querySelector(`#sidebarAssetSub a[data-sub="${currentSub}"]`);
                 if (subLink) subLink.classList.add('active');
+                // Keep the sub-menu open when on assets tab
                 document.getElementById('sidebarAssetSub').classList.add('open');
+                // Refresh section management when navigating to manage sections
+                if (currentSub === 'manageSections') {
+                    refreshSectionManagement();
+                }
             }
             if (name === 'list') {
-                // Force refresh the machine list with all machines
                 const allMachines = getMachines();
                 renderMachineList(allMachines);
             }
@@ -2769,18 +3290,23 @@
             e.preventDefault();
             const tab = link.dataset.tab;
             const sub = link.dataset.sub;
+            
             if (sub) {
                 currentSub = sub;
                 switchToTab('assets');
                 document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
                 link.classList.add('active');
+                // Keep sub-menu open when clicking sub-items
+                document.getElementById('sidebarAssetSub').classList.add('open');
                 if (window.innerWidth < 769) {
                     document.getElementById('sidebar').classList.remove('open');
                     document.getElementById('sidebarOverlay').classList.remove('active');
                 }
                 return;
             }
+            
             if (tab === 'assets') {
+                // Toggle the sub-menu when clicking Asset Management
                 const subMenu = document.getElementById('sidebarAssetSub');
                 subMenu.classList.toggle('open');
                 if (subMenu.classList.contains('open')) {
@@ -2788,6 +3314,7 @@
                     switchToTab('assets');
                     document.querySelector('#sidebarAssetSub a[data-sub="viewAssets"]')?.classList.add('active');
                 } else {
+                    // When closed, show landing view and keep assets active
                     document.getElementById('landingView').style.display = 'block';
                     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
                     document.querySelectorAll('.sidebar-nav > a').forEach(a => a.classList.remove('active'));
@@ -2800,10 +3327,10 @@
                 }
                 return;
             }
+            
             if (tab) {
                 if (tab === 'suppliers') closeSupplierForm();
                 if (tab === 'list') {
-                    // Force refresh with all machines
                     const allMachines = getMachines();
                     renderMachineList(allMachines);
                 }
@@ -2912,14 +3439,15 @@
             document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
             document.querySelectorAll('#bottomNav a').forEach(a => a.classList.remove('active'));
             document.getElementById('sidebar-assets').classList.add('active');
-            document.getElementById('sidebarAssetSub').classList.add('open');
-            document.querySelector('#sidebarAssetSub a[data-sub="viewAssets"]').classList.add('active');
+            // Sub-menu is hidden initially - no 'open' class
+            document.getElementById('sidebarAssetSub').classList.remove('open');
 
             updateLandingCount();
             refreshAssetView();
-            refreshList(); // Load all machines into the "All Machines" tab
+            refreshList();
             refreshDashboard();
             renderSuppliers(getSuppliers());
+            refreshSectionManagement();
 
             showMachineFromURL();
 
@@ -2944,6 +3472,7 @@
                 closeFullscreenDetails();
                 stopQRScanner();
                 closeSupplierForm();
+                closeSectionEditModal();
             }
         });
 
