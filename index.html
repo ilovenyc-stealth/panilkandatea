@@ -2325,10 +2325,8 @@
             document.getElementById('sidebar').style.display = 'none';
             document.querySelector('.hamburger').style.display = 'none';
 
-            // Try to find the machine
             let machine = getMachines().find(m => m.id === id);
 
-            // If not found, try to refresh from localStorage
             if (!machine) {
                 const db = getDB();
                 machine = db.machines.find(m => m.id === id);
@@ -2467,7 +2465,6 @@
             refreshDashboard();
             populateQRSelect();
 
-            // Retry showing the machine
             forceRefreshAndCheck(machineId);
         }
 
@@ -2770,28 +2767,24 @@
 
             showDebug('Attempting to extract ID from: ' + text.substring(0, 200) + (text.length > 200 ? '...' : ''));
 
-            // URL parameter: ?id=M0004 or &id=M0004
             let urlMatch = text.match(/[?&]id=([^&\s]+)/);
             if (urlMatch) {
                 showDebug('Found ID from URL param: ' + urlMatch[1]);
                 return decodeURIComponent(urlMatch[1]);
             }
 
-            // Direct URL pattern
             let directMatch = text.match(/id[=\/]([A-Za-z0-9_\-]+)/);
             if (directMatch) {
                 showDebug('Found ID from direct pattern: ' + directMatch[1]);
                 return directMatch[1];
             }
 
-            // Machine ID pattern: M followed by 4 digits
             let idMatch = text.match(/\bM\d{4}\b/);
             if (idMatch) {
                 showDebug('Found ID from pattern M####: ' + idMatch[0]);
                 return idMatch[0];
             }
 
-            // Any ID pattern
             let genericMatch = text.match(/\b([A-Za-z]+\d+)\b/);
             if (genericMatch) {
                 showDebug('Found ID from generic pattern: ' + genericMatch[1]);
@@ -3588,57 +3581,11 @@
         });
 
         // ============================================================
-        // INIT
+        // INIT - COMPLETELY EMPTY DATABASE
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            const db = getDB();
-            if (!db.sections || db.sections.length === 0) {
-                db.sections = [
-                    { id: 'sec_1', name: 'Withering', color: '#2e7d32', description: 'Withering process' },
-                    { id: 'sec_2', name: 'Rolling', color: '#1976d2', description: 'CTC Rolling' },
-                    { id: 'sec_3', name: 'Fermentation', color: '#e65100', description: 'Fermentation area' },
-                    { id: 'sec_4', name: 'Drying', color: '#c62828', description: 'Drying / Firing' },
-                    { id: 'sec_5', name: 'Grading', color: '#6a1b9a', description: 'Sorting & Grading' },
-                ];
-                saveDB(db);
-            }
-            const machines = getMachines();
-            if (machines.length === 0) {
-                const sample = [
-                    { id: 'M0001', name: 'CTC Roller 1', section: 'sec_2', supplier: null,
-                        manufacturer: 'Marshall',
-                        model: 'CTC-2000', serialNumber: 'SN-001', installationDate: '2023-01-15',
-                        status: 'working', notes: 'Primary roller' },
-                    { id: 'M0002', name: 'Withering Trough 1', section: 'sec_1', supplier: null,
-                        manufacturer: 'TeaTech',
-                        model: 'WT-500', serialNumber: 'SN-002', installationDate: '2023-02-10',
-                        status: 'working', notes: 'Capacity 500kg' },
-                    { id: 'M0003', name: 'Fermentation Conveyor', section: 'sec_3', supplier: null,
-                        manufacturer: 'ConveyX',
-                        model: 'FC-100', serialNumber: 'SN-003', installationDate: '2023-03-01',
-                        status: 'maintenance', notes: 'Belt needs replacement' },
-                ];
-                db.machines = sample;
-                saveDB(db);
-            }
-            let needUpdate = false;
-            db.machines.forEach(m => {
-                if (m.supplier === undefined) { m.supplier = null;
-                    needUpdate = true; }
-            });
-            if (needUpdate) saveDB(db);
-
-            if (!db.suppliers || db.suppliers.length === 0) {
-                db.suppliers = [
-                    { id: 'S0001', name: 'Tea Equipment Ltd', contact: '+94 77 123 4567',
-                        additionalContact: '+94 11 234 5678', serviceCentre: '+94 55 987 6543',
-                        address: 'No. 10, Tea Factory Road, Colombo', otherDetails: 'Payment terms: Net 30 days' },
-                    { id: 'S0002', name: 'Ceylon Machinery Supplies', contact: '+94 71 555 1234',
-                        additionalContact: '', serviceCentre: '+94 81 222 3333',
-                        address: 'Kandy Road, Peradeniya', otherDetails: 'Spare parts specialist' },
-                ];
-                saveDB(db);
-            }
+            // Database starts completely empty - no sections, no machines, no suppliers
+            // Users will add their own data
 
             loadSectionsDropdown('assetSection');
             loadSectionsDropdown('editSection');
