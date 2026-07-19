@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
-        /* ─── (all existing styles remain unchanged) ─── */
         * {
             margin: 0;
             padding: 0;
@@ -52,7 +51,6 @@
             flex: 1;
         }
 
-        /* ─── Sidebar ─── */
         .sidebar {
             position: fixed;
             top: 0;
@@ -143,7 +141,6 @@
             display: block;
         }
 
-        /* ─── Hamburger ─── */
         .hamburger {
             display: none;
             position: fixed;
@@ -163,7 +160,6 @@
             justify-content: center;
         }
 
-        /* ─── Main Container ─── */
         .main-content {
             flex: 1;
             max-width: 1200px;
@@ -177,7 +173,6 @@
             margin-left: calc(var(--sidebar-width) + 20px);
         }
 
-        /* ─── Bottom Nav (mobile) ─── */
         .bottom-nav {
             display: none;
             position: fixed;
@@ -213,7 +208,6 @@
             font-weight: 600;
         }
 
-        /* ─── Header ─── */
         .header {
             display: flex;
             align-items: center;
@@ -249,13 +243,11 @@
             font-size: 13px;
         }
 
-        /* ─── Hide top tabs ─── */
         .tabs,
         .sub-tabs {
             display: none !important;
         }
 
-        /* ─── Landing View ─── */
         #landingView {
             display: block;
             text-align: center;
@@ -278,7 +270,6 @@
             margin-top: 4px;
         }
 
-        /* ─── Tab Content ─── */
         .tab-content {
             display: none;
             animation: fadeIn 0.3s;
@@ -297,7 +288,6 @@
             }
         }
 
-        /* ─── Sub‑page headers (full-page style) ─── */
         .page-header {
             display: flex;
             align-items: center;
@@ -329,7 +319,6 @@
             margin-left: auto;
         }
 
-        /* ─── Cards & Forms ─── */
         .card {
             background: var(--white);
             border-radius: var(--radius-md);
@@ -434,12 +423,7 @@
             background: #2e7d32;
             color: white;
         }
-        .btn-warning {
-            background: #f57c00;
-            color: white;
-        }
 
-        /* ─── Status Badge ─── */
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -462,7 +446,6 @@
             color: var(--danger);
         }
 
-        /* ─── Machine List ─── */
         .machine-list {
             display: grid;
             gap: 8px;
@@ -514,7 +497,6 @@
             gap: 4px;
         }
 
-        /* ─── Info Box ─── */
         .info-box {
             display: flex;
             align-items: center;
@@ -533,7 +515,6 @@
             display: flex !important;
         }
 
-        /* ─── QR ─── */
         .qr-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -557,7 +538,6 @@
             border: 2px solid var(--primary-light);
         }
 
-        /* ─── Scanner ─── */
         #qrReaderContainer {
             margin-top: 12px;
             padding: 16px;
@@ -575,7 +555,6 @@
             object-fit: cover;
         }
 
-        /* ─── Result Card ─── */
         .result-card {
             background: var(--primary-bg);
             border-radius: var(--radius-md);
@@ -609,7 +588,6 @@
             display: block;
         }
 
-        /* ─── Stats ─── */
         .stat-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -643,7 +621,6 @@
             border-color: var(--danger);
         }
 
-        /* ─── Toast ─── */
         .toast-container {
             position: fixed;
             top: 15px;
@@ -678,7 +655,6 @@
             }
         }
 
-        /* ─── Modal ─── */
         .modal {
             display: none;
             position: fixed;
@@ -788,7 +764,6 @@
             font-style: italic;
         }
 
-        /* ─── Scan Result Detail Modal ─── */
         .scan-result-modal .modal-content {
             max-width: 700px;
         }
@@ -821,7 +796,6 @@
             word-break: break-word;
         }
 
-        /* ─── Full‑screen details overlay ─── */
         #fullscreenDetails {
             display: none;
             position: fixed;
@@ -980,6 +954,303 @@
             border-top: 1px solid #e5e7eb;
             padding-top: 16px;
         }
+
+        .sub-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        .sub-content.active {
+            display: block;
+        }
+
+        .sub-page-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 3px solid var(--primary-light);
+        }
+        .sub-page-header .icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: var(--primary-bg);
+            border-radius: 12px;
+            color: var(--primary);
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        .sub-page-header h2 {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0;
+        }
+        .sub-page-header .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-left: auto;
+        }
+
+        .supplier-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 14px 16px;
+            background: var(--white);
+            border-radius: 12px;
+            border: 2px solid var(--primary-light);
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+            transition: border-color 0.2s;
+        }
+        .supplier-item:hover {
+            border-color: var(--primary);
+        }
+        .supplier-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-width: 200px;
+        }
+        .supplier-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .supplier-detail-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 20px;
+            font-size: 13px;
+            color: #444;
+        }
+        .supplier-detail-row span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .supplier-detail-row i {
+            color: var(--primary);
+            width: 16px;
+            font-size: 12px;
+        }
+        .supplier-other {
+            font-size: 12px;
+            color: #666;
+            background: #f5f5f5;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-top: 2px;
+        }
+        .supplier-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .supplier-badge {
+            background: var(--primary-bg);
+            color: var(--primary-dark);
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .search-bar input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 16px;
+            border: 2px solid var(--primary-light);
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        .search-bar input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .search-bar .btn {
+            flex-shrink: 0;
+        }
+        .supplier-count {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .machine-full-view {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 2px solid var(--primary);
+            box-shadow: var(--shadow-lg);
+            margin-top: 16px;
+        }
+        .machine-full-view .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+        .machine-full-view .header-row h3 {
+            font-size: 20px;
+            color: var(--primary-dark);
+        }
+        .machine-full-view .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .machine-full-view .detail-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .machine-full-view .detail-item label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #888;
+            display: block;
+            font-weight: 600;
+        }
+        .machine-full-view .detail-item .value {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-top: 2px;
+        }
+        .machine-full-view .btn-group {
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 2px solid var(--accent-light);
+        }
+
+        .section-stats-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .section-stat-item {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 2px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-stat-item .color-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .section-stat-item .stat-info {
+            flex: 1;
+        }
+        .section-stat-item .stat-info .name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .section-stat-item .stat-info .count {
+            font-size: 12px;
+            color: #666;
+        }
+        .section-stat-item .stat-info .percentage {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .section-edit-modal .modal-content {
+            max-width: 500px;
+        }
+
+        .section-search-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .section-search-bar input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 16px;
+            border: 2px solid var(--primary-light);
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        .section-search-bar input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        .empty-state i {
+            font-size: 48px;
+            color: var(--primary-light);
+            margin-bottom: 16px;
+        }
+        .empty-state h3 {
+            font-size: 18px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        .empty-state p {
+            font-size: 14px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .add-section-inline {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 2px solid var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+        .add-section-inline .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .add-section-inline .form-group.full {
+            grid-column: 1/-1;
+        }
+        .add-section-inline .btn-group {
+            margin-top: 12px;
+        }
+
         @media (max-width:600px) {
             #fullscreenDetails .grid {
                 grid-template-columns: 1fr;
@@ -1002,9 +1273,11 @@
                 height: 40px;
                 font-size: 18px;
             }
+            .add-section-inline .form-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        /* ─── Responsive ─── */
         @media (max-width:768px) {
             body {
                 padding: 10px;
@@ -1114,350 +1387,20 @@
                 margin-bottom: 20px;
             }
         }
-
-        /* ─── Sub‑page as full page (promoted) ─── */
-        .sub-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-        .sub-content.active {
-            display: block;
-        }
-
-        /* ─── Asset management sub‑page header ─── */
-        .sub-page-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 3px solid var(--primary-light);
-        }
-        .sub-page-header .icon-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 48px;
-            height: 48px;
-            background: var(--primary-bg);
-            border-radius: 12px;
-            color: var(--primary);
-            font-size: 22px;
-            flex-shrink: 0;
-        }
-        .sub-page-header h2 {
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin: 0;
-        }
-        .sub-page-header .subtitle {
-            font-size: 14px;
-            color: #666;
-            margin-left: auto;
-        }
-        @media (max-width:600px) {
-            .sub-page-header {
-                flex-wrap: wrap;
-            }
-            .sub-page-header .subtitle {
-                margin-left: 0;
-                width: 100%;
-            }
-            .sub-page-header h2 {
-                font-size: 20px;
-            }
-        }
-
-        /* ─── Supplier List ─── */
-        .supplier-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 14px 16px;
-            background: var(--white);
-            border-radius: 12px;
-            border: 2px solid var(--primary-light);
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 8px;
-            transition: border-color 0.2s;
-        }
-        .supplier-item:hover {
-            border-color: var(--primary);
-        }
-        .supplier-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-            min-width: 200px;
-        }
-        .supplier-name {
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--primary-dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .supplier-detail-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px 20px;
-            font-size: 13px;
-            color: #444;
-        }
-        .supplier-detail-row span {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .supplier-detail-row i {
-            color: var(--primary);
-            width: 16px;
-            font-size: 12px;
-        }
-        .supplier-other {
-            font-size: 12px;
-            color: #666;
-            background: #f5f5f5;
-            padding: 4px 10px;
-            border-radius: 6px;
-            margin-top: 2px;
-        }
-        .supplier-actions {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .supplier-badge {
-            background: var(--primary-bg);
-            color: var(--primary-dark);
-            font-size: 10px;
-            font-weight: 600;
-            padding: 2px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        /* ─── Supplier Search ─── */
-        .search-bar {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-        .search-bar input {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px 16px;
-            border: 2px solid var(--primary-light);
-            border-radius: var(--radius-full);
-            font-size: 14px;
-            transition: border-color 0.2s;
-        }
-        .search-bar input:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-        .search-bar .btn {
-            flex-shrink: 0;
-        }
-        .supplier-count {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 12px;
-        }
-
-        /* ─── Full Machine View Card ─── */
-        .machine-full-view {
-            background: var(--white);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            border: 2px solid var(--primary);
-            box-shadow: var(--shadow-lg);
-            margin-top: 16px;
-        }
-        .machine-full-view .header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 12px;
-            margin-bottom: 16px;
-        }
-        .machine-full-view .header-row h3 {
-            font-size: 20px;
-            color: var(--primary-dark);
-        }
-        .machine-full-view .detail-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-        }
-        .machine-full-view .detail-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .machine-full-view .detail-item label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #888;
-            display: block;
-            font-weight: 600;
-        }
-        .machine-full-view .detail-item .value {
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--text-dark);
-            margin-top: 2px;
-        }
-        .machine-full-view .btn-group {
-            margin-top: 16px;
-            padding-top: 12px;
-            border-top: 2px solid var(--accent-light);
-        }
-
-        /* ─── Section Stats Card ─── */
-        .section-stats-card {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .section-stat-item {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 12px 16px;
-            border: 2px solid var(--primary-light);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .section-stat-item .color-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            border: 1px solid rgba(0,0,0,0.1);
-        }
-        .section-stat-item .stat-info {
-            flex: 1;
-        }
-        .section-stat-item .stat-info .name {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .section-stat-item .stat-info .count {
-            font-size: 12px;
-            color: #666;
-        }
-        .section-stat-item .stat-info .percentage {
-            font-size: 11px;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        /* ─── Section Edit Modal ─── */
-        .section-edit-modal .modal-content {
-            max-width: 500px;
-        }
-
-        /* ─── Search Bar for Sections ─── */
-        .section-search-bar {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-        .section-search-bar input {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px 16px;
-            border: 2px solid var(--primary-light);
-            border-radius: var(--radius-full);
-            font-size: 14px;
-            transition: border-color 0.2s;
-        }
-        .section-search-bar input:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-
-        /* ─── Empty State ─── */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-        }
-        .empty-state i {
-            font-size: 48px;
-            color: var(--primary-light);
-            margin-bottom: 16px;
-        }
-        .empty-state h3 {
-            font-size: 18px;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-        }
-        .empty-state p {
-            font-size: 14px;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        /* ─── Add Section Form Inline ─── */
-        .add-section-inline {
-            background: var(--white);
-            border-radius: var(--radius-md);
-            padding: 18px;
-            margin-bottom: 16px;
-            border: 2px solid var(--primary);
-            box-shadow: var(--shadow-md);
-        }
-        .add-section-inline .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        .add-section-inline .form-group.full {
-            grid-column: 1/-1;
-        }
-        .add-section-inline .btn-group {
-            margin-top: 12px;
-        }
-        @media (max-width:600px) {
-            .add-section-inline .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
-
-    <!-- Hamburger -->
     <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><i class="fas fa-bars"></i></button>
-
-    <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <i class="fas fa-leaf"></i>
             <h2>Panilkanda Tea</h2>
         </div>
         <nav class="sidebar-nav">
-            <!-- Asset Management -->
             <a href="#" id="sidebar-assets" data-tab="assets" class="active">
                 <i class="fas fa-boxes"></i> Asset Management
             </a>
@@ -1477,7 +1420,6 @@
         </nav>
     </aside>
 
-    <!-- Main Content -->
     <div class="main-content" id="mainContainer">
 
         <div class="header">
@@ -1488,17 +1430,14 @@
             </div>
         </div>
 
-        <!-- ==================== LANDING VIEW ==================== -->
         <div id="landingView">
             <div class="big-number" id="landingAssetCount">0</div>
             <div class="label">Total Assets</div>
             <div class="sub">🍃 Panilkanda Tea Factory</div>
         </div>
 
-        <!-- ==================== ASSET MANAGEMENT TAB ==================== -->
         <div id="tab-assets" class="tab-content">
 
-            <!-- ─── PAGE 1: View Assets ─── -->
             <div id="sub-viewAssets" class="sub-content">
                 <div class="sub-page-header">
                     <div class="icon-wrapper"><i class="fas fa-eye"></i></div>
@@ -1518,7 +1457,6 @@
                 <div id="assetListView" class="machine-list"><p style="text-align:center;padding:30px;">Loading assets...</p></div>
             </div>
 
-            <!-- ─── PAGE 2: Add Asset ─── -->
             <div id="sub-addAsset" class="sub-content">
                 <div class="sub-page-header">
                     <div class="icon-wrapper"><i class="fas fa-plus-circle"></i></div>
@@ -1547,7 +1485,6 @@
                 </div>
             </div>
 
-            <!-- ─── PAGE 3: Manage Sections (ENHANCED with Add Section) ─── -->
             <div id="sub-manageSections" class="sub-content">
                 <div class="sub-page-header">
                     <div class="icon-wrapper"><i class="fas fa-cog"></i></div>
@@ -1555,7 +1492,6 @@
                     <span class="subtitle">View, add, edit, and organize your factory sections</span>
                 </div>
 
-                <!-- ─── ADD SECTION FORM (INLINE) ─── -->
                 <div class="add-section-inline" id="addSectionInline">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
                         <h3 style="color:var(--primary-dark);"><i class="fas fa-plus-circle" style="color:var(--primary);"></i> Add New Section</h3>
@@ -1576,10 +1512,8 @@
                     </form>
                 </div>
 
-                <!-- Stats Overview -->
                 <div class="section-stats-card" id="sectionStatsCard"></div>
 
-                <!-- Search & Actions -->
                 <div class="card" style="padding:12px 16px;">
                     <div class="section-search-bar">
                         <input type="text" id="sectionSearchInput" placeholder="Search sections by name or description..." oninput="filterSections()" />
@@ -1590,14 +1524,12 @@
                     </div>
                 </div>
 
-                <!-- Section List -->
                 <div class="card">
                     <div id="sectionListContainer"><p style="text-align:center;padding:20px;color:#666;">Loading sections...</p></div>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== ALL MACHINES ==================== -->
         <div id="tab-list" class="tab-content">
             <div class="page-header">
                 <div class="icon-wrapper"><i class="fas fa-list"></i></div>
@@ -1614,7 +1546,6 @@
             <div id="machineListView" class="machine-list"><p style="text-align:center;padding:30px;">Loading machines...</p></div>
         </div>
 
-        <!-- ==================== LOOKUP ==================== -->
         <div id="tab-lookup" class="tab-content">
             <div class="page-header">
                 <div class="icon-wrapper"><i class="fas fa-search"></i></div>
@@ -1630,7 +1561,6 @@
             </div>
         </div>
 
-        <!-- ==================== QR ==================== -->
         <div id="tab-qr" class="tab-content">
             <div class="page-header">
                 <div class="icon-wrapper"><i class="fas fa-qrcode"></i></div>
@@ -1653,7 +1583,6 @@
             </div>
         </div>
 
-        <!-- ==================== SCAN ==================== -->
         <div id="tab-scan" class="tab-content">
             <div class="page-header">
                 <div class="icon-wrapper"><i class="fas fa-camera"></i></div>
@@ -1678,7 +1607,6 @@
             </div>
         </div>
 
-        <!-- ==================== STATISTICS ==================== -->
         <div id="tab-status" class="tab-content">
             <div class="page-header">
                 <div class="icon-wrapper"><i class="fas fa-chart-bar"></i></div>
@@ -1694,7 +1622,6 @@
             </div>
         </div>
 
-        <!-- ==================== MANAGE SUPPLIERS TAB ==================== -->
         <div id="tab-suppliers" class="tab-content">
             <div class="page-header">
                 <div class="icon-wrapper"><i class="fas fa-truck"></i></div>
@@ -1702,7 +1629,6 @@
                 <span class="subtitle">Supplier directory and contact management</span>
             </div>
 
-            <!-- Search Bar & Export -->
             <div class="card" style="padding:12px 16px;">
                 <div class="search-bar">
                     <input type="text" id="supplierSearchInput" placeholder="Search by name, contact, address, or any detail..." oninput="filterSuppliers()" />
@@ -1713,13 +1639,11 @@
                 </div>
             </div>
 
-            <!-- Supplier List -->
             <div id="supplierListContainer">
                 <div class="supplier-count" id="supplierCount">Loading suppliers...</div>
                 <div id="supplierList" class="machine-list"><p style="text-align:center;padding:30px;">Loading suppliers...</p></div>
             </div>
 
-            <!-- Add / Edit Supplier Form (hidden by default, shown inline) -->
             <div id="supplierFormContainer" style="display:none; margin-top:16px;">
                 <div class="card" style="border:3px solid var(--primary);">
                     <div class="sub-page-header" style="border-bottom:2px solid var(--primary-light); margin-bottom:16px; padding-bottom:12px;">
@@ -1750,7 +1674,6 @@
         <div class="footer">🍃 Panilkanda Tea Factory Machine Tracker · Developed by MaplyVision Labs</div>
     </div>
 
-    <!-- Bottom Navigation (Mobile) -->
     <nav class="bottom-nav" id="bottomNav">
         <a href="#" data-tab="assets" class="active"><i class="fas fa-boxes"></i><span>Assets</span></a>
         <a href="#" data-tab="list"><i class="fas fa-list"></i><span>Machines</span></a>
@@ -1760,7 +1683,6 @@
         <a href="#" data-tab="suppliers"><i class="fas fa-truck"></i><span>Suppliers</span></a>
     </nav>
 
-    <!-- Edit Modal (for machines) -->
     <div class="modal" id="editModal">
         <div class="modal-content">
             <div class="modal-header"><h3><i class="fas fa-edit"></i> Edit Machine</h3><button class="modal-close" onclick="closeEditModal()">&times;</button></div>
@@ -1786,7 +1708,6 @@
         </div>
     </div>
 
-    <!-- ==================== SECTION EDIT MODAL ==================== -->
     <div class="modal section-edit-modal" id="sectionEditModal">
         <div class="modal-content">
             <div class="modal-header"><h3><i class="fas fa-edit"></i> Edit Section</h3><button class="modal-close" onclick="closeSectionEditModal()">&times;</button></div>
@@ -1805,11 +1726,10 @@
         </div>
     </div>
 
-    <!-- ==================== SCAN RESULT DETAIL MODAL ==================== -->
     <div class="modal scan-result-modal" id="scanResultModal">
         <div class="modal-content">
             <div class="modal-header"><h3><i class="fas fa-qrcode"></i> Machine Details</h3><button class="modal-close" onclick="closeScanResultModal()">&times;</button></div>
-            <div id="scanResultModalBody"><!-- dynamically filled --></div>
+            <div id="scanResultModalBody"></div>
             <div class="btn-group" style="margin-top:16px;justify-content:center;">
                 <button onclick="closeScanResultModal()" class="btn btn-secondary"><i class="fas fa-times"></i> Close</button>
                 <button onclick="printScanResult()" class="btn btn-primary"><i class="fas fa-print"></i> Print</button>
@@ -1818,13 +1738,11 @@
         </div>
     </div>
 
-    <!-- ==================== FULLSCREEN DETAILS OVERLAY ==================== -->
     <div id="fullscreenDetails">
         <button class="close-btn" onclick="closeFullscreenDetails()">✕</button>
-        <div class="card" id="fullscreenContent"><!-- filled dynamically --></div>
+        <div class="card" id="fullscreenContent"></div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js">
     </script>
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js">
@@ -1924,7 +1842,6 @@
             return found && found.color ? found.color : '#2e7d32';
         }
 
-        // ─── Supplier helper ───
         function getSupplierName(id) {
             if (!id) return '';
             const suppliers = getSuppliers();
@@ -1932,7 +1849,6 @@
             return found ? found.name : '';
         }
 
-        // ─── Populate supplier dropdown ───
         function loadSuppliersDropdown(selectId, selected) {
             const sel = document.getElementById(selectId);
             if (!sel) return;
@@ -2035,33 +1951,33 @@
             const machines = getMachines();
             const totalMachines = machines.length;
             const container = document.getElementById('sectionStatsCard');
-            
+
             if (sections.length === 0) {
                 container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-folder-open"></i>
-                        <h3>No Sections Yet</h3>
-                        <p>Use the "Add New" button above to create your first section.</p>
-                    </div>
-                `;
+                            <div class="empty-state">
+                                <i class="fas fa-folder-open"></i>
+                                <h3>No Sections Yet</h3>
+                                <p>Use the "Add New" button above to create your first section.</p>
+                            </div>
+                        `;
                 return;
             }
-            
+
             let html = '';
             sections.forEach(sec => {
                 const count = machines.filter(m => m.section === sec.id).length;
                 const percentage = totalMachines > 0 ? Math.round((count / totalMachines) * 100) : 0;
                 const color = sec.color || '#2e7d32';
                 html += `
-                    <div class="section-stat-item">
-                        <div class="color-dot" style="background:${color};"></div>
-                        <div class="stat-info">
-                            <div class="name">${esc(sec.name)}</div>
-                            <div class="count">${count} machine${count !== 1 ? 's' : ''}</div>
-                            <div class="percentage">${percentage}% of total</div>
-                        </div>
-                    </div>
-                `;
+                            <div class="section-stat-item">
+                                <div class="color-dot" style="background:${color};"></div>
+                                <div class="stat-info">
+                                    <div class="name">${esc(sec.name)}</div>
+                                    <div class="count">${count} machine${count !== 1 ? 's' : ''}</div>
+                                    <div class="percentage">${percentage}% of total</div>
+                                </div>
+                            </div>
+                        `;
             });
             container.innerHTML = html;
         }
@@ -2070,58 +1986,57 @@
             const container = document.getElementById('sectionListContainer');
             const sections = getSections();
             const machines = getMachines();
-            
-            // Apply search filter
+
             let filteredSections = sections;
             if (sectionSearchQuery.trim()) {
                 const query = sectionSearchQuery.trim().toLowerCase();
-                filteredSections = sections.filter(s => 
-                    s.name.toLowerCase().includes(query) || 
+                filteredSections = sections.filter(s =>
+                    s.name.toLowerCase().includes(query) ||
                     (s.description && s.description.toLowerCase().includes(query))
                 );
             }
-            
+
             if (sections.length === 0) {
                 container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-folder-plus"></i>
-                        <h3>No Sections Created</h3>
-                        <p>Use the "Add New" button above to create your first department or area.</p>
-                    </div>
-                `;
+                            <div class="empty-state">
+                                <i class="fas fa-folder-plus"></i>
+                                <h3>No Sections Created</h3>
+                                <p>Use the "Add New" button above to create your first department or area.</p>
+                            </div>
+                        `;
                 return;
             }
-            
+
             if (filteredSections.length === 0) {
                 container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-search"></i>
-                        <h3>No Matching Sections</h3>
-                        <p>Try adjusting your search terms.</p>
-                    </div>
-                `;
+                            <div class="empty-state">
+                                <i class="fas fa-search"></i>
+                                <h3>No Matching Sections</h3>
+                                <p>Try adjusting your search terms.</p>
+                            </div>
+                        `;
                 return;
             }
-            
+
             let html = '';
             filteredSections.forEach(sec => {
                 const count = machines.filter(m => m.section === sec.id).length;
                 const color = sec.color || '#2e7d32';
                 html += `
-                    <div class="section-list-item">
-                        <div class="section-info">
-                            <span class="section-color-dot" style="background:${color};"></span>
-                            <strong>${esc(sec.name)}</strong>
-                            <span class="section-stats">📊 ${count} machine${count !== 1 ? 's' : ''}</span>
-                            ${sec.description ? `<span class="section-description">— ${esc(sec.description)}</span>` : ''}
-                        </div>
-                        <div class="section-actions">
-                            <button onclick="editSection('${sec.id}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
-                            <button onclick="viewSectionMachines('${sec.id}')" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i> View Machines</button>
-                            <button onclick="deleteSection('${sec.id}')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                `;
+                            <div class="section-list-item">
+                                <div class="section-info">
+                                    <span class="section-color-dot" style="background:${color};"></span>
+                                    <strong>${esc(sec.name)}</strong>
+                                    <span class="section-stats">📊 ${count} machine${count !== 1 ? 's' : ''}</span>
+                                    ${sec.description ? `<span class="section-description">— ${esc(sec.description)}</span>` : ''}
+                                </div>
+                                <div class="section-actions">
+                                    <button onclick="editSection('${sec.id}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
+                                    <button onclick="viewSectionMachines('${sec.id}')" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i> View Machines</button>
+                                    <button onclick="deleteSection('${sec.id}')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        `;
             });
             container.innerHTML = html;
         }
@@ -2143,7 +2058,7 @@
             const sections = getSections();
             const section = sections.find(s => s.id === sectionId);
             if (!section) { toast('Section not found.', true); return; }
-            
+
             document.getElementById('editSectionId').value = section.id;
             document.getElementById('editSectionName').value = section.name || '';
             document.getElementById('editSectionColor').value = section.color || '#2e7d32';
@@ -2161,18 +2076,18 @@
             const name = document.getElementById('editSectionName').value.trim();
             const color = document.getElementById('editSectionColor').value;
             const description = document.getElementById('editSectionDesc').value.trim();
-            
+
             if (!name) { toast('Please enter a section name.', true); return; }
-            
+
             const db = getDB();
             const idx = db.sections.findIndex(s => s.id === id);
             if (idx === -1) { toast('Section not found.', true); return; }
-            
+
             db.sections[idx].name = name;
             db.sections[idx].color = color;
             db.sections[idx].description = description;
             saveDB(db);
-            
+
             toast('✅ Section updated: ' + name);
             closeSectionEditModal();
             refreshSectionManagement();
@@ -2184,7 +2099,6 @@
         });
 
         function viewSectionMachines(sectionId) {
-            // Switch to View Assets and filter by this section
             currentSub = 'viewAssets';
             switchToTab('assets');
             const filterSelect = document.getElementById('filterSection');
@@ -2198,16 +2112,16 @@
         function exportSectionsToCSV() {
             const sections = getSections();
             if (sections.length === 0) { toast('No sections to export.', true); return; }
-            
+
             const headers = ['ID', 'Section Name', 'Color', 'Description', 'Machine Count'];
             const rows = sections.map(s => {
                 const count = getMachines().filter(m => m.section === s.id).length;
                 return [s.id, s.name || '', s.color || '#2e7d32', s.description || '', count];
             });
-            
+
             let csv = headers.join(',') + '\n';
             rows.forEach(row => { csv += row.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',') + '\n'; });
-            
+
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -2252,10 +2166,10 @@
 
         function filterAssets() { refreshAssetView(); }
 
-        function refreshList() { 
+        function refreshList() {
             const allMachines = getMachines();
-            renderMachineList(allMachines); 
-            updateLandingCount(); 
+            renderMachineList(allMachines);
+            updateLandingCount();
         }
 
         function refreshDashboard() {
@@ -2489,7 +2403,7 @@
         function goBackToApp() { closeFullscreenDetails(); }
 
         // ============================================================
-        // QR SCANNER
+        // QR SCANNER - UPDATED WITH BETTER ID EXTRACTION
         // ============================================================
         let html5QrCode = null;
         let scannerRunning = false;
@@ -2552,9 +2466,9 @@
         </style>
         </head><body><h2>🍃 Machine Details</h2>${content}</body></html>
         `);
-        printWin.document.close();
-        printWin.print();
-        } else { toast('Please allow popups to print.', true); }
+                printWin.document.close();
+                printWin.print();
+            } else { toast('Please allow popups to print.', true); }
         }
 
         function openScanResultInNewTab() {
@@ -2642,12 +2556,16 @@
         </body>
         </html>`;
             const win = window.open('', '_blank');
-            if (win) { win.document.write(htmlContent);
+            if (win) {
+                win.document.write(htmlContent);
                 win.document.close();
                 win.focus();
-                toast('📄 Machine details opened in new tab.'); } else { toast('⚠️ Popup blocked. Please allow popups or use the modal view.',
+                toast('📄 Machine details opened in new tab.');
+            } else {
+                toast('⚠️ Popup blocked. Please allow popups or use the modal view.',
                     true);
-                showMachineDetailsModal(machine, true); }
+                showMachineDetailsModal(machine, true);
+            }
         }
 
         // ─── QR Scanner ───
@@ -2711,63 +2629,279 @@
             }, 300);
         }
 
+        // ============================================================
+        // UPDATED: Better Machine ID Extraction
+        // ============================================================
         function extractMachineIdFromText(text) {
-            const urlMatch = text.match(/[?&]id=([^&\s]+)/);
-            if (urlMatch) return decodeURIComponent(urlMatch[1]);
-            const jsonMatch = text.match(/\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/);
-            if (jsonMatch) { try { const parsed = JSON.parse(jsonMatch[0]); if (parsed && parsed.id) return parsed.id; }
-            catch (e) {} }
-            const idMatch = text.match(/M\d{4}/);
-            if (idMatch) return idMatch[0];
+            if (!text) return null;
+            
+            showDebug('Attempting to extract ID from: ' + text.substring(0, 200) + (text.length > 200 ? '...' : ''));
+            
+            // Try multiple patterns
+            
+            // 1. URL parameter: ?id=M0004 or &id=M0004
+            let urlMatch = text.match(/[?&]id=([^&\s]+)/);
+            if (urlMatch) {
+                showDebug('Found ID from URL param: ' + urlMatch[1]);
+                return decodeURIComponent(urlMatch[1]);
+            }
+            
+            // 2. Direct URL pattern: /?id=M0004 or /id/M0004
+            let directMatch = text.match(/id[=\/]([A-Za-z0-9_\-]+)/);
+            if (directMatch) {
+                showDebug('Found ID from direct pattern: ' + directMatch[1]);
+                return directMatch[1];
+            }
+            
+            // 3. JSON format
+            try {
+                const jsonMatch = text.match(/\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/);
+                if (jsonMatch) {
+                    const parsed = JSON.parse(jsonMatch[0]);
+                    if (parsed && parsed.id) {
+                        showDebug('Found ID from JSON: ' + parsed.id);
+                        return parsed.id;
+                    }
+                }
+            } catch (e) { /* ignore */ }
+            
+            // 4. Machine ID pattern: M followed by 4 digits (M0001-M9999)
+            let idMatch = text.match(/\bM\d{4}\b/);
+            if (idMatch) {
+                showDebug('Found ID from pattern M####: ' + idMatch[0]);
+                return idMatch[0];
+            }
+            
+            // 5. Any ID pattern: letter followed by digits (M001, A001, etc.)
+            let genericMatch = text.match(/\b([A-Za-z]+\d+)\b/);
+            if (genericMatch) {
+                showDebug('Found ID from generic pattern: ' + genericMatch[1]);
+                return genericMatch[1];
+            }
+            
+            // 6. Try to find any ID-like string in the URL
+            let urlIdMatch = text.match(/[?&]([A-Za-z0-9_\-]+)=/);
+            if (urlIdMatch && urlIdMatch[1].toLowerCase() === 'id') {
+                // This is handled by pattern 1 already
+            }
+            
+            showDebug('No ID found in text');
             return null;
         }
 
+        // ============================================================
+        // UPDATED: onScanSuccess with better handling
+        // ============================================================
         function onScanSuccess(decodedText, decodedResult) {
             const result = document.getElementById('scanResult');
-            showDebug('Decoded: ' + decodedText.substring(0, 200) + (decodedText.length > 200 ? '...' : ''));
+            const debug = document.getElementById('scanDebug');
+            
+            // Show the raw decoded text for debugging
+            showDebug('Raw decoded: ' + decodedText.substring(0, 200) + (decodedText.length > 200 ? '...' : ''));
+            
             if (navigator.vibrate) navigator.vibrate(100);
+            
+            // Try to extract machine ID
             const machineId = extractMachineIdFromText(decodedText);
+            
             if (!machineId) {
-                result.innerHTML =
-                    `<div class="result-card error"><p>⚠️ Could not find a machine ID in the QR.</p><p style="font-size:12px;color:#666;margin-top:6px;">Make sure the QR contains a URL with ?id= or a machine ID like M0001.</p><pre style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;overflow:auto;max-height:100px;margin-top:6px;">${esc(decodedText)}</pre></div>`;
-                toast('Invalid QR format.', true);
-                showDebug('ERROR: No ID found in decoded text.');
+                result.innerHTML = `
+                    <div class="result-card error">
+                        <p>⚠️ Could not find a machine ID in the QR.</p>
+                        <p style="font-size:12px;color:#666;margin-top:6px;">Make sure the QR contains a URL with ?id= or a machine ID like M0001.</p>
+                        <div style="margin-top:8px;background:#f5f5f5;padding:8px;border-radius:8px;font-size:11px;overflow:auto;max-height:150px;">
+                            <strong>Raw QR Data:</strong><br>
+                            ${esc(decodedText)}
+                        </div>
+                        <div style="margin-top:10px;">
+                            <button onclick="document.getElementById('scanResult').innerHTML = ''" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-times"></i> Clear
+                            </button>
+                            <button onclick="manualEnterMachineId()" class="btn btn-primary btn-sm">
+                                <i class="fas fa-keyboard"></i> Enter ID Manually
+                            </button>
+                        </div>
+                    </div>
+                `;
+                toast('Invalid QR format. See debug info below.', true);
                 return;
             }
+            
+            // Look up the machine
             const machines = getMachines();
             const dbMachine = machines.find(x => x.id === machineId);
+            
             if (dbMachine) {
-                showDebug('Found in DB: ' + dbMachine.name);
+                showDebug('✅ Found in DB: ' + dbMachine.name + ' (' + dbMachine.id + ')');
                 lastScannedMachine = dbMachine;
                 showMachineDetailsModal(dbMachine, true);
                 toast('✅ Machine found: ' + dbMachine.name);
+                setTimeout(() => stopQRScanner(), 3000);
             } else {
-                result.innerHTML =
-                    `<div class="result-card error"><p>❌ Machine with ID "${esc(machineId)}" not found in database.</p><p style="font-size:12px;color:#666;margin-top:8px;">Try adding this machine first, or scan a QR code with full data.</p></div>`;
-                toast('Machine not found in database.', true);
-                showDebug('ERROR: Machine ID ' + machineId + ' not in DB');
-                return;
+                showDebug('❌ Machine ID ' + machineId + ' not found in DB');
+                result.innerHTML = `
+                    <div class="result-card error">
+                        <p>❌ Machine with ID "<strong>${esc(machineId)}</strong>" not found in database.</p>
+                        <p style="font-size:12px;color:#666;margin-top:8px;">The QR code points to a machine that doesn't exist yet.</p>
+                        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+                            <button onclick="createMachineFromScan('${esc(machineId)}')" class="btn btn-success btn-sm">
+                                <i class="fas fa-plus"></i> Create Machine
+                            </button>
+                            <button onclick="manualEnterMachineId()" class="btn btn-primary btn-sm">
+                                <i class="fas fa-keyboard"></i> Enter ID Manually
+                            </button>
+                            <button onclick="document.getElementById('scanResult').innerHTML = ''" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+                `;
+                toast('Machine not found. You can create it now.', true);
             }
-            setTimeout(() => stopQRScanner(), 2000);
         }
 
         function onScanFailure(err) { /* silent */ }
 
+        // ============================================================
+        // MANUAL MACHINE ID ENTRY
+        // ============================================================
+        function manualEnterMachineId() {
+            const id = prompt('Enter the machine ID (e.g., M0004):', 'M0004');
+            if (!id || id.trim() === '') {
+                toast('Cancelled.', true);
+                return;
+            }
+            
+            // Simulate a scan with the entered ID
+            const result = document.getElementById('scanResult');
+            const machines = getMachines();
+            const machine = machines.find(m => m.id === id.trim());
+            
+            if (machine) {
+                lastScannedMachine = machine;
+                showMachineDetailsModal(machine, true);
+                toast('✅ Machine found: ' + machine.name);
+            } else {
+                result.innerHTML = `
+                    <div class="result-card error">
+                        <p>❌ Machine with ID "<strong>${esc(id.trim())}</strong>" not found in database.</p>
+                        <p style="font-size:12px;color:#666;margin-top:8px;">Would you like to create this machine?</p>
+                        <div class="btn-group" style="margin-top:10px;">
+                            <button onclick="createMachineFromScan('${esc(id.trim())}')" class="btn btn-success btn-sm">
+                                <i class="fas fa-plus"></i> Create Machine
+                            </button>
+                            <button onclick="document.getElementById('scanResult').innerHTML = ''" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+                `;
+                toast('Machine not found.', true);
+            }
+        }
+
+        // ============================================================
+        // CREATE MACHINE FROM SCAN
+        // ============================================================
+        function createMachineFromScan(machineId) {
+            // Check if machine already exists
+            const existing = getMachines().find(m => m.id === machineId);
+            if (existing) {
+                toast('Machine already exists!', true);
+                return;
+            }
+            
+            // Get sections
+            const sections = getSections();
+            if (sections.length === 0) {
+                toast('Please create a section first before adding a machine.', true);
+                return;
+            }
+            
+            // Show a prompt to enter machine name
+            const name = prompt('Enter machine name for ' + machineId + ':', 'New Machine');
+            if (!name || name.trim() === '') {
+                toast('Machine creation cancelled.', true);
+                return;
+            }
+            
+            // Simple section selection
+            let sectionId = sections[0].id;
+            if (sections.length > 1) {
+                const sectionNames = sections.map((s, i) => (i + 1) + '. ' + s.name + ' (' + s.id + ')').join('\n');
+                const choice = prompt('Select section (enter number 1-' + sections.length + '):\n' + sectionNames, '1');
+                const index = parseInt(choice) - 1;
+                if (!isNaN(index) && index >= 0 && index < sections.length) {
+                    sectionId = sections[index].id;
+                }
+            }
+            
+            const db = getDB();
+            const newMachine = {
+                id: machineId,
+                name: name.trim(),
+                section: sectionId,
+                supplier: null,
+                manufacturer: '',
+                model: '',
+                serialNumber: '',
+                installationDate: '',
+                status: 'working',
+                notes: 'Created from QR scan on ' + new Date().toLocaleString(),
+                createdAt: new Date().toISOString()
+            };
+            db.machines.push(newMachine);
+            saveDB(db);
+            toast('✅ Machine created: ' + newMachine.name);
+            
+            // Refresh all views
+            refreshAssetView();
+            refreshList();
+            refreshDashboard();
+            populateQRSelect();
+            
+            // Display the newly created machine
+            const result = document.getElementById('scanResult');
+            const secName = getSectionName(newMachine.section);
+            result.innerHTML = `
+                <div class="result-card success">
+                    <h4 style="margin-bottom:4px;">✅ Machine Created Successfully!</h4>
+                    <p><strong>${esc(newMachine.name)}</strong> (${esc(newMachine.id)}) — ${esc(secName)}</p>
+                    <p style="font-size:12px;color:#666;margin-top:4px;">The machine has been added to the database.</p>
+                    <div class="btn-group" style="margin-top:10px;">
+                        <button onclick="viewMachine('${esc(machineId)}')" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> View Details</button>
+                        <button onclick="editMachine('${esc(machineId)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
+                        <button onclick="generateQRForMachine('${esc(machineId)}')" class="btn btn-secondary btn-sm"><i class="fas fa-qrcode"></i> Generate QR</button>
+                    </div>
+                </div>
+            `;
+        }
+
         function stopQRScanner() {
             const container = document.getElementById('qrReaderContainer');
             if (html5QrCode && scannerRunning) {
-                try { html5QrCode.stop().then(() => { scannerRunning = false;
+                try {
+                    html5QrCode.stop().then(() => {
+                        scannerRunning = false;
                         container.style.display = 'none';
                         container.innerHTML = '';
                         toast('Scanner stopped.');
-                        showDebug('Scanner stopped'); }).catch(() => { scannerRunning = false;
+                        showDebug('Scanner stopped');
+                    }).catch(() => {
+                        scannerRunning = false;
                         container.style.display = 'none';
-                        container.innerHTML = ''; }); } catch (e) { scannerRunning = false;
+                        container.innerHTML = '';
+                    });
+                } catch (e) {
+                    scannerRunning = false;
                     container.style.display = 'none';
-                    container.innerHTML = ''; }
-            } else { container.style.display = 'none';
+                    container.innerHTML = '';
+                }
+            } else {
+                container.style.display = 'none';
                 container.innerHTML = '';
-                scannerRunning = false; }
+                scannerRunning = false;
+            }
         }
 
         document.getElementById('qrFileInput').addEventListener('change', function(e) {
@@ -2780,15 +2914,19 @@
                 showDebug('ERROR: Html5Qrcode not loaded'); return; }
             const qrScanner = new Html5Qrcode("scanResult");
             qrScanner.scanFile(file, true)
-                .then(decodedText => { showDebug('Image decoded: ' + decodedText.substring(0, 100) + (decodedText
+                .then(decodedText => {
+                    showDebug('Image decoded: ' + decodedText.substring(0, 100) + (decodedText
                         .length > 100 ? '...' : ''));
                     onScanSuccess(decodedText, null);
-                    qrScanner.clear().catch(() => {}); })
-                .catch(err => { console.error('Image decode error:', err);
+                    qrScanner.clear().catch(() => {});
+                })
+                .catch(err => {
+                    console.error('Image decode error:', err);
                     showDebug('Image decode error: ' + err.message);
                     result.innerHTML =
                         `<div class="result-card error"><p>❌ Could not decode QR from image. Please try another image.</p><p style="font-size:12px;color:#666;margin-top:4px;">${esc(err.message)}</p></div>`;
-                    toast('Failed to decode QR from image.', true); });
+                    toast('Failed to decode QR from image.', true);
+                });
             this.value = '';
         });
 
@@ -2827,77 +2965,72 @@
                 toast('Machine not found.', true);
                 return;
             }
-            
-            // Switch to lookup tab
+
             switchToTab('lookup');
-            
-            // Clear the input and show the machine details
+
             document.getElementById('lookupInput').value = id;
-            
+
             const secName = getSectionName(machine.section);
             const supplierName = getSupplierName(machine.supplier);
             const result = document.getElementById('lookupResult');
-            
+
             result.innerHTML = `
-                <div class="machine-full-view">
-                    <div class="header-row">
-                        <h3><i class="fas fa-cog" style="color:var(--primary);"></i> ${esc(machine.name)}</h3>
-                        <span class="machine-id" style="font-size:14px;padding:4px 14px;">${esc(machine.id)}</span>
-                    </div>
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <label><i class="fas fa-tag"></i> Name</label>
-                            <div class="value">${esc(machine.name)}</div>
+                        <div class="machine-full-view">
+                            <div class="header-row">
+                                <h3><i class="fas fa-cog" style="color:var(--primary);"></i> ${esc(machine.name)}</h3>
+                                <span class="machine-id" style="font-size:14px;padding:4px 14px;">${esc(machine.id)}</span>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <label><i class="fas fa-tag"></i> Name</label>
+                                    <div class="value">${esc(machine.name)}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <label><i class="fas fa-folder"></i> Section</label>
+                                    <div class="value">${esc(secName)}</div>
+                                </div>
+                                ${supplierName ? `
+                                <div class="detail-item">
+                                    <label><i class="fas fa-truck"></i> Supplier</label>
+                                    <div class="value">${esc(supplierName)}</div>
+                                </div>` : ''}
+                                <div class="detail-item">
+                                    <label><i class="fas fa-industry"></i> Manufacturer</label>
+                                    <div class="value">${esc(machine.manufacturer || '-')}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <label><i class="fas fa-cube"></i> Model</label>
+                                    <div class="value">${esc(machine.model || '-')}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <label><i class="fas fa-barcode"></i> Serial Number</label>
+                                    <div class="value">${esc(machine.serialNumber || '-')}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <label><i class="fas fa-calendar-alt"></i> Installation Date</label>
+                                    <div class="value">${fmtDate(machine.installationDate)}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <label><i class="fas fa-info-circle"></i> Status</label>
+                                    <div class="value"><span class="status-badge ${statusCls(machine.status)}">${statusLabel(machine.status)}</span></div>
+                                </div>
+                                ${machine.notes ? `
+                                <div class="detail-item" style="grid-column:1/-1;">
+                                    <label><i class="fas fa-sticky-note"></i> Notes</label>
+                                    <div class="value">${esc(machine.notes)}</div>
+                                </div>` : ''}
+                            </div>
+                            <div class="btn-group">
+                                <button onclick="editMachine('${esc(machine.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
+                                <button onclick="deleteMachine('${esc(machine.id)}')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</button>
+                                <button onclick="generateQRForMachine('${esc(machine.id)}')" class="btn btn-primary btn-sm"><i class="fas fa-qrcode"></i> Generate QR</button>
+                                <button onclick="openBlankPageWithMachine(window._viewMachine)" class="btn btn-info btn-sm"><i class="fas fa-external-link-alt"></i> Open in New Tab</button>
+                                <button onclick="window.print()" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i> Print</button>
+                            </div>
                         </div>
-                        <div class="detail-item">
-                            <label><i class="fas fa-folder"></i> Section</label>
-                            <div class="value">${esc(secName)}</div>
-                        </div>
-                        ${supplierName ? `
-                        <div class="detail-item">
-                            <label><i class="fas fa-truck"></i> Supplier</label>
-                            <div class="value">${esc(supplierName)}</div>
-                        </div>` : ''}
-                        <div class="detail-item">
-                            <label><i class="fas fa-industry"></i> Manufacturer</label>
-                            <div class="value">${esc(machine.manufacturer || '-')}</div>
-                        </div>
-                        <div class="detail-item">
-                            <label><i class="fas fa-cube"></i> Model</label>
-                            <div class="value">${esc(machine.model || '-')}</div>
-                        </div>
-                        <div class="detail-item">
-                            <label><i class="fas fa-barcode"></i> Serial Number</label>
-                            <div class="value">${esc(machine.serialNumber || '-')}</div>
-                        </div>
-                        <div class="detail-item">
-                            <label><i class="fas fa-calendar-alt"></i> Installation Date</label>
-                            <div class="value">${fmtDate(machine.installationDate)}</div>
-                        </div>
-                        <div class="detail-item">
-                            <label><i class="fas fa-info-circle"></i> Status</label>
-                            <div class="value"><span class="status-badge ${statusCls(machine.status)}">${statusLabel(machine.status)}</span></div>
-                        </div>
-                        ${machine.notes ? `
-                        <div class="detail-item" style="grid-column:1/-1;">
-                            <label><i class="fas fa-sticky-note"></i> Notes</label>
-                            <div class="value">${esc(machine.notes)}</div>
-                        </div>` : ''}
-                    </div>
-                    <div class="btn-group">
-                        <button onclick="editMachine('${esc(machine.id)}')" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</button>
-                        <button onclick="deleteMachine('${esc(machine.id)}')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</button>
-                        <button onclick="generateQRForMachine('${esc(machine.id)}')" class="btn btn-primary btn-sm"><i class="fas fa-qrcode"></i> Generate QR</button>
-                        <button onclick="openBlankPageWithMachine(window._viewMachine)" class="btn btn-info btn-sm"><i class="fas fa-external-link-alt"></i> Open in New Tab</button>
-                        <button onclick="window.print()" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i> Print</button>
-                    </div>
-                </div>
-            `;
-            
-            // Store the machine for the new tab function
+                    `;
+
             window._viewMachine = machine;
-            
-            // Scroll to the result
             result.scrollIntoView({ behavior: 'smooth', block: 'start' });
             toast('📋 Showing details for: ' + machine.name);
         }
@@ -2944,20 +3077,17 @@
             populateQRSelect();
         });
 
-        // ============================================================
-        // SECTION FORM (INLINE in Manage Sections)
-        // ============================================================
         document.getElementById('sectionForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('sectionName').value.trim();
             if (!name) { toast('Please enter a section name.', true); return; }
             const db = getDB();
             const id = 'sec_' + Date.now();
-            db.sections.push({ 
-                id, 
-                name, 
-                color: document.getElementById('sectionColor').value, 
-                description: document.getElementById('sectionDesc').value.trim() 
+            db.sections.push({
+                id,
+                name,
+                color: document.getElementById('sectionColor').value,
+                description: document.getElementById('sectionDesc').value.trim()
             });
             saveDB(db);
             toast('✅ Section added: ' + name);
@@ -2969,7 +3099,6 @@
             loadSectionsDropdown('assetSection');
             loadSectionsDropdown('editSection');
             loadSectionsDropdown('filterSection');
-            // Keep the form visible
             document.getElementById('addSectionInline').style.display = 'block';
             document.getElementById('toggleSectionFormBtn').innerHTML = '<i class="fas fa-chevron-up"></i> Collapse';
             addSectionVisible = true;
@@ -3043,7 +3172,6 @@
             refreshList();
             refreshDashboard();
             populateQRSelect();
-            // Clear the lookup result if it's showing this machine
             const result = document.getElementById('lookupResult');
             if (result) result.innerHTML = '';
         }
@@ -3265,9 +3393,7 @@
                 document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
                 const subLink = document.querySelector(`#sidebarAssetSub a[data-sub="${currentSub}"]`);
                 if (subLink) subLink.classList.add('active');
-                // Keep the sub-menu open when on assets tab
                 document.getElementById('sidebarAssetSub').classList.add('open');
-                // Refresh section management when navigating to manage sections
                 if (currentSub === 'manageSections') {
                     refreshSectionManagement();
                 }
@@ -3290,13 +3416,12 @@
             e.preventDefault();
             const tab = link.dataset.tab;
             const sub = link.dataset.sub;
-            
+
             if (sub) {
                 currentSub = sub;
                 switchToTab('assets');
                 document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
                 link.classList.add('active');
-                // Keep sub-menu open when clicking sub-items
                 document.getElementById('sidebarAssetSub').classList.add('open');
                 if (window.innerWidth < 769) {
                     document.getElementById('sidebar').classList.remove('open');
@@ -3304,9 +3429,8 @@
                 }
                 return;
             }
-            
+
             if (tab === 'assets') {
-                // Toggle the sub-menu when clicking Asset Management
                 const subMenu = document.getElementById('sidebarAssetSub');
                 subMenu.classList.toggle('open');
                 if (subMenu.classList.contains('open')) {
@@ -3314,7 +3438,6 @@
                     switchToTab('assets');
                     document.querySelector('#sidebarAssetSub a[data-sub="viewAssets"]')?.classList.add('active');
                 } else {
-                    // When closed, show landing view and keep assets active
                     document.getElementById('landingView').style.display = 'block';
                     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
                     document.querySelectorAll('.sidebar-nav > a').forEach(a => a.classList.remove('active'));
@@ -3327,7 +3450,7 @@
                 }
                 return;
             }
-            
+
             if (tab) {
                 if (tab === 'suppliers') closeSupplierForm();
                 if (tab === 'list') {
@@ -3405,7 +3528,6 @@
                 db.machines = sample;
                 saveDB(db);
             }
-            // Ensure all machines have supplier field
             let needUpdate = false;
             db.machines.forEach(m => {
                 if (m.supplier === undefined) { m.supplier = null;
@@ -3439,7 +3561,6 @@
             document.querySelectorAll('#sidebarAssetSub a').forEach(a => a.classList.remove('active'));
             document.querySelectorAll('#bottomNav a').forEach(a => a.classList.remove('active'));
             document.getElementById('sidebar-assets').classList.add('active');
-            // Sub-menu is hidden initially - no 'open' class
             document.getElementById('sidebarAssetSub').classList.remove('open');
 
             updateLandingCount();
@@ -3482,5 +3603,5 @@
         console.log('🚚 Suppliers:', getSuppliers().length);
         console.log('🔗 Base URL:', BASE_URL);
     </script>
-</body> 
+</body>
 </html>
